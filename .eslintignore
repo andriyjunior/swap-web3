@@ -1,0 +1,15 @@
+// .eslintignore
+.idea
+.storybook
+.config
+node_modules/*
+config/*
+public/*
+build/*
+scripts/*
+webpack/*
+src/react-app-env.d.ts
+src/reportWebVitals.ts
+config-overrides.js
+lint-staged.config.js
+commitlint.config.js
