@@ -8,8 +8,9 @@ export const App: FC = () => {
   return (
     <>
       <GlobalStyle />
-
-      <Routes />
+      <Common>
+        <Routes />
+      </Common>
     </>
   )
 }

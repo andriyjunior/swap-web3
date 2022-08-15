@@ -7,3 +7,7 @@ export const colorConverter = {
     return `rgba(${red}, ${green}, ${blue}, ${alpha})`
   },
 }
+
+export const getTransparentColor = (color: string, opacity: number) => {
+  return colorConverter.hexToRgba(color, opacity)
+}
