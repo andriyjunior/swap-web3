@@ -1,7 +1,8 @@
-import { ReactNode } from 'react'
-import { FC } from 'react'
+import { ReactNode, FC } from 'react'
 import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
 import { store } from 'store'
+import { ErrorBoundary } from './ErrorBoundary'
 
 interface IProvidersProps {
   children: ReactNode
@@ -10,7 +11,11 @@ interface IProvidersProps {
 export const Providers: FC<IProvidersProps> = ({ children }) => {
   return (
     <>
-      <Provider store={store}>{children}</Provider>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <Provider store={store}>{children}</Provider>
+        </BrowserRouter>
+      </ErrorBoundary>
     </>
   )
 }

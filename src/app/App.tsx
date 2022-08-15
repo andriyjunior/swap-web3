@@ -1,13 +1,15 @@
+import { Common } from 'layouts'
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ErrorBoundary } from './ErrorBoundary'
+import { NavLink } from 'react-router-dom'
+import { GlobalStyle } from 'styles'
+import { Routes } from './Routes'
 
 export const App: FC = () => {
-  const { t } = useTranslation()
   return (
-    <ErrorBoundary>
-      <div>Welcome to Sevn Finance</div>
-      <div>{t('welcome')}</div>
-    </ErrorBoundary>
+    <>
+      <GlobalStyle />
+
+      <Routes />
+    </>
   )
 }
