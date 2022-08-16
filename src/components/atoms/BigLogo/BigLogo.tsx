@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 import logo from 'assets/logo.svg'
 import logoNmb from 'assets/logo-number.svg'
+import { shadows } from 'styles'
 
 const StyledRoot = styled.div<{ isCollapsed: boolean }>`
   display: flex;
@@ -13,7 +14,9 @@ const StyledRoot = styled.div<{ isCollapsed: boolean }>`
   height: 56px;
 `
 
-const StyledImg = styled.img``
+const StyledImg = styled.img`
+  filter: drop-shadow(${shadows.logo});
+`
 
 export const BigLogo: FC<{ isCollapsed: boolean }> = ({ isCollapsed }) => {
   return (

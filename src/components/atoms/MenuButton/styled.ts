@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components'
-import { colors, gradients } from 'styles'
+import { colors, gradients, shadows } from 'styles'
 
 export const styledButton = css`
   position: relative;
@@ -19,6 +19,7 @@ export const styledButton = css`
 
   &.active {
     background-color: ${colors.white};
+    box-shadow: ${shadows.main};
   }
 
   &::before {

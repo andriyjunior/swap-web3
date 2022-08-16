@@ -77,3 +77,7 @@ export const StyledTitle = styled.span`
   transition-duration: 0.1s;
   transition-timing-function: ease-in;
 `
+
+export const StyledIcon = styled.img`
+  margin-right: 10px;
+`

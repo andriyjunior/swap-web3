@@ -1,14 +1,17 @@
 import { Dispatch, FC, SetStateAction } from 'react'
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import { colors, getTransparentColor } from 'styles'
-import { Button } from 'components'
+import { t } from 'i18next'
+import { colors, getTransparentColor, zIndexes } from 'styles'
+import { Button, MenuToogle } from 'components'
 
 import telegram_icon from 'assets/socials/telegram.svg'
 import medium_icon from 'assets/socials/medium.svg'
 import twitter_icon from 'assets/socials/twitter.svg'
-import { NavLink } from 'react-router-dom'
-import { t } from 'i18next'
-import { MenuToogle } from 'components/atoms/MenuToogle'
+import wallet_icon from 'assets/icons/wallet.svg'
+import mediumOL_icon from 'assets/socials/medium-outlined.svg'
+import twitterOL_icon from 'assets/socials/twitter-outlined.svg'
+import telegramOL_icon from 'assets/socials/telegram-outlined.svg'
 
 // interface IHeaderProps {}
 
@@ -23,6 +26,7 @@ const StyledRoot = styled.div`
   align-items: center;
   justify-content: space-between;
   backdrop-filter: blur(10px);
+  z-index: ${zIndexes.fixed};
 `
 
 const StyledSocials = styled.div`
@@ -49,6 +53,21 @@ interface IHeader {
   handleCollapsedToogle: () => void
 }
 
+interface IconProps {
+  src?: string
+  srcOnHover: string
+  alt?: string
+}
+
+const Icon: React.FC<IconProps> = ({ src, srcOnHover, alt }) => (
+  <img
+    src={src}
+    alt={alt}
+    onMouseOver={(e) => (e.currentTarget.src = srcOnHover)}
+    onMouseOut={(e) => (e.currentTarget.src = src || '')}
+  />
+)
+
 export const Header: FC<IHeader> = ({ isCollapsed, handleCollapsedToogle }) => {
   return (
     <StyledRoot>
@@ -58,13 +77,13 @@ export const Header: FC<IHeader> = ({ isCollapsed, handleCollapsedToogle }) => {
       />
       <StyledSocials>
         <StyledIcon to={'#'}>
-          <img src={telegram_icon} alt="" />
+          <Icon src={telegram_icon} srcOnHover={telegramOL_icon} />
         </StyledIcon>
         <StyledIcon to={'#'}>
-          <img src={medium_icon} alt="" />
+          <Icon src={medium_icon} srcOnHover={mediumOL_icon} />
         </StyledIcon>
         <StyledIcon to={'#'}>
-          <img src={twitter_icon} alt="" />
+          <Icon src={twitter_icon} srcOnHover={twitterOL_icon} />
         </StyledIcon>
       </StyledSocials>
 
@@ -72,6 +91,7 @@ export const Header: FC<IHeader> = ({ isCollapsed, handleCollapsedToogle }) => {
         <Button
           onClick={() => console.log('click')}
           title={t('connectWallet')}
+          icon={wallet_icon}
         />
       </StyledRight>
     </StyledRoot>

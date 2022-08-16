@@ -8,5 +8,12 @@
     "games": "Games"
   },
 
-  "connectWallet": "Connect wallet"
+  "connectWallet": "Connect wallet",
+  "swap": "Swap",
+  "liquidity": "Liquidity",
+
+  "swapForm": {
+    "swapTokens": "Swap tokens",
+    "tradeTokensInAnInstant": "Trade tokens in an instant"
+  }
 }
