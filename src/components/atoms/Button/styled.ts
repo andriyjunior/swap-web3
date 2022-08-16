@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { colors, gradients } from 'styles'
 
 export const StyledRoot = styled.button`
-  margin-right: 40px;
   position: relative;
   display: flex;
   align-items: center;
@@ -11,8 +10,7 @@ export const StyledRoot = styled.button`
   border: none;
   border-radius: 42px;
   outline: 2px solid ${colors.white};
-  padding: 0 40px;
-  height: 40px;
+  height: 42px;
   width: 100%;
   z-index: 0;
 
@@ -24,11 +22,11 @@ export const StyledRoot = styled.button`
     width: calc(100% - 4px);
     height: calc(100% - 4px);
     border-image-slice: 1;
-    border-image-source: ${gradients.primary};
+    border-image-source: ${gradients.secondary};
     border-width: 2px;
     border-radius: 42px;
     border-style: solid;
-    background: ${gradients.primary} border-box;
+    background: ${gradients.secondary} border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
@@ -46,7 +44,7 @@ export const StyledRoot = styled.button`
     left: 0;
     width: 100%;
     height: 100%;
-    background: ${gradients.primary};
+    background: ${gradients.secondary};
     border-radius: 42px;
     z-index: -1;
     opacity: 0;
@@ -74,7 +72,7 @@ export const StyledRoot = styled.button`
 export const StyledTitle = styled.span`
   font-weight: 400;
   color: ${colors.black};
-  font-size: 16;
+  font-size: 16px;
   transition-property: font-weight color;
   transition-duration: 0.1s;
   transition-timing-function: ease-in;

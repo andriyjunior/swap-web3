@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { Dispatch, FC, SetStateAction } from 'react'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 import { Button } from 'components'
@@ -8,6 +8,7 @@ import medium_icon from 'assets/socials/medium.svg'
 import twitter_icon from 'assets/socials/twitter.svg'
 import { NavLink } from 'react-router-dom'
 import { t } from 'i18next'
+import { MenuToogle } from 'components/atoms/MenuToogle'
 
 // interface IHeaderProps {}
 
@@ -43,9 +44,18 @@ const StyledRight = styled.div`
   width: 200px;
 `
 
-export const Header: FC = () => {
+interface IHeader {
+  isCollapsed: boolean
+  handleCollapsedToogle: () => void
+}
+
+export const Header: FC<IHeader> = ({ isCollapsed, handleCollapsedToogle }) => {
   return (
     <StyledRoot>
+      <MenuToogle
+        isCollapsed={isCollapsed}
+        handleCollapsedToogle={handleCollapsedToogle}
+      />
       <StyledSocials>
         <StyledIcon to={'#'}>
           <img src={telegram_icon} alt="" />

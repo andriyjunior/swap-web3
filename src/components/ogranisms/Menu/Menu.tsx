@@ -1,5 +1,5 @@
 import { BigLogo, MenuButton } from 'components'
-import { FC, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { colorConverter, colors } from 'styles'
@@ -17,6 +17,8 @@ const StyledRoot = styled.div<{ isCollapsed: boolean }>`
   border: 1px solid rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
   flex-grow: 1;
+  transition: width 0.2s ease-in-out;
+  overflow: hidden;
 `
 
 const StyledButtonContainer = styled.div`
@@ -25,9 +27,12 @@ const StyledButtonContainer = styled.div`
   flex-direction: column;
 `
 
-export const Menu: FC = () => {
+interface IMenu {
+  isCollapsed: boolean
+}
+
+export const Menu: FC<IMenu> = ({ isCollapsed }) => {
   const { t } = useTranslation()
-  const [isCollapsed] = useState(false)
 
   return (
     <StyledRoot isCollapsed={isCollapsed}>

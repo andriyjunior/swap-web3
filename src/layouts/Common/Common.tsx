@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useState } from 'react'
 import { Menu } from 'components'
 import styled from 'styled-components'
 import { gradients } from 'styles'
@@ -22,11 +22,20 @@ const StyleBody = styled.div`
 `
 
 export const Common: FC<ICommonProps> = ({ children }) => {
+  const [isCollapsed, setCollapsed] = useState(false)
+
+  const handleCollapsedToogle = () => {
+    setCollapsed((prev) => !prev)
+  }
+
   return (
     <StyleRoot>
-      <Menu />
+      <Menu isCollapsed={isCollapsed} />
       <StyleBody>
-        <Header />
+        <Header
+          handleCollapsedToogle={handleCollapsedToogle}
+          isCollapsed={isCollapsed}
+        />
         {children}
       </StyleBody>
     </StyleRoot>

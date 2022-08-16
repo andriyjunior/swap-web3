@@ -58,7 +58,7 @@ export const StyledButton = styled.button`
 export const StyledTitle = styled.span`
   padding-left: 8px;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: ${colors.black};
 `
 export const StyledIcon = styled.img`
