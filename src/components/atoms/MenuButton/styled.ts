@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components'
-import { colors, gradients } from 'styles'
+import { colors, gradients, shadows } from 'styles'
 
 export const styledButton = css`
   position: relative;
@@ -19,6 +19,7 @@ export const styledButton = css`
 
   &.active {
     background-color: ${colors.white};
+    box-shadow: ${shadows.main};
   }
 
   &::before {
@@ -57,9 +58,8 @@ export const StyledButton = styled.button`
 
 export const StyledTitle = styled.span`
   padding-left: 8px;
-  font-family: Montserrat;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: ${colors.black};
 `
 export const StyledIcon = styled.img`
