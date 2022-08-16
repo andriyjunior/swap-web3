@@ -12,9 +12,14 @@ const StyleRoot = styled.div`
   background: ${gradients.bg};
   background-blend-mode: normal, luminosity, normal, normal;
   display: flex;
+  width: 100%;
 `
 
-const StyleBody = styled.div``
+const StyleBody = styled.div`
+  width: 100%;
+  flex-grow: 0;
+  flex-shrink: 1;
+`
 
 export const Common: FC<ICommonProps> = ({ children }) => {
   return (

@@ -57,7 +57,6 @@ export const StyledButton = styled.button`
 
 export const StyledTitle = styled.span`
   padding-left: 8px;
-  font-family: Montserrat;
   font-weight: 500;
   font-size: 14px;
   color: ${colors.black};

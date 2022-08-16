@@ -1,21 +1,22 @@
 import { BigLogo, MenuButton } from 'components'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import { colorConverter, colors } from 'styles'
+import { baseMenu } from './const'
 
-import dashboard_icon from 'assets/icons/dashboard.svg'
-import swap_icon from 'assets/icons/swap.svg'
-import games_icon from 'assets/icons/games.svg'
 import more_icon from 'assets/icons/more.svg'
 
 const StyledRoot = styled.div<{ isCollapsed: boolean }>`
   position: sticky;
   top: 0;
-  width: ${({ isCollapsed }) => (isCollapsed ? '82px' : '224px')};
+  background-color: ${colorConverter.hexToRgba(colors.white, 0.5)};
+  width: ${({ isCollapsed }) => (isCollapsed ? '84px' : '224px')};
   height: 100vh;
   padding: 20px 12px;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  background-color: ${colorConverter.hexToRgba(colors.white, 0.5)};
+  flex-shrink: 0;
+  flex-grow: 1;
 `
 
 const StyledButtonContainer = styled.div`
@@ -25,30 +26,24 @@ const StyledButtonContainer = styled.div`
 `
 
 export const Menu: FC = () => {
-  const [isCollapsed, setCollapsed] = useState(false)
+  const { t } = useTranslation()
+  const [isCollapsed] = useState(false)
 
   return (
     <StyledRoot isCollapsed={isCollapsed}>
       <BigLogo isCollapsed={isCollapsed} />
       <StyledButtonContainer>
-        <MenuButton
-          isCollapsed={isCollapsed}
-          title="Dashboard"
-          icon={dashboard_icon}
-          to="/dashboard"
-        />
-        <MenuButton
-          isCollapsed={isCollapsed}
-          title="Swap"
-          icon={swap_icon}
-          to="/swap"
-        />
-        <MenuButton
-          isCollapsed={isCollapsed}
-          title="Games"
-          icon={games_icon}
-          to="/games"
-        />
+        {baseMenu.map((item) => {
+          return (
+            <MenuButton
+              key={item.key}
+              isCollapsed={isCollapsed}
+              title={t(`menu.${item.key}`)}
+              icon={item.icon}
+              to={item.to}
+            />
+          )
+        })}
         <MenuButton isCollapsed={isCollapsed} title="More" icon={more_icon} />
       </StyledButtonContainer>
     </StyledRoot>
