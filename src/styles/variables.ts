@@ -12,6 +12,9 @@ export const gradients = {
     'linear-gradient(90deg, #00FFF0 0%, #BD00FF 37.5%, #FF8700 68.23%, #FFF500 100%)',
   secondary: 'linear-gradient(90deg, #00FFF0 0%, #BD00FF 50%, #FF8700 100%)',
   bg: 'linear-gradient(180deg, rgba(247, 247, 247, 0) 11.59%, #F7F7F7 36.96%), linear-gradient(0deg, #D5D9FF, #D5D9FF), linear-gradient(90deg, #00FFF0 0%, #BD00FF 39.58%, #FF8700 69.79%, #FFF500 100%);',
+  white: 'linear-gradient(180deg, #E8E8E8 0%, #FFFFFF 100%);',
+  whiteFaded:
+    'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #E8E8E8 0%, #FFFFFF 100%);',
 }
 
 export const shadows = {
@@ -20,8 +23,9 @@ export const shadows = {
   onFocus:
     '0px 0px 0px 2px rgba(0, 0, 0, 0.1), inset 0px 4px 8px rgba(123, 43, 255, 0.05);',
   logo: '0px 8px 12px rgba(123, 43, 255, 0.05)',
-  violetSm: '0px 4px 8px rgba(123, 43, 255, 0.05)',
-  violet: '0px 3px 1px rgba(55, 0, 143, 0.2)',
+  violet: '0px 5px 3px rgba(111, 111, 111, 0.09)',
+  violetS: '0px 4px 8px rgba(123, 43, 255, 0.05)',
+  violetXs: '0px 0px 1px rgba(55, 0, 143, 0.2)',
 }
 
 export const zIndexes = {
@@ -42,4 +46,8 @@ export const breakpoints = {
   lg: '992px',
   xl: '1200px',
   xxl: '1400px',
+}
+
+export const borderRadius = {
+  primary: '8px',
 }

@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components'
-import { colors, gradients, shadows } from 'styles'
+import { borderRadius, colors, gradients, shadows } from 'styles'
 
 export const styledButton = css`
   position: relative;
@@ -12,7 +12,7 @@ export const styledButton = css`
   text-align: left;
   background-color: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: ${borderRadius.primary};
   display: flex;
   align-items: center;
   transition: background-color 0.1s ease-in;

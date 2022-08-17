@@ -1,10 +1,11 @@
 import { FC } from 'react'
 import styled from 'styled-components'
+import { borderRadius, colors, getTransparentColor } from 'styles'
 import { Icon } from '../Icon'
-import { BoldTitle } from '../Typography'
+import { Typography } from '../Typography'
 
 import arrow_icon from 'assets/icons/arrow.svg'
-import { colors, getTransparentColor } from 'styles'
+import BNB_icon from 'assets/coins/BNB.png'
 
 interface ITokenSelectorProps {
   title: string
@@ -18,7 +19,7 @@ const StyledRoot = styled.button`
   align-items: center;
   background: none;
   border: none;
-  border-radius: 8px;
+  border-radius: ${borderRadius.primary};
   transition: background-color 0.1s ease-in;
 
   &:hover {
@@ -31,7 +32,7 @@ const StyledCoinIcon = styled(Icon)`
   height: 24px;
 `
 
-const StyledText = styled(BoldTitle)`
+const StyledText = styled(Typography.BodyBold)`
   padding: 0 5px;
 `
 
@@ -51,9 +52,9 @@ export const TokenSelector: FC<ITokenSelectorProps> = ({
 }) => {
   return (
     <StyledRoot onClick={onClick}>
-      <StyledCoinIcon src={icon} />
-      <StyledText>{title}</StyledText>
-      <StyledArrowIcon src={arrow_icon} />
+      <StyledCoinIcon src={icon || BNB_icon} />
+      <StyledText>{title || 'BNB'}</StyledText>
+      {onClick && <StyledArrowIcon src={arrow_icon} />}
     </StyledRoot>
   )
 }

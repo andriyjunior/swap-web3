@@ -1,5 +1,5 @@
 import { BigLogo, MenuButton } from 'components'
-import { Dispatch, FC, SetStateAction, useState } from 'react'
+import { FC, memo } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { colorConverter, colors } from 'styles'
@@ -31,7 +31,7 @@ interface IMenu {
   isCollapsed: boolean
 }
 
-export const Menu: FC<IMenu> = ({ isCollapsed }) => {
+export const Menu: FC<IMenu> = memo(({ isCollapsed }) => {
   const { t } = useTranslation()
 
   return (
@@ -53,4 +53,4 @@ export const Menu: FC<IMenu> = ({ isCollapsed }) => {
       </StyledButtonContainer>
     </StyledRoot>
   )
-}
+})

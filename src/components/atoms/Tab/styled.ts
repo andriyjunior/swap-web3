@@ -7,8 +7,11 @@ export const StyledRoot = styled.button<{ isActive: boolean }>`
   height: 50px;
   width: 100%;
   border: none;
-
   transition: background 0.2s ease-in;
+
+  &:focus {
+    outline: none;
+  }
 
   &:first-child {
     border-radius: 8px 0px 0px 0px;

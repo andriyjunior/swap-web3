@@ -14,6 +14,15 @@
 
   "swapForm": {
     "swapTokens": "Swap tokens",
-    "tradeTokensInAnInstant": "Trade tokens in an instant"
+    "tradeTokensInAnInstant": "Trade tokens in an instant",
+    "youSell": "You sell",
+    "youBuy": "You buy"
+  },
+
+  "userBar": {
+    "wallet": "Wallet",
+    "transactions": "Transactions",
+    "dashboard": "Dashboard",
+    "disconnect": "Disconnect"
   }
 }

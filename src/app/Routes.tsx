@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { Route, Routes as ReactRoutes } from 'react-router-dom'
-import logo from 'assets/logo.svg'
 import { Swap } from 'pages'
 // interface IRoutesProps {}
 

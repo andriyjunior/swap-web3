@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, gradients } from 'styles'
+import { borderRadius, colors, gradients } from 'styles'
 
 export const StyledRoot = styled.button`
   position: relative;
@@ -8,7 +8,7 @@ export const StyledRoot = styled.button`
   justify-content: center;
   background-color: ${colors.white};
   border: none;
-  border-radius: 42px;
+  border-radius: ${borderRadius.primary};
   outline: 2px solid ${colors.white};
   height: 42px;
   width: 100%;
@@ -24,7 +24,7 @@ export const StyledRoot = styled.button`
     border-image-slice: 1;
     border-image-source: ${gradients.secondary};
     border-width: 2px;
-    border-radius: 42px;
+    border-radius: ${borderRadius.primary};
     border-style: solid;
     background: ${gradients.secondary} border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
@@ -45,7 +45,7 @@ export const StyledRoot = styled.button`
     width: 100%;
     height: 100%;
     background: ${gradients.secondary};
-    border-radius: 42px;
+    border-radius: ${borderRadius.primary};
     z-index: -1;
     opacity: 0;
     transition: opacity 0.1s ease-in;
