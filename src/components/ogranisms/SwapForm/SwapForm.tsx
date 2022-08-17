@@ -4,6 +4,8 @@ import { Flex, Typography, IconButton, Button, TokenInput } from 'components'
 import styled from 'styled-components'
 
 import wallet_icon from 'assets/icons/wallet.svg'
+import { useMetaMask } from 'hooks'
+import { selectUser, useAppSelector } from 'store'
 
 // interface ISwapProps {}
 
@@ -13,6 +15,8 @@ const StyledHeader = styled(Flex)`
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
+  const { accountAddress } = useAppSelector(selectUser)
+  const { connect } = useMetaMask()
 
   return (
     <>
@@ -28,11 +32,13 @@ export const SwapForm: FC = () => {
         <IconButton icon="swap" onClick={() => {}} />
       </Flex>
       <TokenInput title={t('swapForm.youBuy')} />
-      <Button
-        title={t('Connect wallet')}
-        icon={wallet_icon}
-        onClick={() => {}}
-      />
+      {!accountAddress && (
+        <Button
+          title={t('Connect wallet')}
+          icon={wallet_icon}
+          onClick={connect}
+        />
+      )}
     </>
   )
 }

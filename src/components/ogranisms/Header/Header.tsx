@@ -1,8 +1,9 @@
 import { FC, memo } from 'react'
 import { NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { colors, getTransparentColor, zIndexes } from 'styles'
-import { MenuToogle, UserBar } from 'components'
+import { Button, MenuToogle, UserBar } from 'components'
 
 import telegram_icon from 'assets/socials/telegram.svg'
 import medium_icon from 'assets/socials/medium.svg'
@@ -10,6 +11,9 @@ import twitter_icon from 'assets/socials/twitter.svg'
 import mediumOL_icon from 'assets/socials/medium-outlined.svg'
 import twitterOL_icon from 'assets/socials/twitter-outlined.svg'
 import telegramOL_icon from 'assets/socials/telegram-outlined.svg'
+import wallet_icon from 'assets/icons/wallet.svg'
+import { useMetaMask } from 'hooks'
+import { selectUser, useAppSelector } from 'store'
 
 // interface IHeaderProps {}
 
@@ -70,6 +74,13 @@ const Icon: React.FC<IconProps> = ({ src, srcOnHover, alt }) => (
 
 export const Header: FC<IHeader> = memo(
   ({ isCollapsed, handleCollapsedToogle }) => {
+    const { t } = useTranslation()
+    const { accountAddress } = useAppSelector(selectUser)
+    const { connect, disconnect } = useMetaMask()
+
+    const username =
+      accountAddress.slice(0, 2) + '...' + accountAddress.slice(38)
+
     return (
       <StyledRoot>
         <MenuToogle
@@ -87,14 +98,18 @@ export const Header: FC<IHeader> = memo(
             <Icon src={twitter_icon} srcOnHover={twitterOL_icon} />
           </StyledIcon>
         </StyledSocials>
-
+        {/* "0x...3C73" */}
         <StyledRight>
-          <UserBar username="0x...3C73" />
-          {/* <Button
-          onClick={() => console.log('click')}
-          title={t('connectWallet')}
-          icon={wallet_icon}
-        /> */}
+          {accountAddress && (
+            <UserBar username={username} disconnect={disconnect} />
+          )}
+          {!accountAddress && (
+            <Button
+              onClick={connect}
+              title={t('connectWallet')}
+              icon={wallet_icon}
+            />
+          )}
         </StyledRight>
       </StyledRoot>
     )

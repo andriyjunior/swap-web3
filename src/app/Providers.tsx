@@ -1,3 +1,4 @@
+import { MetaMaskProvider } from 'hooks'
 import { ReactNode, FC } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
@@ -13,7 +14,9 @@ export const Providers: FC<IProvidersProps> = ({ children }) => {
     <>
       <ErrorBoundary>
         <BrowserRouter>
-          <Provider store={store}>{children}</Provider>
+          <Provider store={store}>
+            <MetaMaskProvider>{children}</MetaMaskProvider>
+          </Provider>
         </BrowserRouter>
       </ErrorBoundary>
     </>

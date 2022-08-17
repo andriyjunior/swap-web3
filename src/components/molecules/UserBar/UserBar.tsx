@@ -2,29 +2,34 @@ import { FC, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ProfileButton, Typography } from 'components'
 import { useTranslation } from 'react-i18next'
-import { useOnClickOutside } from 'hooks'
 import { StyledRoot, StyledAvatarWrap, StyledProfileButtons } from './styled'
 
 import logout_icon from 'assets/icons/logout.svg'
 
 interface IUserBarProps {
   username: string
+  disconnect: () => void
 }
 
-export const UserBar: FC<IUserBarProps> = ({ username }) => {
+export const UserBar: FC<IUserBarProps> = ({ username, disconnect }) => {
   const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
 
-  const ref = useRef(null)
-
-  useOnClickOutside(ref, () => setOpened(false))
+  const handleClose = () => {
+    setOpened(false)
+  }
 
   const handleOpen = () => {
-    setOpened((prev) => !prev)
+    setOpened(true)
   }
 
   return (
-    <StyledRoot ref={ref} isOpened={isOpened} onClick={handleOpen}>
+    <StyledRoot
+      isOpened={isOpened}
+      onClick={handleOpen}
+      onMouseOver={handleOpen}
+      onMouseLeave={handleClose}
+    >
       <Typography.ButtonBold> {username}</Typography.ButtonBold>
       <StyledAvatarWrap></StyledAvatarWrap>
       <AnimatePresence>
@@ -44,7 +49,7 @@ export const UserBar: FC<IUserBarProps> = ({ username }) => {
             <ProfileButton onClick={() => {}}>
               {t('userBar.dashboard')}
             </ProfileButton>
-            <ProfileButton onClick={() => {}} icon={logout_icon}>
+            <ProfileButton onClick={disconnect} icon={logout_icon}>
               {t('userBar.disconnect')}
             </ProfileButton>
           </StyledProfileButtons>
