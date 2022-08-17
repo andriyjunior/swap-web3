@@ -1,7 +1,4 @@
-import { FC, ReactNode } from 'react'
 import styled from 'styled-components'
-
-import styles from './Flex.module.scss'
 
 type TJusifyContent =
   | 'center'
@@ -12,10 +9,12 @@ type TJusifyContent =
 
 type TAlignItems = 'center' | 'flex-start' | 'flex-end'
 
+type TFlexDirection = 'column' | 'row' | 'column-reverse' | 'row-reverse'
+
 interface IStyledRoot {
   justifyContent?: TJusifyContent
   alignItems?: TAlignItems
-  flexDirection?: 'column' | 'row'
+  flexDirection?: TFlexDirection
 }
 
 const StyledRoot = styled.div<IStyledRoot>`

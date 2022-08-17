@@ -5,14 +5,12 @@ import {
   Title,
   Header4,
   IconButton,
-  TokenSelector,
   Button,
+  TokenInput,
 } from 'components'
 import styled from 'styled-components'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import setting_icon from 'assets/icons/settings.svg'
-import BNB_icon from 'assets/coins/BNB.png'
 
 // interface ISwapProps {}
 
@@ -28,9 +26,13 @@ export const SwapForm: FC = () => {
       <Header4>{t('swapForm.swapTokens')}</Header4>
       <StyledHeader alignItems="center" justifyContent="space-between">
         <Title>{t('swapForm.tradeTokensInAnInstant')}</Title>
-        <IconButton icon={setting_icon} onClick={() => {}} />
+        <IconButton icon="settings" onClick={() => {}} />
       </StyledHeader>
-      <TokenSelector title={'BNB'} icon={BNB_icon} />
+      <TokenInput title={t('swapForm.youSell')} />
+      <Flex justifyContent="center">
+        <IconButton icon="swap" onClick={() => {}} />
+      </Flex>
+      <TokenInput title={t('swapForm.youBuy')} />
       <Button
         title={t('Connect wallet')}
         icon={wallet_icon}

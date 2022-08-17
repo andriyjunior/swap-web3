@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import styled from 'styled-components'
 import { colors } from 'styles'
 
@@ -27,6 +26,15 @@ const StyledTitle = styled.p`
   font-weight: 700;
 `
 
+const StyledCaption = styled.p`
+  margin: 0;
+  padding: 0;
+  color: ${colors.black};
+  font-size: 14px;
+  font-weight: 300;
+`
+
 export const Header4 = StyledHeader4
 export const BoldTitle = StyledBoldTitle
 export const Title = StyledTitle
+export const Caption = StyledCaption
