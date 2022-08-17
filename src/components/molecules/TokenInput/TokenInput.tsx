@@ -1,4 +1,4 @@
-import { Caption, TokenSelector } from 'components'
+import { Typography, TokenSelector } from 'components'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
@@ -34,7 +34,7 @@ const StyledInput = styled.input`
   }
 `
 
-const StyledText = styled(Caption)`
+const StyledText = styled(Typography.Caption)`
   padding-top: 10px;
   text-align: right;
   color: ${getTransparentColor(colors.black, 0.5)};
@@ -62,7 +62,7 @@ export const TokenInput: FC<ITokenInputProps> = ({ title }) => {
 
   return (
     <StyledRoot>
-      <Caption>{title}</Caption>
+      <Typography.Caption>{title}</Typography.Caption>
       <StyledBlock>
         <StyledBlockTop>
           <TokenSelector title={''} icon={''} onClick={() => {}} />

@@ -9,29 +9,25 @@ export const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: "Montserrat";
-    src: local("Montserrat"),
-    url(${MontserratBold}) format("truetype");
+    src: url(${MontserratBold}) format("truetype");
     font-weight: 700;
   }
 
   @font-face {
     font-family: "Montserrat";
-    src: local("Montserrat"),
-    url(${MontserratSemiBold}) format("truetype");
+    src: url(${MontserratSemiBold}) format("truetype");
     font-weight: 600;
   }
 
   @font-face {
     font-family: "Montserrat";
-    src: local("Montserrat"),
-    url(${MontserratMedium}) format("truetype");
+    src: url(${MontserratMedium}) format("truetype");
     font-weight: 500;
   }
 
   @font-face {
     font-family: "Montserrat";
-    src: local("Montserrat"),
-    url(${MontserratLight}) format("truetype");
+    src: url(${MontserratLight}) format("truetype");
     font-weight: 400;
   }
 

@@ -1,4 +1,5 @@
 import { App, Providers } from 'app'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { initI18n } from 'translations'
 // import reportWebVitals from "./reportWebVitals";
@@ -7,12 +8,15 @@ initI18n()
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
-  // <React.StrictMode>
-  <Providers>
-    <App />
-  </Providers>
+  <>
+    {/* <React.StrictMode> */}
 
-  // </React.StrictMode>
+    <Providers>
+      <App />
+    </Providers>
+
+    {/* </React.StrictMode> */}
+  </>
 )
 
 // If you want to start measuring performance in your app, pass a function

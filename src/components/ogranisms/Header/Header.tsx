@@ -1,14 +1,12 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import { t } from 'i18next'
 import { colors, getTransparentColor, zIndexes } from 'styles'
-import { Button, MenuToogle } from 'components'
+import { MenuToogle, UserBar } from 'components'
 
 import telegram_icon from 'assets/socials/telegram.svg'
 import medium_icon from 'assets/socials/medium.svg'
 import twitter_icon from 'assets/socials/twitter.svg'
-import wallet_icon from 'assets/icons/wallet.svg'
 import mediumOL_icon from 'assets/socials/medium-outlined.svg'
 import twitterOL_icon from 'assets/socials/twitter-outlined.svg'
 import telegramOL_icon from 'assets/socials/telegram-outlined.svg'
@@ -46,6 +44,8 @@ const StyledIcon = styled(NavLink)`
 
 const StyledRight = styled.div`
   width: 200px;
+  display: flex;
+  justify-content: flex-end;
 `
 
 interface IHeader {
@@ -68,32 +68,35 @@ const Icon: React.FC<IconProps> = ({ src, srcOnHover, alt }) => (
   />
 )
 
-export const Header: FC<IHeader> = ({ isCollapsed, handleCollapsedToogle }) => {
-  return (
-    <StyledRoot>
-      <MenuToogle
-        isCollapsed={isCollapsed}
-        handleCollapsedToogle={handleCollapsedToogle}
-      />
-      <StyledSocials>
-        <StyledIcon to={'#'}>
-          <Icon src={telegram_icon} srcOnHover={telegramOL_icon} />
-        </StyledIcon>
-        <StyledIcon to={'#'}>
-          <Icon src={medium_icon} srcOnHover={mediumOL_icon} />
-        </StyledIcon>
-        <StyledIcon to={'#'}>
-          <Icon src={twitter_icon} srcOnHover={twitterOL_icon} />
-        </StyledIcon>
-      </StyledSocials>
+export const Header: FC<IHeader> = memo(
+  ({ isCollapsed, handleCollapsedToogle }) => {
+    return (
+      <StyledRoot>
+        <MenuToogle
+          isCollapsed={isCollapsed}
+          handleCollapsedToogle={handleCollapsedToogle}
+        />
+        <StyledSocials>
+          <StyledIcon to={'#'}>
+            <Icon src={telegram_icon} srcOnHover={telegramOL_icon} />
+          </StyledIcon>
+          <StyledIcon to={'#'}>
+            <Icon src={medium_icon} srcOnHover={mediumOL_icon} />
+          </StyledIcon>
+          <StyledIcon to={'#'}>
+            <Icon src={twitter_icon} srcOnHover={twitterOL_icon} />
+          </StyledIcon>
+        </StyledSocials>
 
-      <StyledRight>
-        <Button
+        <StyledRight>
+          <UserBar username="0x...3C73" />
+          {/* <Button
           onClick={() => console.log('click')}
           title={t('connectWallet')}
           icon={wallet_icon}
-        />
-      </StyledRight>
-    </StyledRoot>
-  )
-}
+        /> */}
+        </StyledRight>
+      </StyledRoot>
+    )
+  }
+)

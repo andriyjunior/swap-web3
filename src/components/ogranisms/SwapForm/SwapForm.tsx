@@ -1,13 +1,6 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Flex,
-  Title,
-  Header4,
-  IconButton,
-  Button,
-  TokenInput,
-} from 'components'
+import { Flex, Typography, IconButton, Button, TokenInput } from 'components'
 import styled from 'styled-components'
 
 import wallet_icon from 'assets/icons/wallet.svg'
@@ -23,9 +16,11 @@ export const SwapForm: FC = () => {
 
   return (
     <>
-      <Header4>{t('swapForm.swapTokens')}</Header4>
+      <Typography.Header4>{t('swapForm.swapTokens')}</Typography.Header4>
       <StyledHeader alignItems="center" justifyContent="space-between">
-        <Title>{t('swapForm.tradeTokensInAnInstant')}</Title>
+        <Typography.Title>
+          {t('swapForm.tradeTokensInAnInstant')}
+        </Typography.Title>
         <IconButton icon="settings" onClick={() => {}} />
       </StyledHeader>
       <TokenInput title={t('swapForm.youSell')} />

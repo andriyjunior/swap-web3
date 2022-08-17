@@ -10,11 +10,15 @@ const StyledHeader4 = styled.h4`
   font-weight: 700;
 `
 
-const StyledBoldTitle = styled.p`
+const StyledBody = styled.p`
   margin: 0;
   padding: 0;
   color: ${colors.black};
   font-size: 14px;
+  font-weight: 500;
+`
+
+const StyledBodyBold = styled(StyledBody)`
   font-weight: 700;
 `
 
@@ -34,7 +38,24 @@ const StyledCaption = styled.p`
   font-weight: 300;
 `
 
-export const Header4 = StyledHeader4
-export const BoldTitle = StyledBoldTitle
-export const Title = StyledTitle
-export const Caption = StyledCaption
+const StyledButton = styled.span`
+  margin: 0;
+  padding: 0;
+  color: ${colors.black};
+  font-size: 16px;
+  font-weight: 500;
+`
+
+const StyledButtonBold = styled(StyledButton)`
+  font-weight: 700;
+`
+
+export const Typography = {
+  Header4: StyledHeader4,
+  Body: StyledBody,
+  BodyBold: StyledBodyBold,
+  Title: StyledTitle,
+  Caption: StyledCaption,
+  Button: StyledButton,
+  ButtonBold: StyledButtonBold,
+}
