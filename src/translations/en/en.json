@@ -19,10 +19,22 @@
     "youBuy": "You buy"
   },
 
+  "liquidityForm": {
+    "addLiquidity": "Add Liquidity",
+    "addLiquidityToReceiveLpTokens": "Add liquidity to receive LP tokens",
+    "yourLiquidity": "Your Liquidity"
+  },
+
   "userBar": {
     "wallet": "Wallet",
     "transactions": "Transactions",
     "dashboard": "Dashboard",
     "disconnect": "Disconnect"
+  },
+
+  "selectToken": {
+    "selectToken": "Select Token",
+    "searchByNameOrPasteAdress": "Search by name or paste adress",
+    "tokenName": "Token name"
   }
 }

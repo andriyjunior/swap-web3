@@ -1,4 +1,4 @@
-import { SwapForm, Tab } from 'components'
+import { LuquidityForm, SwapForm, Tab } from 'components'
 import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyledPage, StyledRoot, StyledTabs, StyledContent } from './styled'
@@ -8,7 +8,7 @@ import { TabsEmum } from './types'
 
 const tabContent = {
   [TabsEmum.Swap]: <SwapForm />,
-  [TabsEmum.Liquidity]: <></>,
+  [TabsEmum.Liquidity]: <LuquidityForm />,
 }
 
 export const Swap: FC = () => {
