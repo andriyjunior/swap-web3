@@ -6,7 +6,7 @@ export const styledButton = css`
   position: relative;
   display: block;
   padding: 0 18px;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   height: 42px;
   width: 100%;
   text-align: left;

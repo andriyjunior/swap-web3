@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 
 declare global {
   interface Window {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     ethereum?: ethers.providers.ExternalProvider & { on: any }
   }
 }
