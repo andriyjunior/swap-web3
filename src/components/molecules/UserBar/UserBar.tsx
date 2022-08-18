@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react'
+import { FC, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ProfileButton, Typography } from 'components'
 import { useTranslation } from 'react-i18next'
