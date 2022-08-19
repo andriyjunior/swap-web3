@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 import { Icon } from '../Icon'
@@ -9,7 +9,8 @@ import BNB_icon from 'assets/coins/BNB.png'
 
 interface ITokenSelectorProps {
   title: string
-  icon: string
+  hasArrow?: boolean
+  icon?: string
   onClick?: () => void
 }
 
@@ -45,16 +46,14 @@ const StyledArrowIcon = styled(Icon)`
   }
 `
 
-export const TokenSelector: FC<ITokenSelectorProps> = ({
-  title,
-  icon,
-  onClick,
-}) => {
-  return (
-    <StyledRoot onClick={onClick}>
-      <StyledCoinIcon src={icon || BNB_icon} />
-      <StyledText>{title || 'BNB'}</StyledText>
-      {onClick && <StyledArrowIcon src={arrow_icon} />}
-    </StyledRoot>
-  )
-}
+export const TokenSelector: FC<ITokenSelectorProps> = memo(
+  ({ title, icon, onClick, hasArrow }) => {
+    return (
+      <StyledRoot onClick={onClick}>
+        <StyledCoinIcon loading="lazy" src={icon || BNB_icon} />
+        <StyledText>{title || 'BNB'}</StyledText>
+        {hasArrow && <StyledArrowIcon src={arrow_icon} />}
+      </StyledRoot>
+    )
+  }
+)

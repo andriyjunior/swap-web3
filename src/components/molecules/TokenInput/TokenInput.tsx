@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react'
+import { FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import {
@@ -38,31 +38,54 @@ const StyledText = styled(Typography.Caption)`
 
 interface ITokenInputProps {
   title: string
+  tokenName: string
+  amount: string
+  icon: string
+  onInput: (value: string) => void
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  onSelectToken: (value: any) => void
 }
 
-export const TokenInput: FC<ITokenInputProps> = ({ title }) => {
+export const TokenInput: FC<ITokenInputProps> = ({
+  title,
+  tokenName,
+  amount,
+  icon,
+  onSelectToken,
+  onInput,
+}) => {
   const { t } = useTranslation()
-  const [input, setInput] = useState('')
 
   const modalRef = useRef<TModal>(null)
+
+  const handleOnInput = (e: string) => {
+    onInput(e)
+  }
+
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  const handleOnSelect = (value: any) => {
+    onSelectToken(value)
+    modalRef.current?.close()
+  }
 
   return (
     <>
       <Modal ref={modalRef} title={t('selectToken.selectToken')}>
-        <SelectToken />
+        <SelectToken onSelect={handleOnSelect} />
       </Modal>
       <StyledRoot>
         <Typography.Caption>{title}</Typography.Caption>
         <StyledBlock>
           <StyledBlockTop>
             <TokenSelector
-              title={''}
-              icon={''}
+              title={tokenName}
+              icon={icon}
               onClick={() => modalRef.current?.open()}
+              hasArrow
             />
-            <BigDecimalInput value={input} onInput={(e) => setInput(e)} />
+            <BigDecimalInput value={amount} onInput={handleOnInput} />
           </StyledBlockTop>
-          <StyledText>~${Number(input) * 0.23}</StyledText>
+          <StyledText>~${Number(amount) * 0.23}</StyledText>
         </StyledBlock>
       </StyledRoot>
     </>
