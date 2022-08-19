@@ -5,23 +5,16 @@ import {
   Typography,
   IconButton,
   Button,
-  TokenInput,
   Modal,
   TModal,
   Settings,
 } from 'components'
-import { useMetaMask } from 'hooks'
-import { selectUser, useAppSelector } from 'store'
-
-import wallet_icon from 'assets/icons/wallet.svg'
 import { AnimatePresence, motion } from 'framer-motion'
 
 // interface ISwapProps {}
 
-export const SwapForm: FC = () => {
+export const LuquidityForm: FC = () => {
   const { t } = useTranslation()
-  const { accountAddress } = useAppSelector(selectUser)
-  const { connect } = useMetaMask()
 
   const settingsModalRef = useRef<TModal>(null)
 
@@ -37,11 +30,13 @@ export const SwapForm: FC = () => {
           <Settings />
         </Modal>
 
-        <Typography.Header4>{t('swapForm.swapTokens')}</Typography.Header4>
+        <Typography.Header4>
+          {t('liquidityForm.addLiquidity')}
+        </Typography.Header4>
 
         <Flex alignItems="center" justifyContent="space-between">
           <Typography.Title>
-            {t('swapForm.tradeTokensInAnInstant')}
+            {t('liquidityForm.addLiquidityToReceiveLpTokens')}
           </Typography.Title>
 
           <IconButton
@@ -49,22 +44,8 @@ export const SwapForm: FC = () => {
             onClick={() => settingsModalRef.current?.open()}
           />
         </Flex>
-
-        <TokenInput title={t('swapForm.youSell')} />
-
-        <Flex justifyContent="center">
-          <IconButton icon="swap" onClick={() => {}} />
-        </Flex>
-
-        <TokenInput title={t('swapForm.youBuy')} />
-
-        {!accountAddress && (
-          <Button
-            title={t('Connect wallet')}
-            icon={wallet_icon}
-            onClick={connect}
-          />
-        )}
+        <Button title={t('liquidityForm.addLiquidity')} onClick={() => {}} />
+        <Typography.Title>{t('liquidityForm.yourLiquidity')}</Typography.Title>
       </motion.div>
     </AnimatePresence>
   )

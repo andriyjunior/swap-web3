@@ -1,8 +1,15 @@
-import { Typography, TokenSelector } from 'components'
-import { FC, useState } from 'react'
+import { FC, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import {
+  Typography,
+  TokenSelector,
+  BigDecimalInput,
+  TModal,
+  Modal,
+  SelectToken,
+} from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
-import { escapeRegExp } from 'utils'
 
 const StyledRoot = styled.div`
   padding: 18px 0;
@@ -22,18 +29,6 @@ const StyledBlockTop = styled.div`
   justify-content: space-between;
 `
 
-const StyledInput = styled.input`
-  background-color: none;
-  border: none;
-  font-weight: 700;
-  font-size: 26px;
-  text-align: right;
-
-  &:focus {
-    outline: none;
-  }
-`
-
 const StyledText = styled(Typography.Caption)`
   padding-top: 10px;
   text-align: right;
@@ -45,39 +40,31 @@ interface ITokenInputProps {
   title: string
 }
 
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
-
 export const TokenInput: FC<ITokenInputProps> = ({ title }) => {
+  const { t } = useTranslation()
   const [input, setInput] = useState('')
 
-  const enforcer = (nextUserInput: string) => {
-    if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
-      setInput(nextUserInput)
-    }
-  }
-
-  const handleOnInput = (e: string) => {
-    enforcer(e.replace(/,/g, '.'))
-  }
+  const modalRef = useRef<TModal>(null)
 
   return (
-    <StyledRoot>
-      <Typography.Caption>{title}</Typography.Caption>
-      <StyledBlock>
-        <StyledBlockTop>
-          <TokenSelector title={''} icon={''} onClick={() => {}} />
-          <StyledInput
-            inputMode="decimal"
-            placeholder="0.0"
-            pattern="^[0-9]*[.,]?[0-9]*$"
-            value={input}
-            minLength={1}
-            maxLength={79}
-            onInput={(e) => handleOnInput(e.currentTarget.value)}
-          />
-        </StyledBlockTop>
-        <StyledText>~${Number(input) * 0.23}</StyledText>
-      </StyledBlock>
-    </StyledRoot>
+    <>
+      <Modal ref={modalRef} title={t('selectToken.selectToken')}>
+        <SelectToken />
+      </Modal>
+      <StyledRoot>
+        <Typography.Caption>{title}</Typography.Caption>
+        <StyledBlock>
+          <StyledBlockTop>
+            <TokenSelector
+              title={''}
+              icon={''}
+              onClick={() => modalRef.current?.open()}
+            />
+            <BigDecimalInput value={input} onInput={(e) => setInput(e)} />
+          </StyledBlockTop>
+          <StyledText>~${Number(input) * 0.23}</StyledText>
+        </StyledBlock>
+      </StyledRoot>
+    </>
   )
 }

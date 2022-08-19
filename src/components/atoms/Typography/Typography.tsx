@@ -24,7 +24,7 @@ const StyledBodyBold = styled(StyledBody)`
 
 const StyledTitle = styled.p`
   margin: 0;
-  padding: 0;
+  padding: 16px 0;
   color: ${colors.black};
   font-size: 14px;
   font-weight: 700;
