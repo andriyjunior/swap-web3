@@ -9,7 +9,6 @@ import {
   Modal,
   TModal,
   Settings,
-  Settings,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSwapForm } from './hooks'
@@ -17,7 +16,6 @@ import { useMetaMask } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import { AnimatePresence, motion } from 'framer-motion'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
