@@ -5,21 +5,23 @@ import {
   RadioButton,
   Typography,
 } from 'components'
-import { FC, useState } from 'react'
+
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  selectSwapSettings,
+  updateSwapSettings,
+  useAppDispatch,
+  useAppSelector,
+} from 'store'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
+import { TransactionSpeedEnum } from 'types'
 
 // interface ISettingsProps {}
 
-enum TransactionSpeedEnum {
-  Default = 'default',
-  Fast = 'fast',
-  Instant = 'instant',
-}
-
 const data = {
-  name: 'speed',
+  name: 'transactionSpeed',
   options: [
     {
       value: TransactionSpeedEnum.Default,
@@ -37,7 +39,7 @@ const data = {
 }
 
 const data2 = {
-  name: 'tolerance',
+  name: 'transactionTolerance',
   options: [
     {
       value: '0.1',
@@ -61,17 +63,14 @@ const StyledLabel = styled.span`
 `
 
 export const Settings: FC = () => {
-  const [state, setState] = useState<{
-    speed: TransactionSpeedEnum
-    tolerance: string
-    minutes: string
-  }>({ speed: TransactionSpeedEnum.Default, tolerance: '0.1', minutes: '0' })
   const { t } = useTranslation()
 
+  const dispatch = useAppDispatch()
+
+  const state = useAppSelector(selectSwapSettings)
+
   const handleOnChange = (value: { [x: string]: string | number }) => {
-    setState((prev) => {
-      return { ...prev, ...value }
-    })
+    dispatch(updateSwapSettings(value))
   }
   return (
     <>
@@ -82,7 +81,7 @@ export const Settings: FC = () => {
         {data.options.map((item) => {
           return (
             <RadioButton
-              checked={state.speed === item.value}
+              checked={state.transactionSpeed === item.value}
               key={item.key}
               title={t(item.key)}
               name={data.name}
@@ -98,7 +97,9 @@ export const Settings: FC = () => {
         {data2.options.map((item) => {
           return (
             <RadioButton
-              checked={Number(state.tolerance) === Number(item.value)}
+              checked={
+                Number(state.transactionTolerance) === Number(item.value)
+              }
               key={item.key}
               title={t(item.key)}
               name={data2.name}
@@ -108,8 +109,8 @@ export const Settings: FC = () => {
           )
         })}
         <NumberInput
-          value={state.tolerance}
-          onInput={(value) => handleOnChange({ tolerance: value })}
+          value={state.transactionTolerance}
+          onInput={(value) => handleOnChange({ transactionTolerance: value })}
           placeholder={'0.0'}
         />
         <StyledLabel>%</StyledLabel>
@@ -119,8 +120,8 @@ export const Settings: FC = () => {
         {t('swapSettings.transactionDeadline')}
       </Typography.Title>
       <NumberInput
-        value={state.minutes}
-        onInput={(value) => handleOnChange({ minutes: value })}
+        value={state.transactionDeadline}
+        onInput={(value) => handleOnChange({ transactionDeadline: value })}
         placeholder={'0'}
       />
       <StyledLabel>{t('minutes')}</StyledLabel>

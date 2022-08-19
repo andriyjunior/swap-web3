@@ -10,20 +10,20 @@ import {
   TModal,
   Settings,
 } from 'components'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useSwapForm } from './hooks'
 import { useMetaMask } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import { AnimatePresence, motion } from 'framer-motion'
-
-// interface ISwapProps {}
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
   const { accountAddress } = useAppSelector(selectUser)
   const { connect } = useMetaMask()
-
   const settingsModalRef = useRef<TModal>(null)
+
+  const { state, handleOnChange, handleSwapInputs } = useSwapForm()
 
   return (
     <AnimatePresence>
@@ -50,13 +50,37 @@ export const SwapForm: FC = () => {
           />
         </Flex>
 
-        <TokenInput title={t('swapForm.youSell')} />
+        <TokenInput
+          tokenName={state.inputToken}
+          title={t('swapForm.youSell')}
+          icon={state.inputLogoURI}
+          amount={state.inputAmount}
+          onInput={(value) => handleOnChange({ inputAmount: value })}
+          onSelectToken={(value) =>
+            handleOnChange({
+              inputToken: value.symbol,
+              inputLogoURI: value.logoURI,
+            })
+          }
+        />
 
         <Flex justifyContent="center">
-          <IconButton icon="swap" onClick={() => {}} />
+          <IconButton icon="swap" onClick={handleSwapInputs} />
         </Flex>
 
-        <TokenInput title={t('swapForm.youBuy')} />
+        <TokenInput
+          tokenName={state.outputToken}
+          title={t('swapForm.youBuy')}
+          icon={state.outputLogoURI}
+          amount={state.outputAmount}
+          onInput={(value) => handleOnChange({ outputAmount: value })}
+          onSelectToken={(value) =>
+            handleOnChange({
+              outputToken: value.symbol,
+              outputLogoURI: value.logoURI,
+            })
+          }
+        />
 
         {!accountAddress && (
           <Button

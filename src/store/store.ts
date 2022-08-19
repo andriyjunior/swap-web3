@@ -11,14 +11,15 @@ import {
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import user from './features/user'
+import swap from './pages/swap'
 
-const reducers = combineReducers({ user })
+const reducers = combineReducers({ user, swap })
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['user'],
+  whitelist: ['user', 'swap'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)
