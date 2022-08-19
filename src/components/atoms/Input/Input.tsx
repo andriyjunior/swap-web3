@@ -10,7 +10,7 @@ interface IInputProps {
 }
 const StyledRoot = styled(InnerContainer)``
 
-const Styledinput = styled.input`
+const StyledInput = styled.input`
   width: 100%;
   height: 56px;
   background-color: transparent;
@@ -30,7 +30,7 @@ const Styledinput = styled.input`
 export const Input: FC<IInputProps> = ({ value, onInput, placeholder }) => {
   return (
     <StyledRoot>
-      <Styledinput
+      <StyledInput
         placeholder={placeholder}
         value={value}
         onInput={(e) => onInput(e.currentTarget.value)}

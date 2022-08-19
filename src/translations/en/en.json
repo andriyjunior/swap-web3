@@ -36,5 +36,16 @@
     "selectToken": "Select Token",
     "searchByNameOrPasteAdress": "Search by name or paste adress",
     "tokenName": "Token name"
-  }
+  },
+
+  "default": "Default",
+  "fast": "Fast",
+  "instant": "Instant",
+
+  "swapSettings": {
+    "defaultTransactionSpeed": "Default Transaction Speed (GWEI)",
+    "slippageTolerance": "Slippage tolerance",
+    "transactionDeadline": "Transaction deadline"
+  },
+  "minutes": "Minutes"
 }

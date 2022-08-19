@@ -1,6 +1,14 @@
 import { FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Flex, Typography, IconButton, Button, Modal, TModal } from 'components'
+import {
+  Flex,
+  Typography,
+  IconButton,
+  Button,
+  Modal,
+  TModal,
+  Settings,
+} from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 
 // interface ISwapProps {}
@@ -19,7 +27,7 @@ export const LuquidityForm: FC = () => {
         transition={{ duration: 0.2 }}
       >
         <Modal ref={settingsModalRef} title={'Setting'}>
-          Setting
+          <Settings />
         </Modal>
 
         <Typography.Header4>

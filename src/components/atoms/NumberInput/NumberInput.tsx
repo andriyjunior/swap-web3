@@ -1,26 +1,42 @@
 import { FC } from 'react'
 import styled from 'styled-components'
+import { getTransparentColor, colors, borderRadius, shadows } from 'styles'
 import { escapeRegExp } from 'utils'
 import { inputRegex } from '../utils'
+
+interface INumberInputProps {
+  value: string
+  onInput: (e: string) => void
+  placeholder: string
+}
 
 const StyledInput = styled.input`
   background-color: none;
   border: none;
-  font-weight: 700;
-  font-size: 26px;
-  text-align: right;
+  height: 42px;
+  text-align: center;
+  padding: 0 10px;
+  box-shadow: ${shadows.inner};
+  background-color: ${colors.white};
+  border: 1px solid ${getTransparentColor(colors.black, 0.05)};
+  border-radius: ${borderRadius.primary};
 
   &:focus {
     outline: none;
   }
+
+  &::placeholder {
+    font-size: 14px;
+    color: ${getTransparentColor(colors.black, 0.5)};
+    font-weight: 500;
+  }
 `
 
-interface IBigDecimalInput {
-  value: string
-  onInput: (e: string) => void
-}
-
-export const BigDecimalInput: FC<IBigDecimalInput> = ({ value, onInput }) => {
+export const NumberInput: FC<INumberInputProps> = ({
+  value,
+  onInput,
+  placeholder,
+}) => {
   const enforcer = (nextUserInput: string) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
       onInput(nextUserInput)
@@ -33,12 +49,12 @@ export const BigDecimalInput: FC<IBigDecimalInput> = ({ value, onInput }) => {
 
   return (
     <StyledInput
+      placeholder={placeholder}
       inputMode="decimal"
-      placeholder="0.0"
       pattern="^[0-9]*[.,]?[0-9]*$"
       value={value}
       minLength={1}
-      maxLength={79}
+      maxLength={3}
       onInput={(e) => handleOnInput(e.currentTarget.value)}
     />
   )
