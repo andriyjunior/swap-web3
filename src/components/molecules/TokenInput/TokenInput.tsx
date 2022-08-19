@@ -9,6 +9,14 @@ import {
   Modal,
   SelectToken,
 } from 'components'
+import {
+  Typography,
+  TokenSelector,
+  BigDecimalInput,
+  TModal,
+  Modal,
+  SelectToken,
+} from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
 
 const StyledRoot = styled.div`
