@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react'
+import { FC, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Flex,
@@ -11,19 +11,30 @@ import {
   Settings,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useSwapForm } from './hooks'
 import { useMetaMask } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
+import { TokenDTO } from 'types'
+import { useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
+import allTokens from 'const/token-list-old.json'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
   const { accountAddress } = useAppSelector(selectUser)
+
   const { connect } = useMetaMask()
   const settingsModalRef = useRef<TModal>(null)
 
   const { state, handleOnChange, handleSwapInputs } = useSwapForm()
+
+  const getTokenList = useMemo((): TokenDTO[] => {
+    return allTokens.tokens.filter(
+      (item) =>
+        item?.address !== state.inputToken.address &&
+        item?.address !== state.outputToken.address
+    )
+  }, [state])
 
   return (
     <AnimatePresence>
@@ -51,17 +62,17 @@ export const SwapForm: FC = () => {
         </Flex>
 
         <TokenInput
-          tokenName={state.inputToken}
+          tokenName={state.inputToken.symbol}
           title={t('swapForm.youSell')}
-          icon={state.inputLogoURI}
+          icon={state.inputToken.logoURI}
           amount={state.inputAmount}
           onInput={(value) => handleOnChange({ inputAmount: value })}
           onSelectToken={(value) =>
             handleOnChange({
-              inputToken: value.symbol,
-              inputLogoURI: value.logoURI,
+              inputToken: value,
             })
           }
+          tokenList={getTokenList}
         />
 
         <Flex justifyContent="center">
@@ -69,17 +80,17 @@ export const SwapForm: FC = () => {
         </Flex>
 
         <TokenInput
-          tokenName={state.outputToken}
+          tokenName={state.outputToken.symbol}
           title={t('swapForm.youBuy')}
-          icon={state.outputLogoURI}
+          icon={state.outputToken.logoURI}
           amount={state.outputAmount}
           onInput={(value) => handleOnChange({ outputAmount: value })}
           onSelectToken={(value) =>
             handleOnChange({
-              outputToken: value.symbol,
-              outputLogoURI: value.logoURI,
+              outputToken: value,
             })
           }
+          tokenList={getTokenList}
         />
 
         {!accountAddress && (

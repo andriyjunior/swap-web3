@@ -5,6 +5,7 @@ export const colors = {
   purple: '#BD00FF',
   orange: '#FF8700',
   yellow: 'FFF500',
+  error: '#FF005C',
 }
 
 export const gradients = {

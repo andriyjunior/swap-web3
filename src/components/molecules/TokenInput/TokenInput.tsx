@@ -10,6 +10,7 @@ import {
   SelectToken,
 } from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
+import { TokenDTO } from 'types'
 
 const StyledRoot = styled.div`
   padding: 18px 0;
@@ -42,8 +43,8 @@ interface ITokenInputProps {
   amount: string
   icon: string
   onInput: (value: string) => void
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  onSelectToken: (value: any) => void
+  onSelectToken: (value: TokenDTO) => void
+  tokenList: TokenDTO[]
 }
 
 export const TokenInput: FC<ITokenInputProps> = ({
@@ -53,6 +54,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   icon,
   onSelectToken,
   onInput,
+  tokenList,
 }) => {
   const { t } = useTranslation()
 
@@ -62,8 +64,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
     onInput(e)
   }
 
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  const handleOnSelect = (value: any) => {
+  const handleOnSelect = (value: TokenDTO) => {
     onSelectToken(value)
     modalRef.current?.close()
   }
@@ -71,7 +72,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   return (
     <>
       <Modal ref={modalRef} title={t('selectToken.selectToken')}>
-        <SelectToken onSelect={handleOnSelect} />
+        <SelectToken onSelect={handleOnSelect} allTokensList={tokenList} />
       </Modal>
       <StyledRoot>
         <Typography.Caption>{title}</Typography.Caption>

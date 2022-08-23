@@ -10,10 +10,10 @@ const StyledHeader4 = styled.h4`
   font-weight: 700;
 `
 
-const StyledBody = styled.p`
+const StyledBody = styled.p<{ isError?: boolean }>`
   margin: 0;
   padding: 0;
-  color: ${colors.black};
+  color: ${({ isError }) => (isError ? colors.error : colors.black)};
   font-size: 14px;
   font-weight: 500;
 `
@@ -22,10 +22,10 @@ const StyledBodyBold = styled(StyledBody)`
   font-weight: 700;
 `
 
-const StyledTitle = styled.p`
+const StyledTitle = styled.p<{ isError?: boolean }>`
   margin: 0;
   padding: 16px 0;
-  color: ${colors.black};
+  color: ${({ isError }) => (isError ? colors.error : colors.black)};
   font-size: 14px;
   font-weight: 700;
 `

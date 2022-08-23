@@ -1,14 +1,12 @@
-import { FC, ReactNode, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InnerContainer, Input, TokenSelector, Typography } from 'components'
 import styled from 'styled-components'
-
-import allTokenList from 'const/token-list.json'
+import { TokenDTO } from 'types'
 
 interface ISelectTokenProps {
-  children?: ReactNode
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  onSelect: (value: any) => void
+  onSelect: (value: TokenDTO) => void
+  allTokensList: TokenDTO[]
 }
 
 const StyledList = styled(InnerContainer)`
@@ -20,19 +18,22 @@ const StyledList = styled(InnerContainer)`
   overflow-y: scroll;
 `
 
-export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
-  const [tokenList, setTokenList] = useState(allTokenList.tokens)
+export const SelectToken: FC<ISelectTokenProps> = ({
+  onSelect,
+  allTokensList,
+}) => {
+  const [tokenList, setTokenList] = useState<TokenDTO[]>(allTokensList)
   const [input, setInput] = useState('')
 
   const { t } = useTranslation()
 
   useEffect(() => {
-    const filteredTokens = allTokenList.tokens.filter((item) =>
+    const filteredTokens = allTokensList.filter((item) =>
       item.symbol.toLowerCase().includes(input.toLowerCase())
     )
 
-    setTokenList(filteredTokens || allTokenList.tokens)
-  }, [input])
+    setTokenList(filteredTokens || allTokensList)
+  }, [input, allTokensList])
 
   return (
     <>

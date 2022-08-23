@@ -1,38 +1,43 @@
 import { useParsedQueryString } from 'hooks'
 import { useCallback, useMemo, useState } from 'react'
+import { TokenDTO } from 'types'
+
+import allTokenList from 'const/token-list.json'
 
 interface IForm {
-  inputToken: string
+  inputToken: TokenDTO
   inputAmount: string
-  inputLogoURI: string
-  outputToken: string
+  outputToken: TokenDTO
   outputAmount: string
-  outputLogoURI: string
 }
 
 const initialState = {
-  inputToken: 'BUSD',
+  inputToken: allTokenList.tokens[1],
   inputAmount: '',
-  inputLogoURI:
-    'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-dex/main/public/images/coins/BUSD.svg',
-  outputToken: 'ETH',
+  outputToken: allTokenList.tokens[2],
   outputAmount: '',
-  outputLogoURI:
-    'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-dex/main/public/images/coins/ETH.svg',
 }
+
+interface IErrors {
+  [x: string]: string
+}
+
+const initialErrors = {}
 
 export const useSwapForm = () => {
   const [state, setState] = useState<IForm>(initialState)
+  const [errors, setErrors] = useState<IErrors>(initialErrors)
 
   const parsedQs = useParsedQueryString()
 
-  console.log(parsedQs)
-
-  const handleOnChange = useCallback((value: { [x: string]: string }) => {
-    setState((prev) => {
-      return { ...prev, ...value }
-    })
-  }, [])
+  const handleOnChange = useCallback(
+    (value: { [x: string]: string | TokenDTO }) => {
+      setState((prev) => {
+        return { ...prev, ...value }
+      })
+    },
+    []
+  )
 
   const handleSwapInputs = useCallback(() => {
     setState((prev) => {
@@ -40,10 +45,8 @@ export const useSwapForm = () => {
         ...prev,
         inputToken: state.outputToken,
         inputAmount: state.outputAmount,
-        inputLogoURI: state.outputLogoURI,
         outputToken: state.inputToken,
         outputAmount: state.inputAmount,
-        outputLogoURI: state.inputLogoURI,
       }
     })
   }, [state])

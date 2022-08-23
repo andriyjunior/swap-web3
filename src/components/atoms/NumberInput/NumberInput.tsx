@@ -8,6 +8,7 @@ interface INumberInputProps {
   value: string
   onInput: (e: string) => void
   placeholder: string
+  error?: boolean
 }
 
 const StyledInput = styled.input`
@@ -20,6 +21,13 @@ const StyledInput = styled.input`
   background-color: ${colors.white};
   border: 1px solid ${getTransparentColor(colors.black, 0.05)};
   border-radius: ${borderRadius.primary};
+  font-weight: 500;
+  font-size: 14px;
+
+  &.error {
+    border-color: ${colors.error};
+    color: ${colors.error};
+  }
 
   &:focus {
     outline: none;
@@ -36,6 +44,7 @@ export const NumberInput: FC<INumberInputProps> = ({
   value,
   onInput,
   placeholder,
+  error,
 }) => {
   const enforcer = (nextUserInput: string) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
@@ -49,6 +58,7 @@ export const NumberInput: FC<INumberInputProps> = ({
 
   return (
     <StyledInput
+      className={error ? 'error' : ''}
       placeholder={placeholder}
       inputMode="decimal"
       pattern="^[0-9]*[.,]?[0-9]*$"

@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { Icon } from 'components'
 import { gradients, shadows } from 'styles'
 
 import cross_icon from 'assets/icons/cross.svg'
@@ -52,7 +51,7 @@ const StyledButton = styled.button`
   }
 `
 
-const StyledImg = styled(Icon)``
+const StyledImg = styled.img``
 
 const icons = {
   settings: setting_icon,
