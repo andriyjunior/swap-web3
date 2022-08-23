@@ -17,7 +17,7 @@ import { TokenDTO } from 'types'
 import { useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import allTokens from 'const/token-list-old.json'
+import allTokens from 'const/token-list.json'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
@@ -44,7 +44,7 @@ export const SwapForm: FC = () => {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
       >
-        <Modal ref={settingsModalRef} title={'Setting'}>
+        <Modal ref={settingsModalRef} title={t('settings')}>
           <Settings />
         </Modal>
 

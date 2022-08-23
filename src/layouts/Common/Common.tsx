@@ -10,6 +10,8 @@ interface ICommonProps {
 
 const StyleRoot = styled.div`
   background: ${gradients.bg};
+  background-size: 100vw 100vh;
+  background-attachment: fixed;
   background-blend-mode: normal, luminosity, normal, normal;
   display: flex;
   width: 100%;

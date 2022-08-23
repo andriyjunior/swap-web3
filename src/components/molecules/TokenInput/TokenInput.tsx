@@ -17,12 +17,15 @@ const StyledRoot = styled.div`
 `
 
 const StyledBlock = styled.div`
-  margin-top: 10px;
   padding: 20px 10px;
   box-shadow: ${shadows.inner};
   background-color: ${colors.white};
   border: 1px solid ${getTransparentColor(colors.black, 0.05)};
   border-radius: ${borderRadius.primary};
+`
+
+const StyledTitle = styled(Typography.Caption)`
+  padding-bottom: 10px;
 `
 
 const StyledBlockTop = styled.div`
@@ -31,14 +34,14 @@ const StyledBlockTop = styled.div`
 `
 
 const StyledText = styled(Typography.Caption)`
-  padding-top: 10px;
+  padding: 10px 0;
   text-align: right;
   color: ${getTransparentColor(colors.black, 0.5)};
   opacity: 0.5;
 `
 
 interface ITokenInputProps {
-  title: string
+  title?: string
   tokenName: string
   amount: string
   icon: string
@@ -75,7 +78,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
         <SelectToken onSelect={handleOnSelect} allTokensList={tokenList} />
       </Modal>
       <StyledRoot>
-        <Typography.Caption>{title}</Typography.Caption>
+        {title && <StyledTitle>{title}</StyledTitle>}
         <StyledBlock>
           <StyledBlockTop>
             <TokenSelector

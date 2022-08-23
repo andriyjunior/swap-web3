@@ -22,7 +22,8 @@
   "liquidityForm": {
     "addLiquidity": "Add Liquidity",
     "addLiquidityToReceiveLpTokens": "Add liquidity to receive LP tokens",
-    "yourLiquidity": "Your Liquidity"
+    "yourLiquidity": "Your Liquidity",
+    "pricesAndPoolShare": "Prices and pool share"
   },
 
   "userBar": {
@@ -47,5 +48,7 @@
     "slippageTolerance": "Slippage tolerance",
     "transactionDeadline": "Transaction deadline"
   },
-  "minutes": "Minutes"
+  "minutes": "Minutes",
+  "supply": "Supply",
+  "settings": "Settings"
 }
