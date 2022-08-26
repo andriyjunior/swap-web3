@@ -1,8 +1,8 @@
 import { FC, ReactNode, useState } from 'react'
-
-import arrowDown_icon from 'assets/icons/arrow.svg'
 import styled from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
+
+import arrowDown_icon from 'assets/icons/arrow.svg'
 
 const StyledRoot = styled.div`
   padding: 8px 0;
@@ -24,13 +24,13 @@ const StyledIcon = styled.img<{ isActive?: boolean }>`
 
 const StyledContent = styled(motion.div)``
 
-interface IDropdownProps {
+interface IAccordionProps {
   element: ReactNode
   children: ReactNode
   hasArrow?: boolean
 }
 
-export const Dropdown: FC<IDropdownProps> = ({
+export const Accordion: FC<IAccordionProps> = ({
   element,
   children,
   hasArrow,

@@ -10,7 +10,7 @@ import {
   Settings,
   TokenInput,
   InnerContainer,
-  Dropdown,
+  Accordion,
   CoinPair,
 } from 'components'
 import styled from 'styled-components'
@@ -152,7 +152,7 @@ export const LuquidityForm: FC = () => {
         )}
 
         <Typography.Title>{t('liquidityForm.yourLiquidity')}</Typography.Title>
-        <Dropdown
+        <Accordion
           hasArrow
           element={
             <Flex alignItems="center">
@@ -167,8 +167,8 @@ export const LuquidityForm: FC = () => {
           }
         >
           Content
-        </Dropdown>
-        <Dropdown
+        </Accordion>
+        <Accordion
           hasArrow
           element={
             <Flex alignItems="center">
@@ -183,7 +183,7 @@ export const LuquidityForm: FC = () => {
           }
         >
           Content
-        </Dropdown>
+        </Accordion>
       </motion.div>
     </AnimatePresence>
   )
