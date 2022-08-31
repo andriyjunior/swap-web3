@@ -1,8 +1,8 @@
-import { useParsedQueryString } from 'hooks'
 import { useCallback, useMemo, useState } from 'react'
 import { TokenDTO } from 'types'
 
 import allTokenList from 'const/token-list.json'
+import useParsedQueryString from 'hooks/useParsedQueryString'
 
 interface IForm {
   inputToken: TokenDTO

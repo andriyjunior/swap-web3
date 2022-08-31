@@ -1,18 +1,23 @@
 import { FC, memo } from 'react'
-import { NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { colors, getTransparentColor, zIndexes } from 'styles'
-import { Button, MenuToogle, UserBar } from 'components'
+import {
+  Button,
+  MenuToogle,
+  Modal,
+  UserBar,
+  WalletConnection,
+} from 'components'
 
-import telegram_icon from 'assets/socials/telegram.svg'
+import discord_icon from 'assets/socials/discord.svg'
 import medium_icon from 'assets/socials/medium.svg'
 import twitter_icon from 'assets/socials/twitter.svg'
 import mediumOL_icon from 'assets/socials/medium-outlined.svg'
 import twitterOL_icon from 'assets/socials/twitter-outlined.svg'
-import telegramOL_icon from 'assets/socials/telegram-outlined.svg'
+import discordOL_icon from 'assets/socials/discord-outlined.svg'
 import wallet_icon from 'assets/icons/wallet.svg'
-import { useMetaMask } from 'hooks'
+import { useMetaMask, useModalRef } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
 
 // interface IHeaderProps {}
@@ -37,7 +42,7 @@ const StyledSocials = styled.div`
   gap: 42px;
 `
 
-const StyledIcon = styled(NavLink)`
+const StyledIcon = styled.a`
   transform: scale(1);
   transition: transform 0.1s ease-in;
 
@@ -76,42 +81,57 @@ export const Header: FC<IHeader> = memo(
   ({ isCollapsed, handleCollapsedToogle }) => {
     const { t } = useTranslation()
     const { accountAddress } = useAppSelector(selectUser)
-    const { connect, disconnect } = useMetaMask()
+    const { disconnect } = useMetaMask()
+
+    const walletsRef = useModalRef()
+
+    const handleOnClick = () => walletsRef.current?.open()
+    const handleOnClose = () => walletsRef.current?.close()
 
     const username =
       accountAddress.slice(0, 2) + '...' + accountAddress.slice(38)
 
     return (
-      <StyledRoot>
-        <MenuToogle
-          isCollapsed={isCollapsed}
-          handleCollapsedToogle={handleCollapsedToogle}
-        />
-        <StyledSocials>
-          <StyledIcon to={'#'}>
-            <Icon src={telegram_icon} srcOnHover={telegramOL_icon} />
-          </StyledIcon>
-          <StyledIcon to={'#'}>
-            <Icon src={medium_icon} srcOnHover={mediumOL_icon} />
-          </StyledIcon>
-          <StyledIcon to={'#'}>
-            <Icon src={twitter_icon} srcOnHover={twitterOL_icon} />
-          </StyledIcon>
-        </StyledSocials>
-        {/* "0x...3C73" */}
-        <StyledRight>
-          {accountAddress && (
-            <UserBar username={username} disconnect={disconnect} />
-          )}
-          {!accountAddress && (
-            <Button
-              onClick={connect}
-              title={t('connectWallet')}
-              icon={wallet_icon}
-            />
-          )}
-        </StyledRight>
-      </StyledRoot>
+      <>
+        <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
+          <WalletConnection onClick={handleOnClose} />
+        </Modal>
+        <StyledRoot>
+          <MenuToogle
+            isCollapsed={isCollapsed}
+            handleCollapsedToogle={handleCollapsedToogle}
+          />
+          <StyledSocials>
+            <StyledIcon target="_blank" href={'https://discord.gg/PZD2BFkRAj'}>
+              <Icon src={discord_icon} srcOnHover={discordOL_icon} />
+            </StyledIcon>
+            <StyledIcon
+              target="_blank"
+              href={'https://medium.com/@SevnFinance'}
+            >
+              <Icon src={medium_icon} srcOnHover={mediumOL_icon} />
+            </StyledIcon>
+            <StyledIcon
+              target="_blank"
+              href={'https://twitter.com/SevnFinance'}
+            >
+              <Icon src={twitter_icon} srcOnHover={twitterOL_icon} />
+            </StyledIcon>
+          </StyledSocials>
+          <StyledRight>
+            {accountAddress && (
+              <UserBar username={username} disconnect={disconnect} />
+            )}
+            {!accountAddress && (
+              <Button
+                onClick={handleOnClick}
+                title={t('connectWallet')}
+                icon={wallet_icon}
+              />
+            )}
+          </StyledRight>
+        </StyledRoot>
+      </>
     )
   }
 )

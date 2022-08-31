@@ -1,3 +1,4 @@
+import { Loader } from 'components'
 import { Common } from 'layouts'
 import { FC } from 'react'
 import { GlobalStyle } from 'styles'
@@ -8,6 +9,7 @@ export const App: FC = () => {
     <>
       <GlobalStyle />
       <Common>
+        <Loader />
         <Routes />
       </Common>
     </>

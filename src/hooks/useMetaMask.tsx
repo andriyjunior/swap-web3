@@ -1,4 +1,3 @@
-import { ethers } from 'ethers'
 import {
   createContext,
   ReactNode,
@@ -7,6 +6,9 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { formatEther } from 'ethers/lib/utils'
 import {
   logOut,
   saveUser,
@@ -14,82 +16,49 @@ import {
   useAppDispatch,
   useAppSelector,
 } from 'store'
+import { Web3Provider } from '@ethersproject/providers'
 
-const ETH_REQUESTACCOUNTS = 'eth_requestAccounts'
-const ACCOUNTS_CHANGED = 'accountsChanged'
+const useBalance = () => {
+  const { account, library } = useWeb3React()
+  const [balance, setBalance] = useState('')
 
-const initialState = {
-  accountAddress: '',
-  accountBalance: '',
+  useEffect(() => {
+    if (account) {
+      library?.getBalance(account).then((res) => setBalance(formatEther(res)))
+    }
+  }, [account, library])
+
+  return balance
 }
 
 export const useMetamaskConnection = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectUser)
 
-  const [accountInfo, setAccountInfo] = useState(initialState)
-  const [isConnected, setIsConnected] = useState(false)
+  const { active, account, activate, deactivate } = useWeb3React<Web3Provider>()
 
-  const { ethereum } = window
+  const balance = useBalance()
 
-  const provider = ethereum && new ethers.providers.Web3Provider(ethereum)
-
-  const getBalance = async (address: string) => {
-    const bal = (await provider?.getBalance(address)) || ''
-    return ethers.utils.formatEther(bal)
-  }
-
-  const connect = async () => {
-    try {
-      if (!ethereum) {
-        return console.log('You need to install MetaMask')
-      }
-
-      const accounts =
-        ethereum?.request &&
-        (await ethereum?.request({ method: ETH_REQUESTACCOUNTS }))
-
-      const balance = await getBalance(accounts[0])
-
-      setAccountInfo({ accountAddress: accounts[0], accountBalance: balance })
-      setIsConnected(true)
-    } catch (error) {
-      setIsConnected(false)
-    }
+  const connect = () => {
+    activate(new InjectedConnector({}))
   }
 
   useEffect(() => {
-    if (accountInfo.accountAddress) {
-      dispatch(saveUser(accountInfo))
+    if (account) {
+      dispatch(saveUser({ accountAddress: account, accountBalance: balance }))
     }
-  }, [accountInfo.accountAddress])
+  }, [account, balance])
 
   useEffect(() => {
-    if (!isConnected && user.accountAddress) {
+    if (!active && user.accountAddress) {
       connect()
     }
   }, [user.accountAddress])
 
   const disconnect = () => {
-    setAccountInfo(initialState)
-    setIsConnected(false)
+    deactivate()
     dispatch(logOut())
   }
-
-  const handleOnAccountsChange = async (accounts: string[]) => {
-    if (!isConnected) return
-
-    if (!accounts.length) {
-      disconnect()
-    }
-
-    const newAccount = accounts[0]
-    const newBal = await getBalance(newAccount)
-
-    setAccountInfo({ accountAddress: newAccount, accountBalance: newBal })
-  }
-
-  ethereum?.on(ACCOUNTS_CHANGED, handleOnAccountsChange)
 
   return { connect, disconnect }
 }

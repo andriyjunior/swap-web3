@@ -1,4 +1,4 @@
-import { FC, useMemo, useRef, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Flex,
@@ -6,7 +6,6 @@ import {
   IconButton,
   Button,
   Modal,
-  TModal,
   Settings,
   TokenInput,
   InnerContainer,
@@ -21,6 +20,7 @@ import { colors, getTransparentColor } from 'styles'
 
 import allTokens from 'const/token-list.json'
 import icon_plus from 'assets/icons/plus.svg'
+import { useModalRef } from 'hooks'
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;
@@ -44,7 +44,7 @@ export const LuquidityForm: FC = () => {
   const { t } = useTranslation()
   const [liquidityFormShown, setLiquidityFormShown] = useState(false)
 
-  const settingsModalRef = useRef<TModal>(null)
+  const settingsModalRef = useModalRef()
 
   const { state, handleOnChange } = useLiquidityForm()
 

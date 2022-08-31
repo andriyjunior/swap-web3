@@ -1,5 +1,14 @@
 {
   "welcome": "Welcome to the tutorial",
+  "connectWallet": "Connect wallet",
+  "swap": "Swap",
+  "liquidity": "Liquidity",
+  "default": "Default",
+  "fast": "Fast",
+  "instant": "Instant",
+  "minutes": "Minutes",
+  "supply": "Supply",
+  "settings": "Settings",
 
   "menu": {
     "swap": "Swap",
@@ -7,10 +16,6 @@
     "staking": "Staking",
     "games": "Games"
   },
-
-  "connectWallet": "Connect wallet",
-  "swap": "Swap",
-  "liquidity": "Liquidity",
 
   "swapForm": {
     "swapTokens": "Swap tokens",
@@ -39,16 +44,13 @@
     "tokenName": "Token name"
   },
 
-  "default": "Default",
-  "fast": "Fast",
-  "instant": "Instant",
+  "walletConnection": {
+    "connectToAWallet": "Connect to a wallet"
+  },
 
   "swapSettings": {
     "defaultTransactionSpeed": "Default Transaction Speed (GWEI)",
     "slippageTolerance": "Slippage tolerance",
     "transactionDeadline": "Transaction deadline"
-  },
-  "minutes": "Minutes",
-  "supply": "Supply",
-  "settings": "Settings"
+  }
 }

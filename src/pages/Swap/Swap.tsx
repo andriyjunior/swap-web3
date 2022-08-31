@@ -1,15 +1,10 @@
 import { LuquidityForm, SwapForm, Tab } from 'components'
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyledPage, StyledRoot, StyledTabs, StyledContent } from './styled'
 import { TabsEmum } from './types'
 
 // interface ISwapProps {}
-
-const tabContent = {
-  [TabsEmum.Swap]: <SwapForm />,
-  [TabsEmum.Liquidity]: <LuquidityForm />,
-}
 
 export const Swap: FC = () => {
   const [activeTab, setActiveTab] = useState(TabsEmum.Swap)
@@ -18,6 +13,13 @@ export const Swap: FC = () => {
 
   const handleClick = useCallback((value: TabsEmum) => {
     setActiveTab(value)
+  }, [])
+
+  const tabContent = useMemo(() => {
+    return {
+      [TabsEmum.Swap]: <SwapForm />,
+      [TabsEmum.Liquidity]: <LuquidityForm />,
+    }
   }, [])
 
   return (

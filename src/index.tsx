@@ -1,5 +1,4 @@
 import { App, Providers } from 'app'
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { initI18n } from 'translations'
 // import reportWebVitals from "./reportWebVitals";

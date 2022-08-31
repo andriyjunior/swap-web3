@@ -1,4 +1,4 @@
-import { FC, useMemo, useRef } from 'react'
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Flex,
@@ -7,11 +7,10 @@ import {
   Button,
   TokenInput,
   Modal,
-  TModal,
   Settings,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useMetaMask } from 'hooks'
+import { useMetaMask, useModalRef } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
 import { TokenDTO } from 'types'
 import { useSwapForm } from './hooks'
@@ -24,7 +23,7 @@ export const SwapForm: FC = () => {
   const { accountAddress } = useAppSelector(selectUser)
 
   const { connect } = useMetaMask()
-  const settingsModalRef = useRef<TModal>(null)
+  const settingsModalRef = useModalRef()
 
   const { state, handleOnChange, handleSwapInputs } = useSwapForm()
 
