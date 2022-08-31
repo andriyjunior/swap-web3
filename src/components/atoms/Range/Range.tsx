@@ -49,7 +49,7 @@ const StyledInput = styled.input<{ width: number }>`
     top: 50%;
     transform: translateY(-50%);
     box-shadow: ${shadows.logo};
-    transition: background-color 150ms;
+    transition: background 150ms;
   }
 
   &::before {
@@ -58,6 +58,7 @@ const StyledInput = styled.input<{ width: number }>`
     width: ${({ width }) => width + '%'};
     height: 10px;
     background: ${gradients.primary};
+    border-radius: 10px;
   }
 `
 
