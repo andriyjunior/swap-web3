@@ -17,6 +17,7 @@
   "remove": "Remove",
   "deposited": "Deposited",
   "rates": "Rates",
+  "close": "Close",
 
   "menu": {
     "swap": "Swap",
@@ -49,6 +50,11 @@
     "outputIsEstimated": "Output is estimated. If the price changes more than {{percent}}% your transaction will revert.",
     "shareOfPool": "Share of Pool",
     "confirmSupply": "Confirm Supply"
+  },
+
+  "transactionSubmited": {
+    "transactionSubmited": "Transaction submited",
+    "viewOnEtherScan": "View on EtherScan"
   },
 
   "userBar": {

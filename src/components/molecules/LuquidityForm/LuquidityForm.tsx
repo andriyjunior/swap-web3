@@ -29,7 +29,9 @@ export const LuquidityForm: FC = () => {
   }
 
   const tabs = {
-    [TabsEnum.Add]: <AddLiquidity settingsRef={settingsModalRef} />,
+    [TabsEnum.Add]: (
+      <AddLiquidity onOpenSettings={() => settingsModalRef.current?.open()} />
+    ),
     [TabsEnum.Remove]: <RemoveLiquidity onGoBack={handleOnGoBack} />,
   }
 

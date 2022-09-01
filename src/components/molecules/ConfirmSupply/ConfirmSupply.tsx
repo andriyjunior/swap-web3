@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 
 import bnb from 'assets/coins/BNB.png'
+import { FC } from 'react'
 
 const StyledButton = styled.div`
   padding: 24px 0 16px;
@@ -35,7 +36,11 @@ const state = {
   outputToken: 'USDT',
 }
 
-export const ConfirmSupply = () => {
+interface IConfirmSupply {
+  onSuccess: () => void
+}
+
+export const ConfirmSupply: FC<IConfirmSupply> = ({ onSuccess }) => {
   const { t } = useTranslation()
 
   return (
@@ -87,7 +92,7 @@ export const ConfirmSupply = () => {
       </StyledTextRow>
 
       <StyledButton>
-        <Button title={t('confirmSupply.confirmSupply')} onClick={() => {}} />
+        <Button title={t('confirmSupply.confirmSupply')} onClick={onSuccess} />
       </StyledButton>
     </>
   )

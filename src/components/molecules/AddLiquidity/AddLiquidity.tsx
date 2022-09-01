@@ -1,3 +1,9 @@
+import { FC, RefObject, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+import { useModalRef } from 'hooks'
+import { TokenDTO } from 'types'
+import { useLiquidityForm } from './hooks'
 import {
   Typography,
   Flex,
@@ -6,18 +12,12 @@ import {
   InnerContainer,
   Modal,
   ConfirmSupply,
+  TransactionSubmited,
 } from 'components'
-import { FC, RefObject, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 import { TokenInput } from '../TokenInput'
 
 import icon_plus from 'assets/icons/plus.svg'
-import { TokenDTO } from 'types'
-
 import allTokens from 'const/token-list.json'
-import { useLiquidityForm } from './hooks'
-import { useModalRef } from 'hooks'
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;
@@ -33,16 +33,17 @@ const StyledSupplyWrapper = styled.div`
 //TODO: after moving a liquidity state to global state assign properly types in interface
 
 interface IAddLiquidity {
-  settingsRef: RefObject<any>
+  onOpenSettings: () => void
 }
 
-export const AddLiquidity: FC<IAddLiquidity> = ({ settingsRef }) => {
+export const AddLiquidity: FC<IAddLiquidity> = ({ onOpenSettings }) => {
   const [liquidityFormShown, setLiquidityFormShown] = useState(false)
 
   const { t } = useTranslation()
   const { state, handleOnChange } = useLiquidityForm()
 
   const confirmSupplyRef = useModalRef()
+  const txSubmitedRef = useModalRef()
 
   const getTokenList = useMemo((): TokenDTO[] => {
     return allTokens.tokens.filter(
@@ -57,7 +58,19 @@ export const AddLiquidity: FC<IAddLiquidity> = ({ settingsRef }) => {
       <Typography.Header4>{t('liquidityForm.addLiquidity')}</Typography.Header4>
 
       <Modal title={t('confirmSupply.youWillRecieve')} ref={confirmSupplyRef}>
-        <ConfirmSupply />
+        <ConfirmSupply
+          onSuccess={() => {
+            confirmSupplyRef.current?.close()
+            txSubmitedRef.current?.open()
+          }}
+        />
+      </Modal>
+
+      <Modal
+        title={t('transactionSubmited.transactionSubmited')}
+        ref={txSubmitedRef}
+      >
+        <TransactionSubmited onClose={() => txSubmitedRef.current?.close()} />
       </Modal>
 
       <Flex alignItems="center" justifyContent="space-between">
@@ -65,10 +78,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({ settingsRef }) => {
           {t('liquidityForm.addLiquidityToReceiveLpTokens')}
         </Typography.Title>
 
-        <IconButton
-          icon="settings"
-          onClick={() => settingsRef.current?.open()}
-        />
+        <IconButton icon="settings" onClick={onOpenSettings} />
       </Flex>
 
       {!liquidityFormShown && (
