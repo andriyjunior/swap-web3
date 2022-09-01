@@ -1,6 +1,15 @@
 import styled from 'styled-components'
 import { colors } from 'styles'
 
+const StyledHeader3 = styled.h3`
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  color: ${colors.black};
+  font-size: 42px;
+  font-weight: 500;
+`
+
 const StyledHeader4 = styled.h4`
   margin: 0;
   padding: 0;
@@ -51,6 +60,7 @@ const StyledButtonBold = styled(StyledButton)`
 `
 
 export const Typography = {
+  Header3: StyledHeader3,
   Header4: StyledHeader4,
   Body: StyledBody,
   BodyBold: StyledBodyBold,

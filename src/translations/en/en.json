@@ -15,6 +15,8 @@
   "approve": "Approve",
   "add": "Add",
   "remove": "Remove",
+  "deposited": "Deposited",
+  "rates": "Rates",
 
   "menu": {
     "swap": "Swap",
@@ -39,6 +41,14 @@
     "pooled": "Pooled",
     "yourPoolTokens": "Your pool tokens",
     "yourPoolShare": "Your pool share"
+  },
+
+  "confirmSupply": {
+    "youWillRecieve": "You will receive",
+    "poolTokens": "Pool Tokens",
+    "outputIsEstimated": "Output is estimated. If the price changes more than {{percent}}% your transaction will revert.",
+    "shareOfPool": "Share of Pool",
+    "confirmSupply": "Confirm Supply"
   },
 
   "userBar": {

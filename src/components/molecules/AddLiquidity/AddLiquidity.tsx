@@ -4,8 +4,10 @@ import {
   IconButton,
   Button,
   InnerContainer,
-} from 'components/atoms'
-import { FC, Ref, RefObject, useMemo, useState } from 'react'
+  Modal,
+  ConfirmSupply,
+} from 'components'
+import { FC, RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { TokenInput } from '../TokenInput'
@@ -15,6 +17,7 @@ import { TokenDTO } from 'types'
 
 import allTokens from 'const/token-list.json'
 import { useLiquidityForm } from './hooks'
+import { useModalRef } from 'hooks'
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;
@@ -39,6 +42,8 @@ export const AddLiquidity: FC<IAddLiquidity> = ({ settingsRef }) => {
   const { t } = useTranslation()
   const { state, handleOnChange } = useLiquidityForm()
 
+  const confirmSupplyRef = useModalRef()
+
   const getTokenList = useMemo((): TokenDTO[] => {
     return allTokens.tokens.filter(
       (item) =>
@@ -50,6 +55,10 @@ export const AddLiquidity: FC<IAddLiquidity> = ({ settingsRef }) => {
   return (
     <>
       <Typography.Header4>{t('liquidityForm.addLiquidity')}</Typography.Header4>
+
+      <Modal title={t('confirmSupply.youWillRecieve')} ref={confirmSupplyRef}>
+        <ConfirmSupply />
+      </Modal>
 
       <Flex alignItems="center" justifyContent="space-between">
         <Typography.Title>
@@ -125,7 +134,10 @@ export const AddLiquidity: FC<IAddLiquidity> = ({ settingsRef }) => {
             </StyledPricesAndPool>
           </InnerContainer>
           <StyledSupplyWrapper>
-            <Button title={t('supply')} onClick={() => {}} />
+            <Button
+              title={t('supply')}
+              onClick={() => confirmSupplyRef.current?.open()}
+            />
           </StyledSupplyWrapper>
         </>
       )}
