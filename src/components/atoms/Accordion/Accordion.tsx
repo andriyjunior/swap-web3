@@ -6,6 +6,7 @@ import arrowDown_icon from 'assets/icons/arrow.svg'
 
 const StyledRoot = styled.div`
   padding: 8px 0;
+  overflow: hidden;
 `
 
 const StyledButton = styled.button`

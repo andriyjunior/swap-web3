@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -56,7 +56,11 @@ const initialState = {
 
 const allAmount = 1.4
 
-export const RemoveLiquidity = memo(() => {
+interface IRemoveLiquidity {
+  onGoBack: () => void
+}
+
+export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(({ onGoBack }) => {
   const [state, setState] = useState(initialState)
 
   const handleOnChange = useCallback((value) => {
@@ -87,7 +91,7 @@ export const RemoveLiquidity = memo(() => {
   return (
     <>
       <Flex alignItems="center">
-        <StyledArrowButton>
+        <StyledArrowButton onClick={onGoBack}>
           <StyledArrowIcon src={icon_arrow} />
         </StyledArrowButton>
         <Typography.Header4>

@@ -13,6 +13,8 @@
   "amount": "Amount",
   "detailed": "Detailed",
   "approve": "Approve",
+  "add": "Add",
+  "remove": "Remove",
 
   "menu": {
     "swap": "Swap",
@@ -33,7 +35,10 @@
     "addLiquidityToReceiveLpTokens": "Add liquidity to receive LP tokens",
     "yourLiquidity": "Your Liquidity",
     "pricesAndPoolShare": "Prices and pool share",
-    "removeLiquidity": "Remove Liquidity"
+    "removeLiquidity": "Remove Liquidity",
+    "pooled": "Pooled",
+    "yourPoolTokens": "Your pool tokens",
+    "yourPoolShare": "Your pool share"
   },
 
   "userBar": {
