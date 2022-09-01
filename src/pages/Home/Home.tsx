@@ -1,5 +1,4 @@
-import { Dropdown, DropdownItem } from 'components'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 
 export const Home: FC = () => {
   return <>Home</>

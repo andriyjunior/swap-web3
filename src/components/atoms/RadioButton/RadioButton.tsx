@@ -62,7 +62,7 @@ const StyledButton = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: ${gradients.secondary};
+    background: ${gradients.faded};
     border-radius: ${borderRadius.primary};
     z-index: -1;
     opacity: 0;
@@ -87,9 +87,13 @@ const StyledInput = styled.input`
   }
 
   &:checked ~ ${StyledButton} {
-    span {
+    /* span {
       font-weight: 700;
       color: ${colors.white};
+    } */
+
+    &::before {
+      opacity: 0;
     }
 
     &::after {
