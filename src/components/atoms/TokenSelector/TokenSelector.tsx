@@ -16,6 +16,7 @@ interface ITokenSelectorProps {
 
 const StyledRoot = styled.button`
   padding: 5px;
+  min-width: 0;
   display: flex;
   align-items: center;
   background: none;

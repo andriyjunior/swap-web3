@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { UserType } from 'types'
 
 interface IInitialState {
-  accountAddress: string
-  accountBalance: string
+  readonly accountAddress: string
+  readonly accountBalance: string
 }
 
 const initialState: IInitialState = {

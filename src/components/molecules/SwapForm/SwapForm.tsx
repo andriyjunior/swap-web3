@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react'
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Flex,
@@ -7,23 +7,33 @@ import {
   Button,
   TokenInput,
   Modal,
-  TModal,
   Settings,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useSwapForm } from './hooks'
-import { useMetaMask } from 'hooks'
+import { useMetaMask, useModalRef } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
+import { TokenDTO } from 'types'
+import { useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
+import allTokens from 'const/token-list.json'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
   const { accountAddress } = useAppSelector(selectUser)
+
   const { connect } = useMetaMask()
-  const settingsModalRef = useRef<TModal>(null)
+  const settingsModalRef = useModalRef()
 
   const { state, handleOnChange, handleSwapInputs } = useSwapForm()
+
+  const getTokenList = useMemo((): TokenDTO[] => {
+    return allTokens.tokens.filter(
+      (item) =>
+        item?.address !== state.inputToken.address &&
+        item?.address !== state.outputToken.address
+    )
+  }, [state])
 
   return (
     <AnimatePresence>
@@ -33,7 +43,7 @@ export const SwapForm: FC = () => {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
       >
-        <Modal ref={settingsModalRef} title={'Setting'}>
+        <Modal ref={settingsModalRef} title={t('settings')}>
           <Settings />
         </Modal>
 
@@ -51,17 +61,17 @@ export const SwapForm: FC = () => {
         </Flex>
 
         <TokenInput
-          tokenName={state.inputToken}
+          tokenName={state.inputToken.symbol}
           title={t('swapForm.youSell')}
-          icon={state.inputLogoURI}
+          icon={state.inputToken.logoURI}
           amount={state.inputAmount}
           onInput={(value) => handleOnChange({ inputAmount: value })}
           onSelectToken={(value) =>
             handleOnChange({
-              inputToken: value.symbol,
-              inputLogoURI: value.logoURI,
+              inputToken: value,
             })
           }
+          tokenList={getTokenList}
         />
 
         <Flex justifyContent="center">
@@ -69,17 +79,17 @@ export const SwapForm: FC = () => {
         </Flex>
 
         <TokenInput
-          tokenName={state.outputToken}
+          tokenName={state.outputToken.symbol}
           title={t('swapForm.youBuy')}
-          icon={state.outputLogoURI}
+          icon={state.outputToken.logoURI}
           amount={state.outputAmount}
           onInput={(value) => handleOnChange({ outputAmount: value })}
           onSelectToken={(value) =>
             handleOnChange({
-              outputToken: value.symbol,
-              outputLogoURI: value.logoURI,
+              outputToken: value,
             })
           }
+          tokenList={getTokenList}
         />
 
         {!accountAddress && (

@@ -5,12 +5,15 @@ export const colors = {
   purple: '#BD00FF',
   orange: '#FF8700',
   yellow: 'FFF500',
+  error: '#FF005C',
 }
 
 export const gradients = {
   primary:
     'linear-gradient(90deg, #00FFF0 0%, #BD00FF 37.5%, #FF8700 68.23%, #FFF500 100%)',
   secondary: 'linear-gradient(90deg, #00FFF0 0%, #BD00FF 50%, #FF8700 100%)',
+  faded:
+    'linear-gradient(90deg, #8CFFF8 0%, #F3C9FF 37.5%, #FFD5A0 68.23%, #FDF300 100%)',
   bg: 'linear-gradient(180deg, rgba(247, 247, 247, 0) 11.59%, #F7F7F7 36.96%), linear-gradient(0deg, #D5D9FF, #D5D9FF), linear-gradient(90deg, #00FFF0 0%, #BD00FF 39.58%, #FF8700 69.79%, #FFF500 100%);',
   white: 'linear-gradient(180deg, #E8E8E8 0%, #FFFFFF 100%);',
   whiteFaded:

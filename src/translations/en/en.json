@@ -1,5 +1,23 @@
 {
   "welcome": "Welcome to the tutorial",
+  "connectWallet": "Connect wallet",
+  "swap": "Swap",
+  "liquidity": "Liquidity",
+  "default": "Default",
+  "fast": "Fast",
+  "instant": "Instant",
+  "minutes": "Minutes",
+  "supply": "Supply",
+  "settings": "Settings",
+  "price": "Price",
+  "amount": "Amount",
+  "detailed": "Detailed",
+  "approve": "Approve",
+  "add": "Add",
+  "remove": "Remove",
+  "deposited": "Deposited",
+  "rates": "Rates",
+  "close": "Close",
 
   "menu": {
     "swap": "Swap",
@@ -7,10 +25,6 @@
     "staking": "Staking",
     "games": "Games"
   },
-
-  "connectWallet": "Connect wallet",
-  "swap": "Swap",
-  "liquidity": "Liquidity",
 
   "swapForm": {
     "swapTokens": "Swap tokens",
@@ -22,7 +36,25 @@
   "liquidityForm": {
     "addLiquidity": "Add Liquidity",
     "addLiquidityToReceiveLpTokens": "Add liquidity to receive LP tokens",
-    "yourLiquidity": "Your Liquidity"
+    "yourLiquidity": "Your Liquidity",
+    "pricesAndPoolShare": "Prices and pool share",
+    "removeLiquidity": "Remove Liquidity",
+    "pooled": "Pooled",
+    "yourPoolTokens": "Your pool tokens",
+    "yourPoolShare": "Your pool share"
+  },
+
+  "confirmSupply": {
+    "youWillRecieve": "You will receive",
+    "poolTokens": "Pool Tokens",
+    "outputIsEstimated": "Output is estimated. If the price changes more than {{percent}}% your transaction will revert.",
+    "shareOfPool": "Share of Pool",
+    "confirmSupply": "Confirm Supply"
+  },
+
+  "transactionSubmited": {
+    "transactionSubmited": "Transaction submited",
+    "viewOnEtherScan": "View on EtherScan"
   },
 
   "userBar": {
@@ -38,14 +70,13 @@
     "tokenName": "Token name"
   },
 
-  "default": "Default",
-  "fast": "Fast",
-  "instant": "Instant",
+  "walletConnection": {
+    "connectToAWallet": "Connect to a wallet"
+  },
 
   "swapSettings": {
     "defaultTransactionSpeed": "Default Transaction Speed (GWEI)",
     "slippageTolerance": "Slippage tolerance",
     "transactionDeadline": "Transaction deadline"
-  },
-  "minutes": "Minutes"
+  }
 }

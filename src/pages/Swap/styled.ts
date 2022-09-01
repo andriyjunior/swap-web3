@@ -1,6 +1,6 @@
 import { Flex } from 'components'
 import styled from 'styled-components'
-import { colors } from 'styles'
+import { colors, shadows } from 'styles'
 
 export const StyledPage = styled(Flex)`
   padding-top: 80px;
@@ -11,6 +11,7 @@ export const StyledRoot = styled(Flex)`
   width: 502px;
   background-color: ${colors.white};
   align-items: flex-start;
+  box-shadow: ${shadows.main};
 `
 
 export const StyledTabs = styled(Flex)`

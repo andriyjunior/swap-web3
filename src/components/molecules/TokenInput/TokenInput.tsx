@@ -10,18 +10,22 @@ import {
   SelectToken,
 } from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
+import { TokenDTO } from 'types'
 
 const StyledRoot = styled.div`
   padding: 18px 0;
 `
 
 const StyledBlock = styled.div`
-  margin-top: 10px;
   padding: 20px 10px;
   box-shadow: ${shadows.inner};
   background-color: ${colors.white};
   border: 1px solid ${getTransparentColor(colors.black, 0.05)};
   border-radius: ${borderRadius.primary};
+`
+
+const StyledTitle = styled(Typography.Caption)`
+  padding-bottom: 10px;
 `
 
 const StyledBlockTop = styled.div`
@@ -30,20 +34,20 @@ const StyledBlockTop = styled.div`
 `
 
 const StyledText = styled(Typography.Caption)`
-  padding-top: 10px;
+  padding: 10px 0;
   text-align: right;
   color: ${getTransparentColor(colors.black, 0.5)};
   opacity: 0.5;
 `
 
 interface ITokenInputProps {
-  title: string
+  title?: string
   tokenName: string
   amount: string
   icon: string
   onInput: (value: string) => void
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  onSelectToken: (value: any) => void
+  onSelectToken: (value: TokenDTO) => void
+  tokenList: TokenDTO[]
 }
 
 export const TokenInput: FC<ITokenInputProps> = ({
@@ -53,6 +57,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   icon,
   onSelectToken,
   onInput,
+  tokenList,
 }) => {
   const { t } = useTranslation()
 
@@ -62,8 +67,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
     onInput(e)
   }
 
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  const handleOnSelect = (value: any) => {
+  const handleOnSelect = (value: TokenDTO) => {
     onSelectToken(value)
     modalRef.current?.close()
   }
@@ -71,10 +75,10 @@ export const TokenInput: FC<ITokenInputProps> = ({
   return (
     <>
       <Modal ref={modalRef} title={t('selectToken.selectToken')}>
-        <SelectToken onSelect={handleOnSelect} />
+        <SelectToken onSelect={handleOnSelect} allTokensList={tokenList} />
       </Modal>
       <StyledRoot>
-        <Typography.Caption>{title}</Typography.Caption>
+        {title && <StyledTitle>{title}</StyledTitle>}
         <StyledBlock>
           <StyledBlockTop>
             <TokenSelector
