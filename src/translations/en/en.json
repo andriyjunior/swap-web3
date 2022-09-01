@@ -9,6 +9,10 @@
   "minutes": "Minutes",
   "supply": "Supply",
   "settings": "Settings",
+  "price": "Price",
+  "amount": "Amount",
+  "detailed": "Detailed",
+  "approve": "Approve",
 
   "menu": {
     "swap": "Swap",
@@ -28,7 +32,8 @@
     "addLiquidity": "Add Liquidity",
     "addLiquidityToReceiveLpTokens": "Add liquidity to receive LP tokens",
     "yourLiquidity": "Your Liquidity",
-    "pricesAndPoolShare": "Prices and pool share"
+    "pricesAndPoolShare": "Prices and pool share",
+    "removeLiquidity": "Remove Liquidity"
   },
 
   "userBar": {

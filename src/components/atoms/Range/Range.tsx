@@ -10,8 +10,11 @@ interface IRange {
 }
 
 const StyledRoot = styled.div`
+  padding: 24px 0;
+`
+
+const StyledWrapper = styled.div`
   position: relative;
-  margin: 16px 32px;
 `
 
 const StyledInput = styled.input<{ width: number }>`
@@ -65,14 +68,16 @@ const StyledInput = styled.input<{ width: number }>`
 export const Range: FC<IRange> = ({ value, onChange, name, step = 1 }) => {
   return (
     <StyledRoot>
-      <StyledInput
-        name={name}
-        width={value}
-        value={value}
-        type="range"
-        step={step}
-        onChange={(e) => onChange(e.target.valueAsNumber)}
-      />
+      <StyledWrapper>
+        <StyledInput
+          name={name}
+          width={value}
+          value={value}
+          type="range"
+          step={step}
+          onChange={(e) => onChange(e.target.valueAsNumber)}
+        />
+      </StyledWrapper>
     </StyledRoot>
   )
 }
