@@ -12,15 +12,18 @@ import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import user from './features/user/reducer'
 import wallets from './features/wallets/reducer'
+import { resetLocalStorage } from './utils'
 
 const reducers = combineReducers({ user })
 
 const persistConfig = {
   key: 'root',
-  version: 1,
+  version: 1.0001,
   storage,
   whitelist: ['user'],
 }
+
+resetLocalStorage(persistConfig.version, persistConfig.key)
 
 const persistedReducer = persistReducer(persistConfig, reducers)
 
