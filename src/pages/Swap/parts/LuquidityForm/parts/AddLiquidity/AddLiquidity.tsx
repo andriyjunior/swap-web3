@@ -1,4 +1,4 @@
-import { FC, RefObject, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { useModalRef } from 'hooks'
@@ -11,13 +11,13 @@ import {
   Button,
   InnerContainer,
   Modal,
-  ConfirmSupply,
   TransactionSubmited,
+  TokenInput,
 } from 'components'
-import { TokenInput } from '../TokenInput'
 
 import icon_plus from 'assets/icons/plus.svg'
 import allTokens from 'const/token-list.json'
+import { ConfirmSupply } from '../ConfirmSupply'
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;

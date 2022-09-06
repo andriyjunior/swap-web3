@@ -1,16 +1,12 @@
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { Accordion, Button, CoinPair, Flex, Typography } from 'components'
 
 import { colors, getTransparentColor } from 'styles'
-import { Accordion } from '../Accordion'
-import { Button } from '../Button'
-import { CoinPair } from '../CoinPair'
-import { Flex } from '../Flex'
-import { Typography } from '../Typography'
 
 import icon_BNB from 'assets/coins/BNB.png'
 import icon_USDT from 'assets/coins/Tether.png'
-import { FC } from 'react'
 
 const StyledPairTitle = styled(Typography.Body)`
   color: ${getTransparentColor(colors.black, 0.5)};

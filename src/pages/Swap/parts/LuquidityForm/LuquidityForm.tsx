@@ -1,14 +1,10 @@
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Modal,
-  Settings,
-  AddLiquidity,
-  RemoveLiquidity,
-  LiquidityPool,
-} from 'components'
+import { Modal, Settings } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useModalRef } from 'hooks'
+
+import { AddLiquidity, RemoveLiquidity, LiquidityPool } from './parts'
 
 // interface ISwapProps {}
 

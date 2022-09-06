@@ -1,14 +1,16 @@
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  selectSwapSettings,
-  updateSwapSettings,
+  selectUser,
+  updateSlippageTolerance,
+  updateUserDeadline,
+  updateUserGasPrice,
   useAppDispatch,
   useAppSelector,
 } from 'store'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
-import { TransactionSpeedEnum } from 'types'
+import { GAS_PRICE_GWEI } from 'const'
 import {
   Flex,
   HorizontalSeparator,
@@ -20,36 +22,36 @@ import {
 // interface ISettingsProps {}
 
 const data = {
-  name: 'transactionSpeed',
+  name: 'gasPrice',
   options: [
     {
-      value: TransactionSpeedEnum.Default,
+      value: GAS_PRICE_GWEI.default,
       key: 'default',
     },
     {
-      value: TransactionSpeedEnum.Fast,
+      value: GAS_PRICE_GWEI.fast,
       key: 'fast',
     },
     {
-      value: TransactionSpeedEnum.Instant,
+      value: GAS_PRICE_GWEI.instant,
       key: 'instant',
     },
   ],
 }
 
 const data2 = {
-  name: 'transactionTolerance',
+  name: 'userSlippageTolerance',
   options: [
     {
-      value: '0.1',
+      value: 0.1,
       key: '0.1%',
     },
     {
-      value: '0.5',
+      value: 0.5,
       key: '0.5%',
     },
     {
-      value: '1',
+      value: 1,
       key: '1%',
     },
   ],
@@ -70,21 +72,35 @@ export const Settings: FC = () => {
 
   const dispatch = useAppDispatch()
 
-  const state = useAppSelector(selectSwapSettings)
+  const { userSlippageTolerance, userDeadline, gasPrice } =
+    useAppSelector(selectUser)
+
   const [errors, setErrors] = useState<{ [x: string]: string }>({})
 
-  const handleOnChange = (value: { [x: string]: string | number }) => {
-    dispatch(updateSwapSettings(value))
+  // const handleOnChange = (value: { [x: string]: string | number }) => {
+  //   dispatch(updateSwapSettings(value))
+  // }
+
+  const handleOnChangeTolerance = (value) => {
+    dispatch(updateSlippageTolerance(value))
+  }
+
+  const handleOnChangeDeadline = (value) => {
+    dispatch(updateUserDeadline(value))
+  }
+
+  const handleOnChangeGasPrice = (value) => {
+    dispatch(updateUserGasPrice(value))
   }
 
   const handleOnError = () => {
     const isEmpty = (value: string) => !value.length
-    const tolerance = Number(state.transactionTolerance)
+    const tolerance = Number(userSlippageTolerance)
 
     if (
       tolerance < 0.1 ||
       tolerance >= 50 ||
-      isEmpty(state.transactionTolerance)
+      isEmpty(userSlippageTolerance.toString())
     ) {
       setErrors((prev) => {
         return {
@@ -97,7 +113,7 @@ export const Settings: FC = () => {
     }
   }
 
-  useEffect(handleOnError, [state])
+  useEffect(handleOnError, [userSlippageTolerance, userDeadline, gasPrice])
 
   return (
     <>
@@ -108,12 +124,12 @@ export const Settings: FC = () => {
         {data.options.map((item) => {
           return (
             <RadioButton
-              checked={state.transactionSpeed === item.value}
+              checked={gasPrice === item.value}
               key={item.key}
               title={t(item.key)}
               name={data.name}
               value={item.value}
-              onChange={handleOnChange}
+              onChange={(value) => handleOnChangeGasPrice(value[data.name])}
             />
           )
         })}
@@ -124,20 +140,20 @@ export const Settings: FC = () => {
         {data2.options.map((item) => {
           return (
             <RadioButton
-              checked={
-                Number(state.transactionTolerance) === Number(item.value)
-              }
+              checked={Number(userSlippageTolerance) === Number(item.value)}
               key={item.key}
               title={t(item.key)}
               name={data2.name}
               value={item.value}
-              onChange={(value) => handleOnChange(value)}
+              onChange={(value) =>
+                handleOnChangeTolerance(value.userSlippageTolerance)
+              }
             />
           )
         })}
         <NumberInput
-          value={state.transactionTolerance}
-          onInput={(value) => handleOnChange({ transactionTolerance: value })}
+          value={userSlippageTolerance}
+          onInput={(value) => handleOnChangeTolerance(value)}
           placeholder={'0.0'}
           error={Boolean(errors?.transactionTolerance)}
         />
@@ -153,8 +169,8 @@ export const Settings: FC = () => {
         {t('swapSettings.transactionDeadline')}
       </Typography.Title>
       <NumberInput
-        value={state.transactionDeadline}
-        onInput={(value) => handleOnChange({ transactionDeadline: value })}
+        value={userDeadline.toString()}
+        onInput={(value) => handleOnChangeDeadline(value)}
         placeholder={'0'}
       />
       <StyledLabel>{t('minutes')}</StyledLabel>

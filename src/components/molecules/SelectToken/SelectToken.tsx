@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { InnerContainer, Input, TokenSelector, Typography } from 'components'
 import styled from 'styled-components'
 import { TokenDTO } from 'types'
+import { colors, getTransparentColor } from 'styles'
 
 interface ISelectTokenProps {
   onSelect: (value: TokenDTO) => void
@@ -16,6 +17,16 @@ const StyledList = styled(InnerContainer)`
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: ${getTransparentColor(colors.black, 0.25)};
+  }
+  &::-webkit-scrollbar {
+    width: 4px;
+    background-color: ${getTransparentColor(colors.black, 0.25)};
+    border-radius: 2px;
+  }
 `
 
 export const SelectToken: FC<ISelectTokenProps> = ({

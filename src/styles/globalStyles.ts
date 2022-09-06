@@ -1,4 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
+import { getTransparentColor } from './colorConverter'
+import { colors } from './variables'
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -9,7 +11,18 @@ export const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+
+    &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: ${getTransparentColor(colors.black, 0.25)};
   }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: ${getTransparentColor(colors.black, 0.25)};
+    border-radius: 8px;
+  }
+}
 
   a {
     text-decoration: none;

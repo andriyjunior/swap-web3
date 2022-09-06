@@ -1,4 +1,5 @@
-import { LuquidityForm, SwapForm, Tab } from 'components'
+import { Tab } from 'components'
+import { LuquidityForm, SwapForm } from './parts'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyledPage, StyledRoot, StyledTabs, StyledContent } from './styled'
