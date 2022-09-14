@@ -17,8 +17,10 @@ import mediumOL_icon from 'assets/socials/medium-outlined.svg'
 import twitterOL_icon from 'assets/socials/twitter-outlined.svg'
 import discordOL_icon from 'assets/socials/discord-outlined.svg'
 import wallet_icon from 'assets/icons/wallet.svg'
-import { useMetaMask, useModalRef } from 'hooks'
+import { useMetamaskConnection, useModalRef } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
+import { useWeb3React } from '@web3-react/core'
+import { sliceAccAddress } from 'utils'
 
 // interface IHeaderProps {}
 
@@ -80,16 +82,23 @@ const Icon: React.FC<IconProps> = ({ src, srcOnHover, alt }) => (
 export const Header: FC<IHeader> = memo(
   ({ isCollapsed, handleCollapsedToogle }) => {
     const { t } = useTranslation()
-    const { accountAddress } = useAppSelector(selectUser)
-    const { disconnect } = useMetaMask()
+    const { account } = useWeb3React()
+    const { disconnect } = useMetamaskConnection()
+
+    // const currWallet = useAppSelector(
+    //   selectCurrentWallet
+    // ).connectedWallets.find((wallet) => wallet.account === account)
+
+    const handleDisconnect = () => {
+      disconnect()
+    }
 
     const walletsRef = useModalRef()
 
     const handleOnClick = () => walletsRef.current?.open()
     const handleOnClose = () => walletsRef.current?.close()
 
-    const username =
-      accountAddress.slice(0, 2) + '...' + accountAddress.slice(38)
+    const username = sliceAccAddress(account)
 
     return (
       <>
@@ -119,10 +128,10 @@ export const Header: FC<IHeader> = memo(
             </StyledIcon>
           </StyledSocials>
           <StyledRight>
-            {accountAddress && (
-              <UserBar username={username} disconnect={disconnect} />
+            {account && (
+              <UserBar username={username} disconnect={handleDisconnect} />
             )}
-            {!accountAddress && (
+            {!account && (
               <Button
                 onClick={handleOnClick}
                 title={t('connectWallet')}

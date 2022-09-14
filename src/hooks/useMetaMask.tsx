@@ -1,24 +1,17 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { formatEther } from 'ethers/lib/utils'
 import {
-  logOut,
-  saveUser,
+  removeSelectedWallet,
   selectUser,
+  updateSelectedWallet,
   useAppDispatch,
   useAppSelector,
 } from 'store'
 import { Web3Provider } from '@ethersproject/providers'
 
-const useBalance = () => {
+export const useBalance = () => {
   const { account, library } = useWeb3React()
   const [balance, setBalance] = useState('')
 
@@ -45,50 +38,22 @@ export const useMetamaskConnection = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(saveUser({ accountAddress: account, accountBalance: balance }))
+      dispatch(updateSelectedWallet(account))
     }
-  }, [account, balance])
+  }, [account])
 
   useEffect(() => {
-    if (!active && user.accountAddress) {
+    if (!active && user.selectedWallet) {
       connect()
     }
-  }, [user.accountAddress])
+  }, [user.selectedWallet])
 
   const disconnect = () => {
     deactivate()
-    dispatch(logOut())
+    dispatch(removeSelectedWallet())
   }
 
-  return { connect, disconnect }
-}
-
-interface IMetaMaskContext {
-  connect: () => void
-  disconnect: () => void
-}
-
-export const MetaMaskContext = createContext<IMetaMaskContext>({
-  connect: () => Promise<void>,
-  disconnect: () => {},
-})
-
-export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
-  const { connect, disconnect } = useMetamaskConnection()
-
-  const values = useMemo(() => {
+  return useMemo(() => {
     return { connect, disconnect }
   }, [])
-
-  return (
-    <MetaMaskContext.Provider value={values}>
-      {children}
-    </MetaMaskContext.Provider>
-  )
-}
-
-export const useMetaMask = () => {
-  const context = useContext(MetaMaskContext)
-
-  return context
 }

@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { InnerContainer, Input, TokenSelector, Typography } from 'components'
 import styled from 'styled-components'
 import { TokenDTO } from 'types'
+import { colors, getTransparentColor } from 'styles'
+import { useAllTokens } from 'hooks'
+import { Token } from 'packages/swap-sdk'
 
 interface ISelectTokenProps {
-  onSelect: (value: TokenDTO) => void
-  allTokensList: TokenDTO[]
+  onSelect: (value: Token) => void
 }
 
 const StyledList = styled(InnerContainer)`
@@ -16,23 +18,40 @@ const StyledList = styled(InnerContainer)`
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: ${getTransparentColor(colors.black, 0.25)};
+  }
+  &::-webkit-scrollbar {
+    width: 4px;
+    background-color: ${getTransparentColor(colors.black, 0.25)};
+    border-radius: 2px;
+  }
 `
 
 export const SelectToken: FC<ISelectTokenProps> = ({
   onSelect,
-  allTokensList,
+  // allTokensList,
 }) => {
-  const [tokenList, setTokenList] = useState<TokenDTO[]>(allTokensList)
+  const allTokensList = useAllTokens()
+
+  const [tokenList, setTokenList] = useState<Token[]>([])
   const [input, setInput] = useState('')
 
   const { t } = useTranslation()
 
   useEffect(() => {
-    const filteredTokens = allTokensList.filter((item) =>
-      item.symbol.toLowerCase().includes(input.toLowerCase())
-    )
+    setTokenList(Object.values(allTokensList))
 
-    setTokenList(filteredTokens || allTokensList)
+    console.log(Object.values(allTokensList))
+  }, [])
+
+  useEffect(() => {
+    // const filteredTokens = allTokensList.filter((item) =>
+    //   item.symbol.toLowerCase().includes(input.toLowerCase())
+    // )
+    // setTokenList(filteredTokens || allTokensList)
   }, [input, allTokensList])
 
   return (
@@ -48,8 +67,8 @@ export const SelectToken: FC<ISelectTokenProps> = ({
           return (
             <TokenSelector
               key={item.address}
-              icon={item.logoURI}
-              title={item.symbol}
+              icon={''}
+              title={item.symbol ?? ''}
               onClick={() => onSelect(item)}
             />
           )

@@ -5,6 +5,7 @@
   "dependencies": {
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
+    "@ethersproject/constants": "^5.7.0",
     "@ethersproject/contracts": "^5.7.0",
     "@ethersproject/providers": "^5.7.0",
     "@ethersproject/units": "^5.7.0",
@@ -28,6 +29,8 @@
     "@uniswap/v2-sdk": "^3.0.1",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
+    "@web3-react/metamask": "^8.0.0-beta.0",
+    "@web3-react/types": "^6.0.7",
     "ajv": "^8.11.0",
     "bignumber.js": "^9.1.0",
     "deps": "^1.0.0",
@@ -82,6 +85,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
+    "@types/big.js": "^6.1.6",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.22.0",

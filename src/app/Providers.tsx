@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { Web3ReactProvider } from '@web3-react/core'
-import { MetaMaskProvider } from 'hooks'
+import { BlockNumberProvider } from 'context'
 import { ReactNode, FC } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
@@ -15,13 +15,13 @@ export const Providers: FC<IProvidersProps> = ({ children }) => {
     <>
       <ErrorBoundary>
         <BrowserRouter>
-          <Web3ReactProvider
-            getLibrary={(provider) => new Web3Provider(provider)}
-          >
-            <Provider store={store}>
-              <MetaMaskProvider>{children}</MetaMaskProvider>
-            </Provider>
-          </Web3ReactProvider>
+          <Provider store={store}>
+            <Web3ReactProvider
+              getLibrary={(provider) => new Web3Provider(provider)}
+            >
+              <BlockNumberProvider>{children}</BlockNumberProvider>
+            </Web3ReactProvider>
+          </Provider>
         </BrowserRouter>
       </ErrorBoundary>
     </>

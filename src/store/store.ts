@@ -8,19 +8,24 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
+import { resetLocalStorage } from './utils'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
-import user from './features/user'
-import swap from './pages/swap'
+import user from './features/user/reducer'
+import mint from './features/mint/reducer'
+import multicall from './features/multicall/reducer'
+import transactions from './features/transactions/reducer'
 
-const reducers = combineReducers({ user, swap })
+const reducers = combineReducers({ user, multicall, mint, transactions })
 
 const persistConfig = {
   key: 'root',
-  version: 1,
+  version: 1.0001,
   storage,
-  whitelist: ['user', 'swap'],
+  whitelist: ['user'],
 }
+
+resetLocalStorage(persistConfig.version, persistConfig.key)
 
 const persistedReducer = persistReducer(persistConfig, reducers)
 
