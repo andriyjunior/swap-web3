@@ -169,7 +169,7 @@ export const Settings: FC = () => {
         {t('swapSettings.transactionDeadline')}
       </Typography.Title>
       <NumberInput
-        value={userDeadline.toString()}
+        value={(userDeadline / 60).toString()}
         onInput={(value) => handleOnChangeDeadline(value)}
         placeholder={'0'}
       />

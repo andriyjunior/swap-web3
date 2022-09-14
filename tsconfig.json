@@ -6,6 +6,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "strict": true,
@@ -17,7 +18,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "typeRoots": ["./node_modules/@types", "src/types"]
+    "typeRoots": ["./node_modules/@types", "src/types"],
+    "paths": {
+      "sevnswap/sdk*": ["packages/swap-sdk/src/index.ts"]
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["packages"]
 }

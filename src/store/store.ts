@@ -8,13 +8,15 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
+import { resetLocalStorage } from './utils'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import user from './features/user/reducer'
-import wallets from './features/wallets/reducer'
-import { resetLocalStorage } from './utils'
+import mint from './features/mint/reducer'
+import multicall from './features/multicall/reducer'
+import transactions from './features/transactions/reducer'
 
-const reducers = combineReducers({ user })
+const reducers = combineReducers({ user, multicall, mint, transactions })
 
 const persistConfig = {
   key: 'root',

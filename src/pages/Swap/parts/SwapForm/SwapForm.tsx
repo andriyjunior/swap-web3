@@ -11,7 +11,7 @@ import {
   WalletConnection,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useMetamaskConnection, useModalRef } from 'hooks'
+import { useAllTokens, useMetamaskConnection, useModalRef } from 'hooks'
 import { useWeb3React } from '@web3-react/core'
 import { selectUser, useAppSelector } from 'store'
 import { TokenDTO } from 'types'
@@ -19,6 +19,7 @@ import { useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
 import allTokens from 'const/token-list.json'
+import { Token } from 'packages/swap-sdk'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
@@ -29,13 +30,7 @@ export const SwapForm: FC = () => {
 
   const { state, handleOnChange, handleSwapInputs } = useSwapForm()
 
-  const getTokenList = useMemo((): TokenDTO[] => {
-    return allTokens.tokens.filter(
-      (item) =>
-        item?.address !== state.inputToken.address &&
-        item?.address !== state.outputToken.address
-    )
-  }, [state])
+  const getTokenList = useAllTokens()
 
   return (
     <>
@@ -72,12 +67,7 @@ export const SwapForm: FC = () => {
             icon={state.inputToken.logoURI}
             amount={state.inputAmount}
             onInput={(value) => handleOnChange({ inputAmount: value })}
-            onSelectToken={(value) =>
-              handleOnChange({
-                inputToken: value,
-              })
-            }
-            tokenList={getTokenList}
+            onSelectToken={() => {}}
           />
 
           <Flex justifyContent="center">
@@ -90,12 +80,7 @@ export const SwapForm: FC = () => {
             icon={state.outputToken.logoURI}
             amount={state.outputAmount}
             onInput={(value) => handleOnChange({ outputAmount: value })}
-            onSelectToken={(value) =>
-              handleOnChange({
-                outputToken: value,
-              })
-            }
-            tokenList={getTokenList}
+            onSelectToken={() => {}}
           />
 
           {!account && (

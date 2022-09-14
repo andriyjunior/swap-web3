@@ -3,13 +3,11 @@ import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { formatEther } from 'ethers/lib/utils'
 import {
-  removeConnectedWallet,
   removeSelectedWallet,
   selectUser,
   updateSelectedWallet,
   useAppDispatch,
   useAppSelector,
-  Wallet,
 } from 'store'
 import { Web3Provider } from '@ethersproject/providers'
 

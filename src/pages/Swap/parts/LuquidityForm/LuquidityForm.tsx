@@ -6,14 +6,20 @@ import { useModalRef } from 'hooks'
 
 import { AddLiquidity, RemoveLiquidity, LiquidityPool } from './parts'
 
-// interface ISwapProps {}
+interface ISwapProps {
+  userCurrencyA?: string
+  userCurrencyB?: string
+}
 
 enum TabsEnum {
   Add,
   Remove,
 }
 
-export const LuquidityForm: FC = () => {
+export const LuquidityForm: FC<ISwapProps> = ({
+  userCurrencyA,
+  userCurrencyB,
+}) => {
   const [currentTab, setCurrentTab] = useState(TabsEnum.Add)
 
   const { t } = useTranslation()
@@ -26,7 +32,11 @@ export const LuquidityForm: FC = () => {
 
   const tabs = {
     [TabsEnum.Add]: (
-      <AddLiquidity onOpenSettings={() => settingsModalRef.current?.open()} />
+      <AddLiquidity
+        onOpenSettings={() => settingsModalRef.current?.open()}
+        userCurrencyA={userCurrencyA}
+        userCurrencyB={userCurrencyB}
+      />
     ),
     [TabsEnum.Remove]: <RemoveLiquidity onGoBack={handleOnGoBack} />,
   }

@@ -11,6 +11,9 @@ import {
 } from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
 import { TokenDTO } from 'types'
+import { Currency, Token } from 'packages/swap-sdk'
+import { useUSDTCurrencyAmount } from 'hooks'
+import { formatNumber } from 'utils'
 
 const StyledRoot = styled.div`
   padding: 18px 0;
@@ -41,13 +44,13 @@ const StyledText = styled(Typography.Caption)`
 `
 
 interface ITokenInputProps {
+  currency?: Currency
   title?: string
   tokenName: string
   amount: string
   icon: string
   onInput: (value: string) => void
-  onSelectToken: (value: TokenDTO) => void
-  tokenList: TokenDTO[]
+  onSelectToken: (value: Token) => void
 }
 
 export const TokenInput: FC<ITokenInputProps> = ({
@@ -57,7 +60,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   icon,
   onSelectToken,
   onInput,
-  tokenList,
+  currency,
 }) => {
   const { t } = useTranslation()
 
@@ -67,15 +70,17 @@ export const TokenInput: FC<ITokenInputProps> = ({
     onInput(e)
   }
 
-  const handleOnSelect = (value: TokenDTO) => {
+  const handleOnSelect = (value: Token) => {
     onSelectToken(value)
     modalRef.current?.close()
   }
 
+  const amountInDollar = useUSDTCurrencyAmount(currency, Number(amount))
+
   return (
     <>
       <Modal ref={modalRef} title={t('selectToken.selectToken')}>
-        <SelectToken onSelect={handleOnSelect} allTokensList={tokenList} />
+        <SelectToken onSelect={handleOnSelect} />
       </Modal>
       <StyledRoot>
         {title && <StyledTitle>{title}</StyledTitle>}
@@ -89,7 +94,9 @@ export const TokenInput: FC<ITokenInputProps> = ({
             />
             <BigDecimalInput value={amount} onInput={handleOnInput} />
           </StyledBlockTop>
-          <StyledText>~${Number(amount) * 0.23}</StyledText>
+          <StyledText>
+            ~${amountInDollar && formatNumber(amountInDollar)}
+          </StyledText>
         </StyledBlock>
       </StyledRoot>
     </>

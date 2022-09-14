@@ -15,6 +15,7 @@ interface IStyledRoot {
   justifyContent?: TJusifyContent
   alignItems?: TAlignItems
   flexDirection?: TFlexDirection
+  gap?: string
 }
 
 const StyledRoot = styled.div<IStyledRoot>`
@@ -22,6 +23,7 @@ const StyledRoot = styled.div<IStyledRoot>`
   justify-content: ${(props) => props.justifyContent};
   align-items: ${(props) => props.alignItems};
   flex-direction: ${(props) => props.flexDirection};
+  gap: ${(props) => props.gap};
 `
 
 export const Flex = StyledRoot

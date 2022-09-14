@@ -1,27 +1,50 @@
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Tab } from 'components'
 import { LuquidityForm, SwapForm } from './parts'
-import { FC, useCallback, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { StyledPage, StyledRoot, StyledTabs, StyledContent } from './styled'
 import { TabsEmum } from './types'
+import { StyledPage, StyledRoot, StyledTabs, StyledContent } from './styled'
 
-// interface ISwapProps {}
+interface ISwapProps {
+  isAddTab?: boolean
+}
 
-export const Swap: FC = () => {
+export const Swap: FC<ISwapProps> = ({ isAddTab }) => {
+  const navigate = useNavigate()
+  const { userCurrencyA, userCurrencyB } = useParams()
+
   const [activeTab, setActiveTab] = useState(TabsEmum.Swap)
+
+  useEffect(() => {
+    if (isAddTab) {
+      setActiveTab(TabsEmum.Liquidity)
+    }
+  }, [isAddTab])
 
   const { t } = useTranslation()
 
-  const handleClick = useCallback((value: TabsEmum) => {
-    setActiveTab(value)
-  }, [])
+  const handleClick = useCallback(
+    (value: TabsEmum) => {
+      if (activeTab !== value) {
+        setActiveTab(value)
+        navigate(value === TabsEmum.Swap ? '/swap' : '/swap/add')
+      }
+    },
+    [activeTab]
+  )
 
   const tabContent = useMemo(() => {
     return {
       [TabsEmum.Swap]: <SwapForm />,
-      [TabsEmum.Liquidity]: <LuquidityForm />,
+      [TabsEmum.Liquidity]: (
+        <LuquidityForm
+          userCurrencyA={userCurrencyA}
+          userCurrencyB={userCurrencyB}
+        />
+      ),
     }
-  }, [])
+  }, [userCurrencyA, userCurrencyB])
 
   return (
     <StyledPage

@@ -51,8 +51,8 @@ interface IInitialState {
 const initialState: IInitialState = {
   selectedWallet: undefined,
   userSlippageTolerance: '1',
-  gasPrice: GAS_PRICE_GWEI.default,
-  userDeadline: 15,
+  gasPrice: GAS_PRICE_GWEI.testnet,
+  userDeadline: 900,
   timestamp: currentTimestamp(),
   //   userExpertMode: false,
   //   userLocale: null,
@@ -72,18 +72,23 @@ const userSlice = createSlice({
   reducers: {
     updateSelectedWallet(state, { payload }) {
       state.selectedWallet = payload
+      state.timestamp = currentTimestamp()
     },
     updateSlippageTolerance(state, { payload }) {
       state.userSlippageTolerance = payload
+      state.timestamp = currentTimestamp()
     },
     updateUserDeadline(state, { payload }) {
-      state.userDeadline = payload
+      state.userDeadline = payload * 60
+      state.timestamp = currentTimestamp()
     },
     updateUserGasPrice(state, { payload }) {
       state.gasPrice = payload
+      state.timestamp = currentTimestamp()
     },
     removeSelectedWallet(state) {
       state.selectedWallet = undefined
+      state.timestamp = currentTimestamp()
     },
   },
 })

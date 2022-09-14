@@ -6,6 +6,7 @@ node_modules/*
 config/*
 public/*
 build/*
+src/packages/*
 scripts/*
 webpack/*
 src/react-app-env.d.ts
