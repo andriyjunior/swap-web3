@@ -1,4 +1,4 @@
-import { Currency, ETHER, Token } from 'packages/swap-sdk'
+import { Currency, ETHER, Token, WETH9, WNATIVE } from 'packages/swap-sdk'
 import { useWeb3React } from '@web3-react/core'
 import { SerializedToken } from 'abis'
 
@@ -34,7 +34,12 @@ export function deserializeToken(serializedToken: SerializedToken): Token {
 }
 
 export const useAllTokens = (): { [address: string]: Token } => {
+  const { chainId } = useWeb3React()
   const wrappedTokens = allTokens_mock.tokens.map(deserializeToken)
+
+  if (chainId) {
+    wrappedTokens.unshift(WNATIVE[chainId])
+  }
 
   return wrappedTokens.reduce((tokenMap_, token) => {
     tokenMap_[token.address] = token

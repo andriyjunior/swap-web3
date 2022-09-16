@@ -16,6 +16,8 @@ export * from './currencyId'
 export * from './prices'
 export * from './formatBalance'
 export * from './exchange'
+export * from './wallet'
+export * from './web3React'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 

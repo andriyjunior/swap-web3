@@ -20,7 +20,7 @@ const reducers = combineReducers({ user, multicall, mint, transactions })
 
 const persistConfig = {
   key: 'root',
-  version: 1.0001,
+  version: 1.0002,
   storage,
   whitelist: ['user'],
 }

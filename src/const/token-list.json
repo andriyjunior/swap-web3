@@ -27,14 +27,6 @@
       "chainId": 3
     },
     {
-      "name": "Wrapped ETH",
-      "symbol": "ETH",
-      "decimals": 18,
-      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
-      "chainId": 3
-    },
-    {
       "name": "ERC 20",
       "symbol": "ERC",
       "decimals": 18,

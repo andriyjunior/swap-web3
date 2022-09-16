@@ -42,7 +42,7 @@ export const useCurrencySelectRoute = () => {
           })
         }
       } else {
-        navigate(`/swap/add/${currencyIdA || 'BNB'}/${newCurrencyIdB}`, {
+        navigate(`/swap/add/${currencyIdA || 'ETH'}/${newCurrencyIdB}`, {
           replace: true,
         })
       }

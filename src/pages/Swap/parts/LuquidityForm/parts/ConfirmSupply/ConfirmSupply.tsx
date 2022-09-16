@@ -72,7 +72,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
     <>
       <Flex justifyContent="space-between">
         <StyledLiquidityMinted>
-          {liquidityMinted?.toSignificant(4)}
+          {liquidityMinted?.toSignificant(6)}
         </StyledLiquidityMinted>
         <StyledCoinPair>
           <CoinPair size="large" inputToken={bnb} outputToken={bnb} />

@@ -2,9 +2,8 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InnerContainer, Input, TokenSelector, Typography } from 'components'
 import styled from 'styled-components'
-import { TokenDTO } from 'types'
 import { colors, getTransparentColor } from 'styles'
-import { useAllTokens } from 'hooks'
+import { useAllTokens, useDebounce } from 'hooks'
 import { Token } from 'packages/swap-sdk'
 
 interface ISelectTokenProps {
@@ -30,29 +29,27 @@ const StyledList = styled(InnerContainer)`
   }
 `
 
-export const SelectToken: FC<ISelectTokenProps> = ({
-  onSelect,
-  // allTokensList,
-}) => {
+export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
   const allTokensList = useAllTokens()
 
   const [tokenList, setTokenList] = useState<Token[]>([])
   const [input, setInput] = useState('')
+  const debouncedQuery = useDebounce(input, 200)
 
   const { t } = useTranslation()
 
   useEffect(() => {
     setTokenList(Object.values(allTokensList))
-
-    console.log(Object.values(allTokensList))
   }, [])
 
   useEffect(() => {
-    // const filteredTokens = allTokensList.filter((item) =>
-    //   item.symbol.toLowerCase().includes(input.toLowerCase())
-    // )
-    // setTokenList(filteredTokens || allTokensList)
-  }, [input, allTokensList])
+    const filteredTokens = Object.values(allTokensList).filter((item) => {
+      if (item?.symbol?.toLowerCase().includes(debouncedQuery.toLowerCase())) {
+        return item
+      }
+    })
+    setTokenList(filteredTokens || allTokensList)
+  }, [debouncedQuery])
 
   return (
     <>
