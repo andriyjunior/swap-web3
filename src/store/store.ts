@@ -15,8 +15,9 @@ import user from './features/user/reducer'
 import mint from './features/mint/reducer'
 import multicall from './features/multicall/reducer'
 import transactions from './features/transactions/reducer'
+import burn from './features/burn/reducer'
 
-const reducers = combineReducers({ user, multicall, mint, transactions })
+const reducers = combineReducers({ user, multicall, mint, transactions, burn })
 
 const persistConfig = {
   key: 'root',

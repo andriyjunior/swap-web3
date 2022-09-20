@@ -7,6 +7,7 @@ import { colors, getTransparentColor } from 'styles'
 
 import icon_BNB from 'assets/coins/BNB.png'
 import icon_USDT from 'assets/coins/Tether.png'
+import { useNavigate } from 'react-router-dom'
 
 const StyledPairTitle = styled(Typography.Body)`
   color: ${getTransparentColor(colors.black, 0.5)};
@@ -52,7 +53,14 @@ interface ILiquidityPool {
 }
 
 export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
+  const navigate = useNavigate()
+
   const { t } = useTranslation()
+
+  const handleOnRemove = () => {
+    navigate('/swap/remove')
+  }
+
   return (
     <>
       <Typography.Title>{t('liquidityForm.yourLiquidity')}</Typography.Title>
@@ -107,7 +115,7 @@ export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
 
         <StyledButtons>
           <Button title={t('add')} onClick={() => {}} />
-          <Button title={t('remove')} onClick={onRemove} />
+          <Button title={t('remove')} onClick={handleOnRemove} />
         </StyledButtons>
       </Accordion>
     </>

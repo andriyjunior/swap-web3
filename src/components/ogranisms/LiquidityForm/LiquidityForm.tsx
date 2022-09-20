@@ -1,26 +1,31 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Settings } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useModalRef } from 'hooks'
 
-import { AddLiquidity, RemoveLiquidity, LiquidityPool } from './parts'
-
-interface ISwapProps {
-  userCurrencyA?: string
-  userCurrencyB?: string
-}
+import { RemoveLiquidity, LiquidityPool, AddLiquidity } from './parts'
+import { useNavigate, useParams } from 'react-router-dom'
 
 enum TabsEnum {
   Add,
   Remove,
 }
 
-export const LuquidityForm: FC<ISwapProps> = ({
-  userCurrencyA,
-  userCurrencyB,
-}) => {
+interface ILiquidityForm {
+  isRemoveTab?: boolean
+}
+
+export const LiquidityForm: FC<ILiquidityForm> = ({ isRemoveTab }) => {
+  const navigate = useNavigate()
+  const { userCurrencyA, userCurrencyB } = useParams()
   const [currentTab, setCurrentTab] = useState(TabsEnum.Add)
+
+  useEffect(() => {
+    if (isRemoveTab) {
+      setCurrentTab(TabsEnum.Remove)
+    }
+  }, [isRemoveTab])
 
   const { t } = useTranslation()
 
@@ -28,6 +33,7 @@ export const LuquidityForm: FC<ISwapProps> = ({
 
   const handleOnGoBack = () => {
     setCurrentTab(TabsEnum.Add)
+    navigate('/swap/add')
   }
 
   const tabs = {
@@ -38,7 +44,13 @@ export const LuquidityForm: FC<ISwapProps> = ({
         userCurrencyB={userCurrencyB}
       />
     ),
-    [TabsEnum.Remove]: <RemoveLiquidity onGoBack={handleOnGoBack} />,
+    [TabsEnum.Remove]: (
+      <RemoveLiquidity
+        onGoBack={handleOnGoBack}
+        userCurrencyA={userCurrencyA}
+        userCurrencyB={userCurrencyB}
+      />
+    ),
   }
 
   const handleOnRemove = () => {

@@ -1,18 +1,38 @@
 import { FC } from 'react'
-import { Route, Routes as ReactRoutes } from 'react-router-dom'
-import { Home, Swap } from 'pages'
+import { Route, Routes as ReactRoutes, useParams } from 'react-router-dom'
+import { Home, SwapPage } from 'pages'
+import { LiquidityForm, SwapForm } from 'components'
 // interface IRoutesProps {}
 
 export const Routes: FC = () => {
   return (
     <ReactRoutes>
       <Route path="/" element={<Home />} />
-      <Route path="/swap">
-        <Route index element={<Swap />} />
-        <Route path=":userCurrencyA" element={<Swap />} />
-        <Route path=":userCurrencyA/:userCurrencyB" element={<Swap />} />
+      <Route path="/swap" element={<SwapPage />}>
+        <Route path="" element={<SwapForm />} />
+        <Route path=":userCurrencyA" element={<SwapForm />} />
+        <Route path=":userCurrencyA/:userCurrencyB" element={<SwapForm />} />
+        <Route path="add">
+          <Route index element={<LiquidityForm />} />
+          <Route path=":userCurrencyA" element={<LiquidityForm />} />
+          <Route
+            path=":userCurrencyA/:userCurrencyB"
+            element={<LiquidityForm />}
+          />
+        </Route>
+        <Route path="remove">
+          <Route index element={<LiquidityForm isRemoveTab />} />
+          <Route
+            path=":userCurrencyA"
+            element={<LiquidityForm isRemoveTab />}
+          />
+          <Route
+            path=":userCurrencyA/:userCurrencyB"
+            element={<LiquidityForm isRemoveTab />}
+          />
+        </Route>
       </Route>
-      <Route path="/swap/add">
+      {/* <Route path="/swap/add">
         <Route index element={<Swap isAddTab />} />
         <Route path=":userCurrencyA" element={<Swap isAddTab />} />
         <Route
@@ -20,6 +40,14 @@ export const Routes: FC = () => {
           element={<Swap isAddTab />}
         />
       </Route>
+      <Route path="swap/remove">
+        <Route index element={<Swap isAddTab />} />
+        <Route path=":userCurrencyA" element={<Swap isAddTab />} />
+        <Route
+          path=":userCurrencyA/:userCurrencyB"
+          element={<Swap isAddTab />}
+        />
+      </Route> */}
       <Route path="/farms" element="Farms" />
       <Route path="/staking" element="Staking" />
       <Route path="/games" element="Games" />
