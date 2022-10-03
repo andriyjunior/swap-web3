@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useMemo, useState } from 'react'
+import { FC, memo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -9,6 +9,8 @@ import {
   RadioButton,
   Button,
   TokenSelector,
+  Modal,
+  TransactionSubmited,
 } from 'components'
 
 import {
@@ -23,18 +25,18 @@ import {
   StyledPriceContainer,
   StyledTokenPrice,
 } from './styled'
+import styled from 'styled-components'
+import { useModalRef } from 'hooks'
+import { Field } from 'store'
+import { ConfirmRemoveLiquidity } from '../ConfirmRemoveLiquidity'
+import { useRemoveLiquidity } from './hooks'
 
 import icon_arrow from 'assets/icons/back-arrow.svg'
-import { useWeb3React } from '@web3-react/core'
-import { useCurrency, wrappedCurrency } from 'hooks'
-import {
-  Field,
-  useBurnActionHandlers,
-  useBurnState,
-  useDerivedBurnInfo,
-  useGasPrice,
-} from 'store'
-import { Percent } from 'packages/swap-sdk'
+
+const StyledSupplyWrapper = styled.div`
+  display: flex;
+  gap: 20px;
+`
 
 const data2 = {
   name: 'percentOfAmount',
@@ -68,74 +70,64 @@ interface IRemoveLiquidity {
 
 export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
   ({ onGoBack, userCurrencyA, userCurrencyB }) => {
-    const { chainId } = useWeb3React()
-
-    const [currencyA, currencyB] = [
-      useCurrency(userCurrencyA) ?? undefined,
-      useCurrency(userCurrencyB) ?? undefined,
-    ]
-
-    const [tokenA, tokenB] = useMemo(
-      () => [
-        wrappedCurrency(currencyA, chainId),
-        wrappedCurrency(currencyB, chainId),
-      ],
-      [currencyA, currencyB, chainId]
-    )
-
-    const gasPrice = useGasPrice()
-
-    const { independentField, typedValue } = useBurnState()
-    const [removalCheckedA, setRemovalCheckedA] = useState(true)
-    const [removalCheckedB, setRemovalCheckedB] = useState(true)
-
-    const { pair, parsedAmounts, error, tokenToReceive } = useDerivedBurnInfo(
-      currencyA ?? undefined,
-      currencyB ?? undefined,
-      removalCheckedA,
-      removalCheckedB
-    )
-
-    const { onUserInput: _onUserInput } = useBurnActionHandlers()
-
-    const formattedAmounts = {
-      [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo(
-        '0'
-      )
-        ? '0'
-        : parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
-      [Field.LIQUIDITY]:
-        independentField === Field.LIQUIDITY
-          ? typedValue
-          : parsedAmounts[Field.LIQUIDITY]?.toSignificant(6) ?? '',
-      [Field.CURRENCY_A]:
-        independentField === Field.CURRENCY_A
-          ? typedValue
-          : parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',
-      [Field.CURRENCY_B]:
-        independentField === Field.CURRENCY_B
-          ? typedValue
-          : parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? '',
-    }
-
-    // wrapped onUserInput to clear signatures
-    const onUserInput = useCallback(
-      (field: Field, value: string) => {
-        // setSignatureData(null)
-        return _onUserInput(field, value)
-      },
-      [_onUserInput]
-    )
-
-    const onLiquidityInput = useCallback(
-      (value: string): void => onUserInput(Field.LIQUIDITY, value),
-      [onUserInput]
-    )
+    const confirmModalRef = useModalRef()
+    const txSubmitedRef = useModalRef()
 
     const { t } = useTranslation()
 
+    const {
+      onRemove,
+      currencyA,
+      currencyB,
+      parsedAmounts,
+      formattedAmounts,
+      txHash,
+      _onUserInput,
+      pair,
+      tokenA,
+      tokenB,
+      onAttempToApprove,
+      onLiquidityInput,
+    } = useRemoveLiquidity(userCurrencyA, userCurrencyB)
+
+    useEffect(() => {
+      if (txHash) {
+        txSubmitedRef.current?.open()
+      }
+    }, [txHash])
+
+    const isDisabled = Boolean(!currencyA || !currencyB)
+    const isDisabledRemove = isDisabled || !parsedAmounts.LIQUIDITY
+
+    const handleOnRemove = () => {
+      onRemove()
+      confirmModalRef?.current?.close()
+    }
+
     return (
       <>
+        <Modal ref={confirmModalRef}>
+          <ConfirmRemoveLiquidity
+            currencies={{
+              [Field.CURRENCY_A]: currencyA,
+              [Field.CURRENCY_B]: currencyB,
+            }}
+            amounts={formattedAmounts}
+            onSupply={handleOnRemove}
+            liquidityMinted={parsedAmounts[Field.LIQUIDITY]}
+          />
+        </Modal>
+
+        <Modal
+          title={t('transactionSubmited.transactionSubmited')}
+          ref={txSubmitedRef}
+        >
+          <TransactionSubmited
+            onClose={() => txSubmitedRef.current?.close()}
+            txHash={txHash}
+          />
+        </Modal>
+
         <Flex alignItems="center">
           <StyledArrowButton onClick={onGoBack}>
             <StyledArrowIcon src={icon_arrow} />
@@ -227,7 +219,18 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
           </StyledPriceContainer>
         )}
 
-        <Button title={t('approve')} onClick={() => {}} />
+        <StyledSupplyWrapper>
+          <Button
+            isDisabled={isDisabled}
+            title={t('Enable')}
+            onClick={onAttempToApprove}
+          />
+          <Button
+            isDisabled={isDisabledRemove}
+            title={t('remove')}
+            onClick={() => confirmModalRef.current?.open()}
+          />
+        </StyledSupplyWrapper>
       </>
     )
   }

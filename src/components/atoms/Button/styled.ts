@@ -1,5 +1,11 @@
 import styled from 'styled-components'
-import { borderRadius, colors, gradients } from 'styles'
+import {
+  borderRadius,
+  colorConverter,
+  colors,
+  getTransparentColor,
+  gradients,
+} from 'styles'
 
 export const StyledRoot = styled.button`
   position: relative;
@@ -65,6 +71,36 @@ export const StyledRoot = styled.button`
 
     &::after {
       opacity: 1;
+    }
+  }
+
+  &:disabled {
+    &::before {
+      background: transparent;
+      border-image-source: none;
+      -webkit-mask: none;
+    }
+
+    &:hover::before {
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      border-width: 2px;
+      cursor: not-allowed;
+    }
+
+    &:active {
+      span {
+        font-weight: 400;
+        /* color: ${colors.white}; */
+      }
+
+      &::after {
+        opacity: 0;
+      }
+    }
+
+    span {
+      color: ${getTransparentColor(colors.black, 0.2)};
     }
   }
 `

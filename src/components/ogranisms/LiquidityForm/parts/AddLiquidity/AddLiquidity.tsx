@@ -237,8 +237,6 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
         <WalletConnection onClick={() => walletsRef.current?.close()} />
       </Modal>
 
-      {attemptingTxn && <Typography.Title>PENDING</Typography.Title>}
-
       <Flex alignItems="center" justifyContent="space-between">
         <Typography.Title>
           {t('liquidityForm.addLiquidityToReceiveLpTokens')}

@@ -8,6 +8,7 @@ import { colors, getTransparentColor } from 'styles'
 import icon_BNB from 'assets/coins/BNB.png'
 import icon_USDT from 'assets/coins/Tether.png'
 import { useNavigate } from 'react-router-dom'
+import { paths } from 'const'
 
 const StyledPairTitle = styled(Typography.Body)`
   color: ${getTransparentColor(colors.black, 0.5)};
@@ -58,7 +59,7 @@ export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
   const { t } = useTranslation()
 
   const handleOnRemove = () => {
-    navigate('/swap/remove')
+    navigate(paths.removeLiquidity())
   }
 
   return (

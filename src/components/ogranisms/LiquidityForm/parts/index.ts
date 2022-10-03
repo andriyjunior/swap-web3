@@ -1,4 +1,5 @@
 export * from './AddLiquidity'
 export * from './ConfirmSupply'
+export * from './ConfirmRemoveLiquidity'
 export * from './RemoveLiquidity'
 export * from './LiquidityPool'

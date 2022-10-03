@@ -1,3 +1,4 @@
+import { paths } from 'const'
 import { Currency } from 'packages/swap-sdk'
 import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -13,15 +14,15 @@ export const useCurrencySelectRoute = () => {
     (currencyA_: Currency) => {
       const newCurrencyIdA = currencyId(currencyA_)
       if (newCurrencyIdA === currencyIdB) {
-        navigate(`/swap/add/${currencyIdB}/${currencyIdA}`, {
+        navigate(`${paths.liquidity}/${currencyIdB}/${currencyIdA}`, {
           replace: true,
         })
       } else if (currencyIdB) {
-        navigate(`/swap/add/${newCurrencyIdA}/${currencyIdB}`, {
+        navigate(`${paths.liquidity}/${newCurrencyIdA}/${currencyIdB}`, {
           replace: true,
         })
       } else {
-        navigate(`/swap/add/${newCurrencyIdA}`, {
+        navigate(`${paths.liquidity}/${newCurrencyIdA}`, {
           replace: true,
         })
       }
@@ -33,18 +34,21 @@ export const useCurrencySelectRoute = () => {
       const newCurrencyIdB = currencyId(currencyB_)
       if (currencyIdA === newCurrencyIdB) {
         if (currencyIdB) {
-          navigate(`/swap/add/${currencyIdB}/${newCurrencyIdB}`, {
+          navigate(`${paths.liquidity}/${currencyIdB}/${newCurrencyIdB}`, {
             replace: true,
           })
         } else {
-          navigate(`/swap/add/${newCurrencyIdB}`, {
+          navigate(`${paths.liquidity}/${newCurrencyIdB}`, {
             replace: true,
           })
         }
       } else {
-        navigate(`/swap/add/${currencyIdA || 'ETH'}/${newCurrencyIdB}`, {
-          replace: true,
-        })
+        navigate(
+          `${paths.liquidity}/${currencyIdA || 'ETH'}/${newCurrencyIdB}`,
+          {
+            replace: true,
+          }
+        )
       }
     },
     [currencyIdA, navigate, currencyIdB]

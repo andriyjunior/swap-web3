@@ -12,8 +12,9 @@ export const Routes: FC = () => {
         <Route path="" element={<SwapForm />} />
         <Route path=":userCurrencyA" element={<SwapForm />} />
         <Route path=":userCurrencyA/:userCurrencyB" element={<SwapForm />} />
-        <Route path="add">
-          <Route index element={<LiquidityForm />} />
+      </Route>
+      <Route path="/liquidity" element={<SwapPage />}>
+        <Route path="" element={<LiquidityForm />}>
           <Route path=":userCurrencyA" element={<LiquidityForm />} />
           <Route
             path=":userCurrencyA/:userCurrencyB"
@@ -32,6 +33,7 @@ export const Routes: FC = () => {
           />
         </Route>
       </Route>
+
       {/* <Route path="/swap/add">
         <Route index element={<Swap isAddTab />} />
         <Route path=":userCurrencyA" element={<Swap isAddTab />} />

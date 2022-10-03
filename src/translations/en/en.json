@@ -18,6 +18,9 @@
   "deposited": "Deposited",
   "rates": "Rates",
   "close": "Close",
+  "enable": "Enable",
+  "burned": "Burned",
+  "confirm": "Confirm",
 
   "menu": {
     "swap": "Swap",

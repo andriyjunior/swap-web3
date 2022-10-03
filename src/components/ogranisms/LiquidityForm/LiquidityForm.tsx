@@ -6,6 +6,7 @@ import { useModalRef } from 'hooks'
 
 import { RemoveLiquidity, LiquidityPool, AddLiquidity } from './parts'
 import { useNavigate, useParams } from 'react-router-dom'
+import { paths } from 'const'
 
 enum TabsEnum {
   Add,
@@ -33,7 +34,7 @@ export const LiquidityForm: FC<ILiquidityForm> = ({ isRemoveTab }) => {
 
   const handleOnGoBack = () => {
     setCurrentTab(TabsEnum.Add)
-    navigate('/swap/add')
+    navigate(paths.liquidity)
   }
 
   const tabs = {
@@ -54,7 +55,7 @@ export const LiquidityForm: FC<ILiquidityForm> = ({ isRemoveTab }) => {
   }
 
   const handleOnRemove = () => {
-    setCurrentTab(TabsEnum.Remove)
+    // setCurrentTab(TabsEnum.Remove)
   }
 
   return (
