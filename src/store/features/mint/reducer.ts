@@ -20,7 +20,7 @@ const mintSlice = createSlice({
     resetMintState(state) {
       return initialState
     },
-    typeInput(state, { payload: { field, typedValue, noLiquidity } }) {
+    mintTypeInput(state, { payload: { field, typedValue, noLiquidity } }) {
       if (noLiquidity) {
         // they're typing into the field they've last typed in
         if (field === state.independentField) {
@@ -50,6 +50,6 @@ const mintSlice = createSlice({
   },
 })
 
-export const { resetMintState, typeInput } = mintSlice.actions
+export const { resetMintState, mintTypeInput } = mintSlice.actions
 
 export default mintSlice.reducer

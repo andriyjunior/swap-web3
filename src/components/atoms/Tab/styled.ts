@@ -1,9 +1,14 @@
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { getTransparentColor, colors } from 'styles'
 
-export const StyledRoot = styled.button<{ isActive: boolean }>`
+export const StyledRoot = styled(NavLink)<{ isActive: boolean }>`
   position: relative;
-  background: ${getTransparentColor(colors.black, 0.05)};
+  background: ${({ isActive }) =>
+    isActive ? colors.white : getTransparentColor(colors.black, 0.05)};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 50px;
   width: 100%;
   border: none;
@@ -57,10 +62,6 @@ export const StyledRoot = styled.button<{ isActive: boolean }>`
 
   &:last-child::before {
     opacity: ${({ isActive }) => (isActive ? 1 : 0)};
-  }
-
-  &.active {
-    background-color: ${colors.white};
   }
 `
 

@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
 import { formatEther } from 'ethers/lib/utils'
 import {
-  removeSelectedWallet,
   selectUser,
   updateSelectedWallet,
   useAppDispatch,
   useAppSelector,
 } from 'store'
-import { Web3Provider } from '@ethersproject/providers'
+import { useAuth } from './useAuth'
+import { ConnectorNames, connectorsByName } from 'utils'
 
 export const useBalance = () => {
   const { account, library } = useWeb3React()
@@ -28,12 +27,12 @@ export const useMetamaskConnection = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectUser)
 
-  const { active, account, activate, deactivate } = useWeb3React<Web3Provider>()
+  const { active, account, logOut, login } = useAuth()
 
   const balance = useBalance()
 
   const connect = () => {
-    activate(new InjectedConnector({}))
+    login(ConnectorNames.Injected)
   }
 
   useEffect(() => {
@@ -49,8 +48,7 @@ export const useMetamaskConnection = () => {
   }, [user.selectedWallet])
 
   const disconnect = () => {
-    deactivate()
-    dispatch(removeSelectedWallet())
+    logOut()
   }
 
   return useMemo(() => {

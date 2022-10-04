@@ -1,11 +1,11 @@
 import { useWeb3React } from '@web3-react/core'
 import { Contract } from '@ethersproject/contracts'
 import ERC20_ABI from 'abis/erc20.json'
+import SevnPair from 'abis/SevnPair.json'
 import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
-import { Erc20, Erc20Bytes32, Multicall } from 'abis'
+import { Erc20, Erc20Bytes32, ISevnPair, Multicall } from 'abis'
 import { getContract, getMulticallAddress, getProviderOrSigner } from 'utils'
 import multiCallAbi from 'abis/Multicall.json'
-import { useMemo } from 'react'
 import { ChainId } from 'packages/swap-sdk'
 import { infuraProvider } from 'utils'
 
@@ -62,4 +62,11 @@ export function useMulticallContract() {
     multiCallAbi,
     false
   )
+}
+
+export function usePairContract(
+  pairAddress?: string,
+  withSignerIfPossible?: boolean
+): ISevnPair | null {
+  return useContract(pairAddress, SevnPair.abi, withSignerIfPossible)
 }

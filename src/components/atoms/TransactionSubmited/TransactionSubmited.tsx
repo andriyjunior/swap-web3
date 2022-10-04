@@ -52,7 +52,10 @@ export const TransactionSubmited: FC<ITransactionSubmited> = ({
       <StyledImage src={txSubmited_image} />
       <Flex alignItems="center">
         {chainId && (
-          <StyledLink href={`${etherscan[chainId]}tx/${txHash}`}>
+          <StyledLink
+            href={`${etherscan[chainId]}tx/${txHash}`}
+            target="_blank"
+          >
             {t('transactionSubmited.viewOnEtherScan')}
             <StyledIcon src={link_icon} />
           </StyledLink>

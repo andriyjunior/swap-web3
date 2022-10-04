@@ -19,7 +19,7 @@ import {
 } from 'hooks'
 import { useCallback, useMemo } from 'react'
 import {
-  typeInput,
+  mintTypeInput,
   useCurrencyBalances,
   useAppSelector,
   useAppDispatch,
@@ -263,7 +263,7 @@ export function useMintActionHandlers(noLiquidity: boolean | undefined): {
     (typedValue: string) => {
       console.log(typedValue)
       dispatch(
-        typeInput({
+        mintTypeInput({
           field: Field.CURRENCY_A,
           typedValue,
           noLiquidity: noLiquidity === true,
@@ -275,7 +275,7 @@ export function useMintActionHandlers(noLiquidity: boolean | undefined): {
   const onFieldBInput = useCallback(
     (typedValue: string) => {
       dispatch(
-        typeInput({
+        mintTypeInput({
           field: Field.CURRENCY_B,
           typedValue,
           noLiquidity: noLiquidity === true,

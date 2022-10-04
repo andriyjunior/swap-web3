@@ -1,7 +1,7 @@
 import { Web3Provider, JsonRpcSigner, Provider } from '@ethersproject/providers'
 import { Contract } from '@ethersproject/contracts'
 import { isAddress } from './isAddress'
-import { Signer } from 'ethers'
+import { BigNumber, Signer } from 'ethers'
 
 export * from './isDev'
 export * from './getTokenList'
@@ -16,6 +16,10 @@ export * from './currencyId'
 export * from './prices'
 export * from './formatBalance'
 export * from './exchange'
+export * from './wallet'
+export * from './web3React'
+export * from './isUndefinedOrNull'
+export * from './serializeTokens'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 
@@ -49,4 +53,11 @@ export function getProviderOrSigner(
   account?: string
 ): Web3Provider | JsonRpcSigner {
   return account ? getSigner(library, account) : library
+}
+
+// add 10%
+export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
+  return value
+    .mul(BigNumber.from(10000).add(BigNumber.from(margin)))
+    .div(BigNumber.from(10000))
 }
