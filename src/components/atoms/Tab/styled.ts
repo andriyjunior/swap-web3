@@ -38,7 +38,7 @@ export const StyledRoot = styled(NavLink)<{ isActive: boolean }>`
     width: 20px;
     height: 100%;
     background-color: ${colors.white};
-    clip-path: polygon(0 0, 50% 0, 0 100%, 0% 100%);
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
     z-index: 1;
     opacity: 0;
   }
@@ -55,7 +55,7 @@ export const StyledRoot = styled(NavLink)<{ isActive: boolean }>`
     width: 20px;
     height: 100%;
     background-color: ${colors.white};
-    clip-path: polygon(50% 0, 100% 0, 100% 100%);
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
     z-index: 1;
     opacity: 0;
   }
