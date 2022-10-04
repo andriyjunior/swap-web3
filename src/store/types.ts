@@ -36,3 +36,11 @@ type TagDetails = Tags[keyof Tags]
 export interface TagInfo extends TagDetails {
   id: string
 }
+
+/**
+ * An empty result, useful as a default.
+ */
+export const EMPTY_LIST: TokenAddressMap = {
+  [ChainId.MAINNET]: {},
+  [ChainId.ROPSTEN]: {},
+}

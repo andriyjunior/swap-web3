@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { SerializedToken } from 'abis'
 import { GAS_PRICE_GWEI } from 'const'
+
+export interface SerializedPair {
+  token0: SerializedToken
+  token1: SerializedToken
+}
 
 const currentTimestamp = () => new Date().getTime()
 
@@ -26,18 +32,18 @@ interface IInitialState {
   // deadline set by user in minutes, used in all txns
   userDeadline: number
 
-  //   tokens: {
-  //     [chainId: number]: {
-  //       [address: string]: SerializedToken
-  //     }
-  //   }
+  tokens: {
+    [chainId: number]: {
+      [address: string]: SerializedToken
+    }
+  }
 
-  //   pairs: {
-  //     [chainId: number]: {
-  //       // keyed by token0Address:token1Address
-  //       [key: string]: SerializedPair
-  //     }
-  //   }
+  pairs: {
+    [chainId: number]: {
+      // keyed by token0Address:token1Address
+      [key: string]: SerializedPair
+    }
+  }
 
   timestamp: number
   //   URLWarningVisible: boolean
@@ -59,8 +65,8 @@ const initialState: IInitialState = {
   //   userClientSideRouter: false,
   //   userHideClosedPositions: false,
   //   userSlippageToleranceHasBeenMigratedToAuto: true,
-  //   tokens: {},
-  //   pairs: {},
+  tokens: {},
+  pairs: {},
   //   URLWarningVisible: true,
   //   showSurveyPopup: undefined,
   //   showDonationLink: true,

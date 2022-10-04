@@ -1,0 +1,38 @@
+{
+  "name": "Uniswap Labs Default",
+  "timestamp": "2022-06-29T15:57:01.868Z",
+  "version": {
+    "major": 4,
+    "minor": 1,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "ipfs://QmNa8mQkrNKp1WEEeGjFezDmDeodkWRevGFN8JCV7b4Xir",
+  "keywords": ["uniswap", "default"],
+  "tokens": [
+    {
+      "name": "SEVN",
+      "symbol": "SEVN-T",
+      "decimals": 18,
+      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
+      "address": "0x2c3f07314ba8dA7A99E50BB1B9a3Dfd659881E63",
+      "chainId": 3
+    },
+    {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
+      "address": "0x738e997fc917fe7F0b51dfa9A5939507B3E6A154",
+      "chainId": 3
+    },
+    {
+      "name": "ERC 20",
+      "symbol": "ERC",
+      "decimals": 18,
+      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
+      "address": "0x0556940E0Ccd3E9e25C9CCA53Ac9c68dDA883496",
+      "chainId": 3
+    }
+  ]
+}

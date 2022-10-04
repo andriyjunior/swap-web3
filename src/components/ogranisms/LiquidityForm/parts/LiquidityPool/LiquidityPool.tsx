@@ -1,124 +1,86 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Accordion, Button, CoinPair, Flex, Typography } from 'components'
 
 import { colors, getTransparentColor } from 'styles'
 
-import icon_BNB from 'assets/coins/BNB.png'
-import icon_USDT from 'assets/coins/Tether.png'
 import { useNavigate } from 'react-router-dom'
 import { paths } from 'const'
-
-const StyledPairTitle = styled(Typography.Body)`
-  color: ${getTransparentColor(colors.black, 0.5)};
-`
-
-const StyledButtons = styled(Flex)`
-  padding-top: 10px;
-  gap: 10px;
-`
-
-const StyledTextRow = styled(Flex)`
-  margin-top: 10px;
-  height: 24px;
-`
-
-const StyledText = styled(Typography.Body)`
-  color: ${getTransparentColor(colors.black, 0.5)};
-`
-
-const StyledCoinWrapper = styled.span`
-  padding-left: 10px;
-`
-
-const StyledCoinIcon = styled.img`
-  width: 24px;
-  height: 24px;
-`
-
-const state = {
-  inputToken: {
-    logoURI: icon_USDT,
-    symbol: 'USDT',
-  },
-
-  outputToken: {
-    logoURI: icon_BNB,
-    symbol: 'BNB',
-  },
-}
+import {
+  toV2LiquidityToken,
+  useTokenBalancesWithLoadingIndicator,
+  useTrackedTokenPairs,
+} from 'store'
+import { PairState, usePairs } from 'hooks'
+import { useWeb3React } from '@web3-react/core'
+import { LiquidityItem } from './parts'
 
 interface ILiquidityPool {
   onRemove: () => void
 }
 
 export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
-  const navigate = useNavigate()
+  const { account } = useWeb3React()
 
   const { t } = useTranslation()
 
-  const handleOnRemove = () => {
-    navigate(paths.removeLiquidity())
-  }
+  // fetch the user's balances of all tracked V2 LP tokens
+  const trackedTokenPairs = useTrackedTokenPairs()
+
+  const tokenPairsWithLiquidityTokens = useMemo(
+    () =>
+      trackedTokenPairs.map((tokens) => ({
+        liquidityToken: toV2LiquidityToken(tokens),
+        tokens,
+      })),
+    [trackedTokenPairs]
+  )
+
+  const liquidityTokens = useMemo(
+    () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
+    [tokenPairsWithLiquidityTokens]
+  )
+
+  const [v2PairsBalances, fetchingV2PairBalances] =
+    useTokenBalancesWithLoadingIndicator(account ?? undefined, liquidityTokens)
+
+  // fetch the reserves for all V2 pools in which the user has a balance
+  const liquidityTokensWithBalances = useMemo(
+    () =>
+      tokenPairsWithLiquidityTokens.filter(({ liquidityToken }) =>
+        v2PairsBalances[liquidityToken.address]?.greaterThan('0')
+      ),
+    [tokenPairsWithLiquidityTokens, v2PairsBalances]
+  )
+
+  const v2Pairs = usePairs(
+    liquidityTokensWithBalances.map(({ tokens }) => tokens)
+  )
+  const v2IsLoading =
+    fetchingV2PairBalances ||
+    v2Pairs?.length < liquidityTokensWithBalances.length ||
+    (v2Pairs?.length &&
+      v2Pairs.every(([pairState]) => pairState === PairState.LOADING))
+
+  const allV2PairsWithLiquidity = v2Pairs
+    ?.filter(
+      ([pairState, pair]) => pairState === PairState.EXISTS && Boolean(pair)
+    )
+    .map(([, pair]) => pair)
+
+  console.log('allV2PairsWithLiquidity', v2IsLoading)
 
   return (
     <>
-      <Typography.Title>{t('liquidityForm.yourLiquidity')}</Typography.Title>
-      <Accordion
-        hasArrow
-        element={
-          <Flex alignItems="center">
-            <CoinPair
-              inputToken={state.inputToken.logoURI}
-              outputToken={state.outputToken.logoURI}
-            />
-            <StyledPairTitle>
-              {state.inputToken.symbol}/{state.outputToken.symbol}
-            </StyledPairTitle>
-          </Flex>
-        }
-      >
-        <StyledTextRow justifyContent="space-between" alignItems="center">
-          <StyledText>
-            {t('liquidityForm.pooled')}&nbsp;
-            {state.inputToken.symbol}:
-          </StyledText>
-          <Flex justifyContent="space-between" alignItems="center">
-            <StyledText>100.25</StyledText>
-            <StyledCoinWrapper>
-              <StyledCoinIcon src={state.inputToken.logoURI} />
-            </StyledCoinWrapper>
-          </Flex>
-        </StyledTextRow>
+      <Typography.Title>
+        {v2IsLoading ? 'Loading' : t('liquidityForm.yourLiquidity')}
+      </Typography.Title>
 
-        <StyledTextRow justifyContent="space-between" alignItems="center">
-          <StyledText>
-            {t('liquidityForm.pooled')}&nbsp;
-            {state.outputToken.symbol}:
-          </StyledText>
-          <Flex justifyContent="space-between" alignItems="center">
-            <StyledText>100.25</StyledText>
-            <StyledCoinWrapper>
-              <StyledCoinIcon src={state.outputToken.logoURI} />
-            </StyledCoinWrapper>
-          </Flex>
-        </StyledTextRow>
-
-        <StyledTextRow justifyContent="space-between" alignItems="center">
-          <StyledText>{t('liquidityForm.yourPoolTokens')}</StyledText>
-          <StyledText>0.006</StyledText>
-        </StyledTextRow>
-        <StyledTextRow justifyContent="space-between" alignItems="center">
-          <StyledText>{t('liquidityForm.yourPoolShare')}</StyledText>
-          <StyledText>0.01%</StyledText>
-        </StyledTextRow>
-
-        <StyledButtons>
-          <Button title={t('add')} onClick={() => {}} />
-          <Button title={t('remove')} onClick={handleOnRemove} />
-        </StyledButtons>
-      </Accordion>
+      {!allV2PairsWithLiquidity.length ||
+        allV2PairsWithLiquidity.map((pair) => {
+          return <LiquidityItem key={pair?.token0.symbol} pair={pair} />
+        })}
     </>
   )
 }

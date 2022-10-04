@@ -5,9 +5,18 @@ import { SerializedToken } from 'abis'
 import allTokens_mock from 'const/token-list.json'
 import { arrayify, parseBytes32String } from 'ethers/lib/utils'
 import { useMemo } from 'react'
-import { NEVER_RELOAD, useSingleCallResult, WrappedTokenInfo } from 'store'
+import {
+  combinedTokenMapFromOfficialsUrlsSelector,
+  NEVER_RELOAD,
+  TokenAddressMap,
+  userAddedTokenSelector,
+  useSingleCallResult,
+  WrappedTokenInfo,
+} from 'store'
 import { isAddress } from 'utils'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
+import { createSelector } from '@reduxjs/toolkit'
+import { useSelector } from 'react-redux'
 
 export function deserializeToken(serializedToken: SerializedToken): Token {
   if (serializedToken.logoURI) {
@@ -32,6 +41,15 @@ export function deserializeToken(serializedToken: SerializedToken): Token {
     // serializedToken.projectLink ,
   )
 }
+
+const mapWithoutUrls = (tokenMap: TokenAddressMap, chainId: number) =>
+  Object.keys(tokenMap[chainId]).reduce<{ [address: string]: Token }>(
+    (newMap, address) => {
+      newMap[address] = tokenMap[chainId][address].token
+      return newMap
+    },
+    {}
+  )
 
 export const useAllTokens = (): { [address: string]: Token } => {
   const { chainId } = useWeb3React()
@@ -157,4 +175,35 @@ export const useCurrency = (
   // currencyId?.toLowerCase() === GELATO_NATIVE
   const token = useToken(isETH ? undefined : currencyId)
   return isETH ? ETHER : token
+}
+
+const allOfficialsAndUserAddedTokensSelector = (chainId: number) =>
+  createSelector(
+    [
+      combinedTokenMapFromOfficialsUrlsSelector,
+      userAddedTokenSelector(chainId),
+    ],
+    (tokenMap, userAddedTokens) => {
+      return (
+        userAddedTokens
+          // reduce into all ALL_TOKENS filtered by the current chain
+          .reduce<{ [address: string]: Token }>(
+            (tokenMap_, token) => {
+              tokenMap_[token.address] = token
+              return tokenMap_
+            },
+            // must make a copy because reduce modifies the map, and we do not
+            // want to make a copy in every iteration
+            mapWithoutUrls(tokenMap, chainId)
+          )
+      )
+    }
+  )
+
+/**
+ * Returns all tokens that are from officials token list and user added tokens
+ */
+export function useOfficialsAndUserAddedTokens(): { [address: string]: Token } {
+  const { chainId } = useWeb3React()
+  return useSelector(allOfficialsAndUserAddedTokensSelector(chainId || 1))
 }
