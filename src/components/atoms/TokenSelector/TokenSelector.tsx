@@ -1,17 +1,21 @@
 import { FC, memo } from 'react'
 import styled from 'styled-components'
+import { Token } from 'packages/swap-sdk'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 import { Icon } from '../Icon'
 import { Typography } from '../Typography'
 
 import arrow_icon from 'assets/icons/arrow.svg'
 import BNB_icon from 'assets/coins/BNB.png'
+import { useAddUserToken } from 'store'
 
 interface ITokenSelectorProps {
-  title: string
   hasArrow?: boolean
+  token?: Token
+  title?: string
   icon?: string
   onClick?: () => void
+  hasImport?: boolean
 }
 
 const StyledRoot = styled.button`
@@ -48,12 +52,21 @@ const StyledArrowIcon = styled(Icon)`
 `
 
 export const TokenSelector: FC<ITokenSelectorProps> = memo(
-  ({ title, icon, onClick, hasArrow }) => {
+  ({ icon, onClick, hasArrow, token, title, hasImport }) => {
+    const addToken = useAddUserToken()
+
+    const handleImport = () => {
+      if (hasImport && token) {
+        addToken(token)
+      }
+    }
+
     return (
       <StyledRoot onClick={onClick}>
         <StyledCoinIcon loading="lazy" src={icon || BNB_icon} />
-        <StyledText>{title || 'BNB'}</StyledText>
+        <StyledText>{title || token?.symbol || 'BNB'}</StyledText>
         {hasArrow && <StyledArrowIcon src={arrow_icon} />}
+        {hasImport && <button onClick={handleImport}>import</button>}
       </StyledRoot>
     )
   }

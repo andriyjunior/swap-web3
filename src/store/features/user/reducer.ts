@@ -72,6 +72,10 @@ const initialState: IInitialState = {
   //   showDonationLink: true,
 }
 
+function pairKey(token0Address: string, token1Address: string) {
+  return `${token0Address};${token1Address}`
+}
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -96,6 +100,48 @@ const userSlice = createSlice({
       state.selectedWallet = undefined
       state.timestamp = currentTimestamp()
     },
+    addSerializedToken(state, { payload: { serializedToken } }) {
+      if (!state.tokens) {
+        state.tokens = {}
+      }
+      state.tokens[serializedToken.chainId] =
+        state.tokens[serializedToken.chainId] || {}
+      state.tokens[serializedToken.chainId][serializedToken.address] =
+        serializedToken
+      state.timestamp = currentTimestamp()
+    },
+    removeSerializedToken(state, { payload: { address, chainId } }) {
+      if (!state.tokens) {
+        state.tokens = {}
+      }
+      state.tokens[chainId] = state.tokens[chainId] || {}
+      delete state.tokens[chainId][address]
+      state.timestamp = currentTimestamp()
+    },
+    addSerializedPair(state, { payload: { serializedPair } }) {
+      if (
+        serializedPair.token0.chainId === serializedPair.token1.chainId &&
+        serializedPair.token0.adress !== serializedPair.token1.adress
+      ) {
+        const { chainId } = serializedPair.token0
+        state.pairs[chainId] = state.pairs[chainId] || {}
+        state.pairs[chainId][
+          pairKey(serializedPair.token0.address, serializedPair.token1.address)
+        ] = serializedPair
+      }
+      state.timestamp = currentTimestamp()
+    },
+    removeSerializedPair(
+      state,
+      { payload: { chainId, tokenAAddress, tokenBAddress } }
+    ) {
+      if (state.pairs[chainId]) {
+        // just delete both keys if either exists
+        delete state.pairs[chainId][pairKey(tokenAAddress, tokenBAddress)]
+        delete state.pairs[chainId][pairKey(tokenBAddress, tokenAAddress)]
+      }
+      state.timestamp = currentTimestamp()
+    },
   },
 })
 
@@ -105,6 +151,10 @@ export const {
   updateSlippageTolerance,
   updateUserDeadline,
   updateUserGasPrice,
+  addSerializedToken,
+  removeSerializedToken,
+  addSerializedPair,
+  removeSerializedPair,
 } = userSlice.actions
 
 export default userSlice.reducer

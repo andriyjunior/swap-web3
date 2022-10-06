@@ -2,14 +2,16 @@ import { ChainId, Pair, Token } from 'packages/swap-sdk'
 import { useWeb3React } from '@web3-react/core'
 import { GAS_PRICE_GWEI } from 'const'
 import { selectGasPrice } from 'store/selectors'
-import { useAppSelector } from 'store/utils'
+import { useAppDispatch, useAppSelector } from 'store/utils'
 import { deserializeToken, useOfficialsAndUserAddedTokens } from 'hooks'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'config'
 import farms from 'config/constants/farms'
 import { flatMap } from 'lodash'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
+import { addSerializedToken, removeSerializedToken } from '../reducer'
+import { serializeToken } from './helpers'
 
 export const useGasPrice = (): string => {
   const { chainId } = useWeb3React()
@@ -122,5 +124,28 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
     18,
     'Sevn-LP',
     'SevnFinance LPs'
+  )
+}
+
+export const useAddUserToken = (): ((token: Token) => void) => {
+  const dispatch = useAppDispatch()
+  return useCallback(
+    (token: Token) => {
+      dispatch(addSerializedToken({ serializedToken: serializeToken(token) }))
+    },
+    [dispatch]
+  )
+}
+
+export const useRemoveUserAddedToken = (): ((
+  chainId: number,
+  address: string
+) => void) => {
+  const dispatch = useAppDispatch()
+  return useCallback(
+    (chainId: number, address: string) => {
+      dispatch(removeSerializedToken({ chainId, address }))
+    },
+    [dispatch]
   )
 }

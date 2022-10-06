@@ -13,6 +13,7 @@ export const userAddedTokenSelector = (chainId: number) =>
   createSelector(selectUserTokens, (serializedTokensMap) =>
     Object.values(serializedTokensMap?.[chainId] ?? {}).map(deserializeToken)
   )
+
 export default function useUserAddedTokens(): Token[] {
   const { chainId } = useWeb3React()
   return useSelector(userAddedTokenSelector(chainId || 1))
