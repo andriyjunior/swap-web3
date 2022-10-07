@@ -1,4 +1,4 @@
-import { SEVN, USDT } from 'const'
+import { SEVN, USDT, WETH } from 'const'
 import { ChainId, Token, WBNB } from 'packages/swap-sdk'
 
 const CAKE_MAINNET = new Token(
@@ -2406,7 +2406,7 @@ export const bscTokens = {
 }
 
 export const bscTestnetTokens = {
-  // wbnb: WBNB[ChainId.TESTNET],
+  weth: WETH[ChainId.TESTNET],
   sevn: SEVN[ChainId.TESTNET],
   erc20: new Token(
     ChainId.TESTNET,
