@@ -176,7 +176,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 export const useCurrency = (
   currencyId: string | undefined
 ): Currency | Token | null | undefined => {
-  const isETH = currencyId?.toUpperCase() === 'ETH'
+  const isETH = currencyId?.toUpperCase().includes('ETH')
   // currencyId?.toLowerCase() === GELATO_NATIVE
   const token = useToken(isETH ? undefined : currencyId)
   return isETH ? ETHER : token

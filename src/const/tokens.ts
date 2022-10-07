@@ -2,23 +2,23 @@ import { ChainId, Token } from 'packages/swap-sdk'
 
 const SEVN_MAINNET = new Token(
   ChainId.MAINNET,
-  '0x2c3f07314ba8dA7A99E50BB1B9a3Dfd659881E63',
+  '0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5',
   18,
   'SEVN',
   'SEVN Token'
 )
 
 const SEVN_TESTNET = new Token(
-  ChainId.ROPSTEN,
-  '0x2c3f07314ba8dA7A99E50BB1B9a3Dfd659881E63',
+  ChainId.TESTNET,
+  '0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5',
   18,
   'SEVN',
   'SEVN Token'
 )
 
 const WETH_TESTNET = new Token(
-  ChainId.ROPSTEN,
-  '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+  ChainId.TESTNET,
+  '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
   18,
   'WETH',
   'Wrapped Ether'
@@ -26,25 +26,25 @@ const WETH_TESTNET = new Token(
 
 export const SEVN = {
   [ChainId.MAINNET]: SEVN_MAINNET,
-  [ChainId.ROPSTEN]: SEVN_TESTNET,
+  [ChainId.TESTNET]: SEVN_TESTNET,
 }
 
 export const WETH = {
   //TODO: Change to MAINNET WETH token
   [ChainId.MAINNET]: WETH_TESTNET,
-  [ChainId.ROPSTEN]: WETH_TESTNET,
+  [ChainId.TESTNET]: WETH_TESTNET,
 }
 
 export const USDT_TESTNET = new Token(
-  ChainId.ROPSTEN,
-  '0x738e997fc917fe7F0b51dfa9A5939507B3E6A154',
+  ChainId.TESTNET,
+  '0x47c4E1c3C4c9282A2A75A465230C99fAc436F591',
   6,
   'USDT',
   'Tether USD'
 )
 
 export const USDT = {
-  //TODO: Change to ROPSTEN WETH token
+  //TODO: Change to TESTNET WETH token
   [ChainId.MAINNET]: USDT_TESTNET,
-  [ChainId.ROPSTEN]: USDT_TESTNET,
+  [ChainId.TESTNET]: USDT_TESTNET,
 }

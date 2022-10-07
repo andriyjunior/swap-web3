@@ -2,17 +2,11 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Settings } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PairState, useModalRef, usePairs } from 'hooks'
+import { useModalRef } from 'hooks'
 
 import { RemoveLiquidity, LiquidityPool, AddLiquidity } from './parts'
 import { useNavigate, useParams } from 'react-router-dom'
 import { paths } from 'const'
-import {
-  toV2LiquidityToken,
-  useTokenBalancesWithLoadingIndicator,
-  useTrackedTokenPairs,
-} from 'store'
-import { useWeb3React } from '@web3-react/core'
 
 enum TabsEnum {
   Add,

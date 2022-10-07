@@ -11,16 +11,16 @@ import { bscTestnetTokens } from './tokens'
 
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.MAINNET]: [],
-  [ChainId.ROPSTEN]: [],
+  [ChainId.TESTNET]: [],
 }
 
 export const PINNED_PAIRS: {
   readonly [chainId in ChainId]?: [Token, Token][]
 } = {
   [ChainId.MAINNET]: [],
-  [ChainId.ROPSTEN]: [
+  [ChainId.TESTNET]: [
     [bscTestnetTokens.erc20, bscTestnetTokens.sevn],
-    [WETH[ChainId.ROPSTEN], bscTestnetTokens.usdt],
+    [WETH[ChainId.TESTNET], bscTestnetTokens.usdt],
   ],
 }
 

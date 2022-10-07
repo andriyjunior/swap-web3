@@ -1,4 +1,4 @@
-import { ChainId } from '@uniswap/sdk'
+import { ChainId } from 'packages/swap-sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
 
 export type ConnectorType = InjectedConnector
@@ -13,7 +13,7 @@ export enum ConnectorNames {
 
 const POLLING_INTERVAL = 12000
 
-const SUPPORTED_CHAIN_ID = [ChainId.MAINNET, ChainId.ROPSTEN]
+const SUPPORTED_CHAIN_ID = [ChainId.MAINNET, ChainId.TESTNET]
 
 export const injected = new InjectedConnector({
   supportedChainIds: SUPPORTED_CHAIN_ID,
