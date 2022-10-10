@@ -18,7 +18,7 @@ import {
   // ALLOWED_PRICE_IMPACT_HIGH,
   // ALLOWED_PRICE_IMPACT_MEDIUM,
   // ALLOWED_PRICE_IMPACT_LOW,
-} from 'const'
+} from 'config'
 import { getContract, getProviderOrSigner } from './index'
 
 // // converts a basis points value to a sdk percent

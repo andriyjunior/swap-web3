@@ -1,5 +1,6 @@
 export * from './lists'
 export * from './tokens'
+export * from './exchange'
 
 import { ChainTokenList } from 'abis'
 import { WETH } from 'const'

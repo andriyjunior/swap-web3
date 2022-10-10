@@ -1,6 +1,6 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { ROUTER_ADDRESS } from 'const'
+import { ROUTER_ADDRESS } from 'config'
 import { BigNumber, Contract } from 'ethers'
 import { splitSignature } from 'ethers/lib/utils'
 import {

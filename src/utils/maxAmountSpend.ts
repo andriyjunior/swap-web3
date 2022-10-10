@@ -1,5 +1,5 @@
 import { CurrencyAmount, ETHER, JSBI } from 'packages/swap-sdk'
-import { BIG_INT_ZERO, MIN_BNB } from 'const'
+import { BIG_INT_ZERO, MIN_BNB } from 'config'
 
 /**
  * Given some token amount, return the max that can be spent of it

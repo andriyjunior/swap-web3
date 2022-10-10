@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 // import { logError } from 'utils/sentry'
 import { useWeb3React } from '@web3-react/core'
 // import { useTranslation } from '@pancakeswap/localization'
-import { ROUTER_ADDRESS } from 'const'
+import { ROUTER_ADDRESS } from 'config'
 
 import { useTokenContract } from './useContract'
 
