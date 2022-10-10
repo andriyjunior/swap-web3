@@ -29,9 +29,9 @@ function combineMaps(
 ): TokenAddressMap {
   return {
     [ChainId.MAINNET]: { ...map1[ChainId.MAINNET], ...map2[ChainId.MAINNET] },
-    [ChainId.ROPSTEN]: {
-      ...map1[ChainId.ROPSTEN],
-      ...map2[ChainId.ROPSTEN],
+    [ChainId.TESTNET]: {
+      ...map1[ChainId.TESTNET],
+      ...map2[ChainId.TESTNET],
     },
   }
 }

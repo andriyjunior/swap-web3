@@ -35,14 +35,14 @@ import {
   useTransactionAdder,
   useGasPrice,
 } from 'store'
-import { ETHER, TokenAmount } from 'packages/swap-sdk'
+import { ChainId, ETHER, TokenAmount } from 'packages/swap-sdk'
 import {
   calculateSlippageAmount,
   getRouterContract,
   maxAmountSpend,
 } from 'utils'
 import { useCurrencySelectRoute } from 'pages/Swap/hooks'
-import { ONE_BIPS, ROUTER_ADDRESS } from 'const'
+import { ONE_BIPS, ROUTER_ADDRESS, SEVN, USDT } from 'const'
 import { BigNumber } from 'ethers'
 import { TransactionResponse } from '@ethersproject/providers'
 
@@ -55,7 +55,7 @@ const DAIInfo = {
   decimals: 18,
   logoURI: 'https://gliaswaptest.ckbapp.dev/token/dai.png',
   address: '0xC4401D8D5F05B958e6f1b884560F649CdDfD9615',
-  chainId: 3,
+  chainId: ChainId.TESTNET,
 }
 
 const USDTInfo = {
@@ -64,11 +64,8 @@ const USDTInfo = {
   decimals: 6,
   logoURI: 'https://gliaswaptest.ckbapp.dev/token/usdt.png',
   address: '0x1cf98d2a2f5b0BFc365EAb6Ae1913C275bE2618F',
-  chainId: 3,
+  chainId: ChainId.TESTNET,
 }
-
-const SEVN_ADDRESS = '0x2c3f07314ba8dA7A99E50BB1B9a3Dfd659881E63'
-const USDT_ADDRESS = '0x738e997fc917fe7F0b51dfa9A5939507B3E6A154'
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;
@@ -99,6 +96,9 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
   const walletsRef = useModalRef()
   const confirmSupplyRef = useModalRef()
   const txSubmitedRef = useModalRef()
+
+  const SEVN_ADDRESS = chainId && SEVN[chainId].address
+  const USDT_ADDRESS = chainId && USDT[chainId].address
 
   const [currencyIdA, currencyIdB] = [
     userCurrencyA ? userCurrencyA : SEVN_ADDRESS,
@@ -294,8 +294,8 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
                   {price?.toSignificant(6) ?? '-'}
                 </Typography.Title>
                 <Typography.Body>
-                  {currencies?.CURRENCY_A?.symbol}&nbsp;per&nbsp;
-                  {currencies?.CURRENCY_B?.symbol}
+                  {currencies?.CURRENCY_B?.symbol}&nbsp;per&nbsp;
+                  {currencies?.CURRENCY_A?.symbol}
                 </Typography.Body>
               </Flex>
               <Flex alignItems="center" flexDirection="column">
@@ -303,8 +303,8 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
                   {price?.invert()?.toSignificant(6) ?? '-'}
                 </Typography.Title>
                 <Typography.Body>
-                  {currencies?.CURRENCY_B?.symbol}&nbsp;per&nbsp;
-                  {currencies?.CURRENCY_A?.symbol}
+                  {currencies?.CURRENCY_A?.symbol}&nbsp;per&nbsp;
+                  {currencies?.CURRENCY_B?.symbol}
                 </Typography.Body>
               </Flex>
               <Flex alignItems="center" flexDirection="column">
@@ -316,15 +316,22 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
             </StyledPricesAndPool>
           </InnerContainer>
 
-          {showFieldAApproval ||
-            (showFieldBApproval && (
-              <StyledSupplyWrapper>
-                <Flex justifyContent="space-between" gap="10px">
-                  <Button title={t('approve A')} onClick={approveACallback} />
-                  <Button title={t('approve B')} onClick={approveBCallback} />
-                </Flex>
-              </StyledSupplyWrapper>
-            ))}
+          {(showFieldAApproval || showFieldBApproval) && (
+            <StyledSupplyWrapper>
+              <Flex justifyContent="space-between" gap="10px">
+                <Button
+                  title={t('approve A')}
+                  onClick={approveACallback}
+                  isDisabled={!showFieldAApproval}
+                />
+                <Button
+                  title={t('approve B')}
+                  onClick={approveBCallback}
+                  isDisabled={!showFieldBApproval}
+                />
+              </Flex>
+            </StyledSupplyWrapper>
+          )}
 
           <StyledSupplyWrapper>
             <Button

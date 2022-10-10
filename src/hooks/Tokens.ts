@@ -17,6 +17,7 @@ import { isAddress } from 'utils'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 import { createSelector } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
+import useUserAddedTokens from 'store/features/user/hooks/useUserAddedTokens'
 
 export function deserializeToken(serializedToken: SerializedToken): Token {
   if (serializedToken.logoURI) {
@@ -53,7 +54,11 @@ const mapWithoutUrls = (tokenMap: TokenAddressMap, chainId: number) =>
 
 export const useAllTokens = (): { [address: string]: Token } => {
   const { chainId } = useWeb3React()
-  const wrappedTokens = allTokens_mock.tokens.map(deserializeToken)
+  const userTokens = useUserAddedTokens().map(deserializeToken)
+
+  const wrappedTokens = [...allTokens_mock.tokens, ...userTokens].map(
+    deserializeToken
+  )
 
   if (chainId) {
     wrappedTokens.unshift(WNATIVE[chainId])
@@ -171,7 +176,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 export const useCurrency = (
   currencyId: string | undefined
 ): Currency | Token | null | undefined => {
-  const isETH = currencyId?.toUpperCase() === 'ETH'
+  const isETH = currencyId?.toUpperCase().includes('ETH')
   // currencyId?.toLowerCase() === GELATO_NATIVE
   const token = useToken(isETH ? undefined : currencyId)
   return isETH ? ETHER : token

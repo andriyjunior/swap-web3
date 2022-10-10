@@ -70,15 +70,15 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
 export const WETH9 = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+    '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     18,
     'WETH',
     'Wrapped Ether',
     'https://weth.io'
   ),
-  [ChainId.ROPSTEN]: new Token(
-    ChainId.ROPSTEN,
-    '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+  [ChainId.TESTNET]: new Token(
+    ChainId.TESTNET,
+    '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     18,
     'WETH',
     'Wrapped Ether',
@@ -95,8 +95,8 @@ export const WBNB = {
     'Wrapped BNB',
     'https://www.binance.org'
   ),
-  [ChainId.ROPSTEN]: new Token(
-    ChainId.ROPSTEN,
+  [ChainId.TESTNET]: new Token(
+    ChainId.TESTNET,
     '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     18,
     'WBNB',
@@ -107,7 +107,7 @@ export const WBNB = {
 
 export const WNATIVE = {
   [ChainId.MAINNET]: WETH9[ChainId.MAINNET],
-  [ChainId.ROPSTEN]: WETH9[ChainId.ROPSTEN],
+  [ChainId.TESTNET]: WETH9[ChainId.TESTNET],
   // [ChainId.MAINNET]: WBNB[ChainId.MAINNET],
-  // [ChainId.ROPSTEN]: WBNB[ChainId.ROPSTEN],
+  // [ChainId.TESTNET]: WBNB[ChainId.TESTNET],
 }

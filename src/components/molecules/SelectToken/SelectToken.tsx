@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { InnerContainer, Input, TokenSelector, Typography } from 'components'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
-import { useAllTokens, useDebounce } from 'hooks'
+import { useAllTokens, useDebounce, useToken } from 'hooks'
 import { Token } from 'packages/swap-sdk'
 
 interface ISelectTokenProps {
@@ -36,6 +36,8 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
   const [input, setInput] = useState('')
   const debouncedQuery = useDebounce(input, 200)
 
+  const foundToken = useToken(debouncedQuery)
+
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -44,7 +46,13 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
 
   useEffect(() => {
     const filteredTokens = Object.values(allTokensList).filter((item) => {
-      if (item?.symbol?.toLowerCase().includes(debouncedQuery.toLowerCase())) {
+      const debouncedTrimmed = debouncedQuery.toLowerCase().trim()
+      const listOfQuerry = [
+        item?.symbol?.toLowerCase().includes(debouncedTrimmed),
+        item?.address?.toLowerCase().includes(debouncedTrimmed),
+      ]
+
+      if (listOfQuerry.some((itemTrue) => itemTrue)) {
         return item
       }
     })
@@ -65,11 +73,19 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
             <TokenSelector
               key={item.address}
               icon={''}
-              title={item.symbol ?? ''}
+              token={item}
               onClick={() => onSelect(item)}
             />
           )
         })}
+        {foundToken && !allTokensList[foundToken.address] && (
+          <TokenSelector
+            key={foundToken?.address}
+            icon={''}
+            token={foundToken}
+            hasImport
+          />
+        )}
       </StyledList>
     </>
   )

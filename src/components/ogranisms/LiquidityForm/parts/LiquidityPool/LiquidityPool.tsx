@@ -69,8 +69,6 @@ export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
     )
     .map(([, pair]) => pair)
 
-  console.log('allV2PairsWithLiquidity', v2IsLoading)
-
   return (
     <>
       <Typography.Title>

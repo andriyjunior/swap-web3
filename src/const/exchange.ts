@@ -2,8 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, JSBI, Percent } from 'packages/swap-sdk'
 
 export const ROUTER_ADDRESS = {
-  [ChainId.MAINNET]: '0xf46FDB6FCfdcA85382d0C07A26e66174172e3107',
-  [ChainId.ROPSTEN]: '0xf46FDB6FCfdcA85382d0C07A26e66174172e3107',
+  [ChainId.MAINNET]: '0x488544824Cf9166f147e869eAC6097e7579E0a0E',
+  [ChainId.TESTNET]: '0x488544824Cf9166f147e869eAC6097e7579E0a0E',
 }
 
 // // used to construct intermediary pairs for trading

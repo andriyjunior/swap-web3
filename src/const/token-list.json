@@ -15,24 +15,32 @@
       "symbol": "SEVN-T",
       "decimals": 18,
       "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0x2c3f07314ba8dA7A99E50BB1B9a3Dfd659881E63",
-      "chainId": 3
+      "address": "0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5",
+      "chainId": 5
     },
     {
       "name": "Tether USD",
       "symbol": "USDT",
       "decimals": 6,
       "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0x738e997fc917fe7F0b51dfa9A5939507B3E6A154",
-      "chainId": 3
+      "address": "0x47c4E1c3C4c9282A2A75A465230C99fAc436F591",
+      "chainId": 5
     },
     {
-      "name": "ERC 20",
-      "symbol": "ERC",
+      "name": "ERC 20-T1",
+      "symbol": "ERC-20",
       "decimals": 18,
       "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0x0556940E0Ccd3E9e25C9CCA53Ac9c68dDA883496",
-      "chainId": 3
+      "address": "0xE5b4385d52B6a700fC77f84F0c61A0079933B3e6",
+      "chainId": 5
+    },
+    {
+      "name": "ERC 20-T2",
+      "symbol": "ERC-20",
+      "decimals": 18,
+      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
+      "address": "0xB919cfF0AffaFa68D12C8219E8a4D08924Ad6eed",
+      "chainId": 5
     }
   ]
 }

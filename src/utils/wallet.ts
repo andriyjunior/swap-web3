@@ -7,8 +7,8 @@ const NETWORK_CONFIG = {
     // scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC],
     // rpcUrls: BSC_RPC_URLS,
   },
-  [ChainId.ROPSTEN]: {
-    name: 'ROPSTEN Smart Chain Testnet',
+  [ChainId.TESTNET]: {
+    name: 'TESTNET Smart Chain Testnet',
     // scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC_TESTNET],
     // rpcUrls: BSC_TESTNET_RPC_URLS,
   },
@@ -49,7 +49,7 @@ export const setupNetwork = async (
             ],
           })
         } catch (error) {
-          console.error('Failed to setup the network in Metamsk ', error)
+          console.error('Failed to setup the network in Metamask ', error)
           return false
         }
       }

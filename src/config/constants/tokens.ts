@@ -1,4 +1,4 @@
-import { SEVN, USDT } from 'const'
+import { SEVN, USDT, WETH } from 'const'
 import { ChainId, Token, WBNB } from 'packages/swap-sdk'
 
 const CAKE_MAINNET = new Token(
@@ -11,7 +11,7 @@ const CAKE_MAINNET = new Token(
 )
 
 const CAKE_TESTNET = new Token(
-  ChainId.ROPSTEN,
+  ChainId.TESTNET,
   '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe',
   18,
   'CAKE',
@@ -29,7 +29,7 @@ const USDC_BSC = new Token(
 )
 
 const USDC_TESTNET = new Token(
-  ChainId.ROPSTEN,
+  ChainId.TESTNET,
   '0x64544969ed7EBf5f083679233325356EbE738930',
   18,
   'USDC',
@@ -39,12 +39,12 @@ const USDC_TESTNET = new Token(
 
 export const USDC = {
   [ChainId.MAINNET]: USDC_BSC,
-  [ChainId.ROPSTEN]: USDC_TESTNET,
+  [ChainId.TESTNET]: USDC_TESTNET,
 }
 
 export const CAKE = {
   [ChainId.MAINNET]: CAKE_MAINNET,
-  [ChainId.ROPSTEN]: CAKE_TESTNET,
+  [ChainId.TESTNET]: CAKE_TESTNET,
 }
 
 const BUSD_MAINNET = new Token(
@@ -57,7 +57,7 @@ const BUSD_MAINNET = new Token(
 )
 
 const BUSD_TESTNET = new Token(
-  ChainId.ROPSTEN,
+  ChainId.TESTNET,
   '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
   18,
   'BUSD',
@@ -67,7 +67,7 @@ const BUSD_TESTNET = new Token(
 
 export const BUSD: Record<ChainId, Token> = {
   [ChainId.MAINNET]: BUSD_MAINNET,
-  [ChainId.ROPSTEN]: BUSD_TESTNET,
+  [ChainId.TESTNET]: BUSD_TESTNET,
 }
 
 export const bscTokens = {
@@ -2406,19 +2406,19 @@ export const bscTokens = {
 }
 
 export const bscTestnetTokens = {
-  wbnb: WBNB[ChainId.ROPSTEN],
-  sevn: SEVN[ChainId.ROPSTEN],
+  weth: WETH[ChainId.TESTNET],
+  sevn: SEVN[ChainId.TESTNET],
   erc20: new Token(
-    ChainId.ROPSTEN,
-    '0x0556940E0Ccd3E9e25C9CCA53Ac9c68dDA883496',
+    ChainId.TESTNET,
+    '0xB919cfF0AffaFa68D12C8219E8a4D08924Ad6eed',
     18,
     'ERC',
     'ERC 20',
     'https://www.paxos.com/busd/'
   ),
-  usdt: USDT[ChainId.ROPSTEN],
+  usdt: USDT[ChainId.TESTNET],
   syrup: new Token(
-    ChainId.ROPSTEN,
+    ChainId.TESTNET,
     '0xfE1e507CeB712BDe086f3579d2c03248b2dB77f9',
     18,
     'SYRUP',
@@ -2426,7 +2426,7 @@ export const bscTestnetTokens = {
     'https://pancakeswap.finance/'
   ),
   bake: new Token(
-    ChainId.ROPSTEN,
+    ChainId.TESTNET,
     '0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5',
     18,
     'BAKE',

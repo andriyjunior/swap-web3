@@ -42,5 +42,5 @@ export interface TagInfo extends TagDetails {
  */
 export const EMPTY_LIST: TokenAddressMap = {
   [ChainId.MAINNET]: {},
-  [ChainId.ROPSTEN]: {},
+  [ChainId.TESTNET]: {},
 }
