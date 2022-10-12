@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Flex,
@@ -11,15 +11,28 @@ import {
   WalletConnection,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAllTokens, useMetamaskConnection, useModalRef } from 'hooks'
+import {
+  useAllTokens,
+  useCurrency,
+  useModalRef,
+  useWrapCallback,
+  WrapType,
+} from 'hooks'
+import {
+  selectUserSlippageTolerance,
+  useAppSelector,
+  useDefaultsFromURLSearch,
+  useDerivedSwapInfo,
+  useSingleTokenSwapInfo,
+  useSwapState,
+} from 'store'
 import { useWeb3React } from '@web3-react/core'
-import { selectUser, useAppSelector } from 'store'
-import { TokenDTO } from 'types'
 import { useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import allTokens from 'const/token-list.json'
 import { Token } from 'packages/swap-sdk'
+import { Field } from 'store/features/swap/actions'
+import { useSwapActionHandlers } from 'store/features/swap/useSwapActionHandlers'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
@@ -30,7 +43,121 @@ export const SwapForm: FC = () => {
 
   const { state, handleOnChange, handleSwapInputs } = useSwapForm()
 
-  const getTokenList = useAllTokens()
+  const loadedUrlParams = useDefaultsFromURLSearch()
+
+  // token warning stuff
+  const [loadedInputCurrency, loadedOutputCurrency] = [
+    useCurrency(loadedUrlParams?.inputCurrencyId),
+    useCurrency(loadedUrlParams?.outputCurrencyId),
+  ]
+
+  const urlLoadedTokens: Token[] = useMemo(
+    () =>
+      [loadedInputCurrency, loadedOutputCurrency]?.filter(
+        (c): c is Token => c instanceof Token
+      ) ?? [],
+    [loadedInputCurrency, loadedOutputCurrency]
+  )
+
+  const defaultTokens = useAllTokens()
+
+  const importTokensNotInDefault =
+    urlLoadedTokens &&
+    urlLoadedTokens.filter((token: Token) => {
+      return !(token.address in defaultTokens)
+    })
+
+  // get custom setting values for user
+  const [allowedSlippage] = useAppSelector(selectUserSlippageTolerance)
+
+  const {
+    independentField,
+    typedValue,
+    recipient,
+    [Field.INPUT]: { currencyId: inputCurrencyId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+  } = useSwapState()
+
+  const inputCurrency = useCurrency(inputCurrencyId)
+  const outputCurrency = useCurrency(outputCurrencyId)
+
+  const {
+    v2Trade,
+    currencyBalances,
+    parsedAmount,
+    currencies,
+    inputError: swapInputError,
+  } = useDerivedSwapInfo(
+    independentField,
+    typedValue,
+    inputCurrency!,
+    outputCurrency!,
+    recipient
+  )
+
+  const {
+    wrapType,
+    execute: onWrap,
+    inputError: wrapInputError,
+  } = useWrapCallback(
+    currencies[Field.INPUT],
+    currencies[Field.OUTPUT],
+    typedValue
+  )
+
+  const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
+  const trade = showWrap ? undefined : v2Trade
+
+  const singleTokenPrice = useSingleTokenSwapInfo(
+    inputCurrencyId,
+    inputCurrency!,
+    outputCurrencyId,
+    outputCurrency!
+  )
+
+  const parsedAmounts = showWrap
+    ? {
+        [Field.INPUT]: parsedAmount,
+        [Field.OUTPUT]: parsedAmount,
+      }
+    : {
+        [Field.INPUT]:
+          independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
+        [Field.OUTPUT]:
+          independentField === Field.OUTPUT
+            ? parsedAmount
+            : trade?.outputAmount,
+      }
+
+  const {
+    onSwitchTokens,
+    onCurrencySelection,
+    onUserInput,
+    onChangeRecipient,
+  } = useSwapActionHandlers()
+  const isValid = !swapInputError
+  const dependentField: Field =
+    independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
+
+  const handleTypeInput = useCallback(
+    (value: string) => {
+      onUserInput(Field.INPUT, value)
+    },
+    [onUserInput]
+  )
+  const handleTypeOutput = useCallback(
+    (value: string) => {
+      onUserInput(Field.OUTPUT, value)
+    },
+    [onUserInput]
+  )
+
+  const formattedAmounts = {
+    [independentField]: typedValue,
+    [dependentField]: showWrap
+      ? parsedAmounts[independentField]?.toExact() ?? ''
+      : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+  }
 
   return (
     <>
@@ -62,24 +189,26 @@ export const SwapForm: FC = () => {
           </Flex>
 
           <TokenInput
-            tokenName={state.inputToken.symbol}
+            currency={inputCurrency || undefined}
+            tokenName={inputCurrency?.symbol || ''}
             title={t('swapForm.youSell')}
             icon={state.inputToken.logoURI}
-            amount={state.inputAmount}
-            onInput={(value) => handleOnChange({ inputAmount: value })}
+            amount={formattedAmounts[Field.INPUT]}
+            onInput={handleTypeInput}
             onSelectToken={() => {}}
           />
 
           <Flex justifyContent="center">
-            <IconButton icon="swap" onClick={handleSwapInputs} />
+            <IconButton icon="swap" onClick={onSwitchTokens} />
           </Flex>
 
           <TokenInput
-            tokenName={state.outputToken.symbol}
+            currency={outputCurrency || undefined}
+            tokenName={outputCurrency?.symbol || ''}
             title={t('swapForm.youBuy')}
             icon={state.outputToken.logoURI}
-            amount={state.outputAmount}
-            onInput={(value) => handleOnChange({ outputAmount: value })}
+            amount={formattedAmounts[Field.OUTPUT]}
+            onInput={handleTypeOutput}
             onSelectToken={() => {}}
           />
 

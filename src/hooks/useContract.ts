@@ -6,8 +6,11 @@ import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
 import { Erc20, Erc20Bytes32, ISevnPair, Multicall } from 'abis'
 import { getContract, getMulticallAddress, getProviderOrSigner } from 'utils'
 import multiCallAbi from 'abis/Multicall.json'
-import { ChainId } from 'packages/swap-sdk'
+import { ChainId, WNATIVE } from 'packages/swap-sdk'
 import { infuraProvider } from 'utils'
+import { Weth } from 'abis/types/Weth'
+
+import WETH_ABI from 'abis/weth.json'
 
 function useContract<T extends Contract = Contract>(
   address: string | undefined,
@@ -69,4 +72,15 @@ export function usePairContract(
   withSignerIfPossible?: boolean
 ): ISevnPair | null {
   return useContract(pairAddress, SevnPair.abi, withSignerIfPossible)
+}
+
+export const useWETHContract = (
+  withSignerIfPossible?: boolean
+): Contract | null => {
+  const { chainId } = useWeb3React()
+  return useContract<Weth>(
+    chainId ? WNATIVE[chainId].address : undefined,
+    WETH_ABI,
+    withSignerIfPossible
+  )
 }

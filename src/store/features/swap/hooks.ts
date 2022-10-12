@@ -15,7 +15,11 @@ import {
 } from 'config/constants/exchange'
 // import useSWRImmutable from 'swr/immutable'
 import { useDispatch, useSelector } from 'react-redux'
-import { isAddress } from 'utils'
+import {
+  computeSlippageAdjustedAmounts,
+  isAddress,
+  tryParseAmount,
+} from 'utils'
 import { useCurrencyBalances } from '../wallet/hooks'
 import {
   Field,
@@ -28,8 +32,12 @@ import { SwapState } from './reducer'
 import { PairDataTimeWindowEnum } from './types'
 import { derivedPairByDataIdSelector, pairByDataIdSelector } from './selectors'
 import { RootState } from 'store/store'
-import { useAppDispatch } from 'store/utils'
+import { useAppDispatch, useAppSelector } from 'store/utils'
 import { useLocation, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { useTradeExactIn, useTradeExactOut } from 'hooks'
+import { selectUserSlippageTolerance } from 'store/selectors'
+import { getTokenAddress } from 'components/molecules/Chart/utils'
 
 export function useSwapState(): RootState['swap'] {
   return useSelector<RootState, RootState['swap']>((state) => state.swap)
@@ -56,146 +64,146 @@ function involvesAddress(trade: Trade, checksummedAddress: string): boolean {
 }
 
 // Get swap price for single token disregarding slippage and price impact
-// export function useSingleTokenSwapInfo(
-//   inputCurrencyId: string | undefined,
-//   inputCurrency: Currency | undefined,
-//   outputCurrencyId: string | undefined,
-//   outputCurrency: Currency | undefined
-// ): { [key: string]: number } {
-//   const token0Address = getTokenAddress(inputCurrencyId)
-//   const token1Address = getTokenAddress(outputCurrencyId)
+export function useSingleTokenSwapInfo(
+  inputCurrencyId: string | undefined,
+  inputCurrency: Currency | undefined,
+  outputCurrencyId: string | undefined,
+  outputCurrency: Currency | undefined
+): { [key: string]: number } | null {
+  const token0Address = getTokenAddress(inputCurrencyId)
+  const token1Address = getTokenAddress(outputCurrencyId)
 
-//   const parsedAmount = tryParseAmount('1', inputCurrency ?? undefined)
+  const parsedAmount = tryParseAmount('1', inputCurrency ?? undefined)
 
-//   const bestTradeExactIn = useTradeExactIn(
-//     parsedAmount,
-//     outputCurrency ?? undefined
-//   )
-//   if (!inputCurrency || !outputCurrency || !bestTradeExactIn) {
-//     return null
-//   }
+  const bestTradeExactIn = useTradeExactIn(
+    parsedAmount,
+    outputCurrency ?? undefined
+  )
+  if (!inputCurrency || !outputCurrency || !bestTradeExactIn) {
+    return null
+  }
 
-//   const inputTokenPrice = parseFloat(
-//     bestTradeExactIn?.executionPrice?.toSignificant(6)
-//   )
-//   const outputTokenPrice = 1 / inputTokenPrice
+  const inputTokenPrice = parseFloat(
+    bestTradeExactIn?.executionPrice?.toSignificant(6)
+  )
+  const outputTokenPrice = 1 / inputTokenPrice
 
-//   return {
-//     [token0Address]: inputTokenPrice,
-//     [token1Address]: outputTokenPrice,
-//   }
-// }
+  return {
+    [token0Address]: inputTokenPrice,
+    [token1Address]: outputTokenPrice,
+  }
+}
 
 // // from the current swap inputs, compute the best trade and return it.
-// export function useDerivedSwapInfo(
-//   independentField: Field,
-//   typedValue: string,
-//   inputCurrency: Currency | undefined,
-//   outputCurrency: Currency | undefined,
-//   recipient: string
-// ): {
-//   currencies: { [field in Field]?: Currency }
-//   currencyBalances: { [field in Field]?: CurrencyAmount }
-//   parsedAmount: CurrencyAmount | undefined
-//   v2Trade: Trade | undefined
-//   inputError?: string
-// } {
-//   const { account } = useWeb3React()
-//   const { t } = useTranslation()
+export function useDerivedSwapInfo(
+  independentField: Field,
+  typedValue: string,
+  inputCurrency: Currency | undefined,
+  outputCurrency: Currency | undefined,
+  recipient: string
+): {
+  currencies: { [field in Field]?: Currency }
+  currencyBalances: { [field in Field]?: CurrencyAmount }
+  parsedAmount: CurrencyAmount | undefined
+  v2Trade: Trade | undefined
+  inputError?: string
+} {
+  const { account } = useWeb3React()
+  const { t } = useTranslation()
 
-//   const to: string | null =
-//     (recipient === null ? account : isAddress(recipient) || null) ?? null
+  const to: string | null =
+    (recipient === null ? account : isAddress(recipient) || null) ?? null
 
-//   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
-//     inputCurrency ?? undefined,
-//     outputCurrency ?? undefined,
-//   ])
+  const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
+    inputCurrency ?? undefined,
+    outputCurrency ?? undefined,
+  ])
 
-//   const isExactIn: boolean = independentField === Field.INPUT
-//   const parsedAmount = tryParseAmount(
-//     typedValue,
-//     (isExactIn ? inputCurrency : outputCurrency) ?? undefined
-//   )
+  const isExactIn: boolean = independentField === Field.INPUT
+  const parsedAmount = tryParseAmount(
+    typedValue,
+    (isExactIn ? inputCurrency : outputCurrency) ?? undefined
+  )
 
-//   const bestTradeExactIn = useTradeExactIn(
-//     isExactIn ? parsedAmount : undefined,
-//     outputCurrency ?? undefined
-//   )
-//   const bestTradeExactOut = useTradeExactOut(
-//     inputCurrency ?? undefined,
-//     !isExactIn ? parsedAmount : undefined
-//   )
+  const bestTradeExactIn = useTradeExactIn(
+    isExactIn ? parsedAmount : undefined,
+    outputCurrency ?? undefined
+  )
+  const bestTradeExactOut = useTradeExactOut(
+    inputCurrency ?? undefined,
+    !isExactIn ? parsedAmount : undefined
+  )
 
-//   const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
+  const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
-//   const currencyBalances = {
-//     [Field.INPUT]: relevantTokenBalances[0],
-//     [Field.OUTPUT]: relevantTokenBalances[1],
-//   }
+  const currencyBalances = {
+    [Field.INPUT]: relevantTokenBalances[0],
+    [Field.OUTPUT]: relevantTokenBalances[1],
+  }
 
-//   const currencies: { [field in Field]?: Currency } = {
-//     [Field.INPUT]: inputCurrency ?? undefined,
-//     [Field.OUTPUT]: outputCurrency ?? undefined,
-//   }
+  const currencies: { [field in Field]?: Currency } = {
+    [Field.INPUT]: inputCurrency ?? undefined,
+    [Field.OUTPUT]: outputCurrency ?? undefined,
+  }
 
-//   let inputError: string | undefined
-//   if (!account) {
-//     inputError = t('Connect Wallet')
-//   }
+  let inputError: string | undefined
+  if (!account) {
+    inputError = t('Connect Wallet')
+  }
 
-//   if (!parsedAmount) {
-//     inputError = inputError ?? t('Enter an amount')
-//   }
+  if (!parsedAmount) {
+    inputError = inputError ?? t('Enter an amount')
+  }
 
-//   if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
-//     inputError = inputError ?? t('Select a token')
-//   }
+  if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+    inputError = inputError ?? t('Select a token')
+  }
 
-//   const formattedTo = isAddress(to)
-//   if (!to || !formattedTo) {
-//     inputError = inputError ?? t('Enter a recipient')
-//   } else if (
-//     BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
-//     (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
-//     (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
-//   ) {
-//     inputError = inputError ?? t('Invalid recipient')
-//   }
+  const formattedTo = isAddress(to)
+  if (!to || !formattedTo) {
+    inputError = inputError ?? t('Enter a recipient')
+  } else if (
+    BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
+    (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
+    (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
+  ) {
+    inputError = inputError ?? t('Invalid recipient')
+  }
 
-//   const [allowedSlippage] = useUserSlippageTolerance()
+  const [allowedSlippage] = useAppSelector(selectUserSlippageTolerance)
 
-//   const slippageAdjustedAmounts =
-//     v2Trade &&
-//     allowedSlippage &&
-//     computeSlippageAdjustedAmounts(v2Trade, allowedSlippage)
+  const slippageAdjustedAmounts =
+    v2Trade &&
+    allowedSlippage &&
+    computeSlippageAdjustedAmounts(v2Trade, Number(allowedSlippage))
 
-//   // compare input balance to max input based on version
-//   const [balanceIn, amountIn] = [
-//     currencyBalances[Field.INPUT],
-//     slippageAdjustedAmounts ? slippageAdjustedAmounts[Field.INPUT] : null,
-//   ]
+  // compare input balance to max input based on version
+  const [balanceIn, amountIn] = [
+    currencyBalances[Field.INPUT],
+    slippageAdjustedAmounts ? slippageAdjustedAmounts[Field.INPUT] : null,
+  ]
 
-//   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-//     inputError = t('Insufficient %symbol% balance', {
-//       symbol: amountIn.currency.symbol,
-//     })
-//   }
+  if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
+    inputError = t('Insufficient %symbol% balance', {
+      symbol: amountIn.currency.symbol,
+    })
+  }
 
-//   return {
-//     currencies,
-//     currencyBalances,
-//     parsedAmount,
-//     v2Trade: v2Trade ?? undefined,
-//     inputError,
-//   }
-// }
+  return {
+    currencies,
+    currencyBalances,
+    parsedAmount,
+    v2Trade: v2Trade ?? undefined,
+    inputError,
+  }
+}
 
 function parseCurrencyFromURLParameter(urlParam: any): string {
   if (typeof urlParam === 'string') {
     const valid = isAddress(urlParam)
     if (valid) return valid
-    if (urlParam.toUpperCase() === 'BNB') return 'BNB'
-    if (valid === false) return 'BNB'
+    if (urlParam.toUpperCase() === 'ETH') return 'ETH'
+    if (valid === false) return 'ETH'
   }
   return ''
 }
@@ -238,7 +246,7 @@ export function queryParametersToSwapState(
     }
   }
 
-  const recipient = validatedRecipient(parsedQs.recipient)
+  const recipient = validatedRecipient(parsedQs.recipient) || ''
 
   return {
     [Field.INPUT]: {
@@ -256,45 +264,46 @@ export function queryParametersToSwapState(
 }
 
 // updates the swap state to use the defaults for a given network
-// export function useDefaultsFromURLSearch():
-//   | {
-//       inputCurrencyId: string | undefined
-//       outputCurrencyId: string | undefined
-//     }
-//   | undefined {
-//   const { chainId } = useWeb3React()
-//   const dispatch = useAppDispatch()
-//   const { pathname } = useLocation()
-//   const [result, setResult] = useState<
-//     | {
-//         inputCurrencyId: string | undefined
-//         outputCurrencyId: string | undefined
-//       }
-//     | undefined
-//   >()
+export const useDefaultsFromURLSearch = ():
+  | {
+      inputCurrencyId: string | undefined
+      outputCurrencyId: string | undefined
+    }
+  | undefined => {
+  const { chainId } = useWeb3React()
+  const query = useParams()
+  const dispatch = useAppDispatch()
+  // const { pathname } = useLocation()
+  const [result, setResult] = useState<
+    | {
+        inputCurrencyId: string | undefined
+        outputCurrencyId: string | undefined
+      }
+    | undefined
+  >()
 
-//   useEffect(() => {
-//     if (!chainId) return
-//     const parsed = queryParametersToSwapState(pathname)
+  useEffect(() => {
+    if (!chainId) return
+    const parsed = queryParametersToSwapState(query)
 
-//     dispatch(
-//       replaceSwapState({
-//         typedValue: parsed.typedValue,
-//         field: parsed.independentField,
-//         inputCurrencyId: parsed[Field.INPUT].currencyId,
-//         outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-//         recipient: null,
-//       })
-//     )
+    dispatch(
+      replaceSwapState({
+        typedValue: parsed.typedValue,
+        field: parsed.independentField,
+        inputCurrencyId: parsed[Field.INPUT].currencyId,
+        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
+        recipient: '',
+      })
+    )
 
-//     setResult({
-//       inputCurrencyId: parsed[Field.INPUT].currencyId,
-//       outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-//     })
-//   }, [dispatch, chainId, query])
+    setResult({
+      inputCurrencyId: parsed[Field.INPUT].currencyId,
+      outputCurrencyId: parsed[Field.OUTPUT].currencyId,
+    })
+  }, [dispatch, chainId, query])
 
-//   return result
-// }
+  return result
+}
 
 // type useFetchPairPricesParams = {
 //   token0Address: string

@@ -51,26 +51,18 @@ export const SUGGESTED_BASES: ChainTokenList = {
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [ChainId.MAINNET]: [
-    bscTokens.eth,
-    bscTokens.dai,
-    bscTokens.busd,
-    bscTokens.usdt,
-  ],
-  [ChainId.TESTNET]: [
-    bscTestnetTokens.weth,
-    bscTestnetTokens.sevn,
-    bscTestnetTokens.usdt,
-  ],
+  [ChainId.MAINNET]: [],
+  [ChainId.TESTNET]: [],
 }
 
 export const PINNED_PAIRS: {
   readonly [chainId in ChainId]?: [Token, Token][]
 } = {
-  [ChainId.MAINNET]: [
-    [bscTokens.cake, bscTokens.eth],
-    [bscTokens.busd, bscTokens.usdt],
-    [bscTokens.dai, bscTokens.usdt],
+  [ChainId.MAINNET]: [],
+  [ChainId.TESTNET]: [
+    [bscTestnetTokens.weth, bscTestnetTokens.sevn],
+    [bscTestnetTokens.erc20, bscTestnetTokens.usdt],
+    [bscTestnetTokens.weth, bscTestnetTokens.usdt],
   ],
 }
 
@@ -118,10 +110,10 @@ export const BASE_FEE = new Percent(JSBI.BigInt(25), BIPS_BASE)
 export const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
 // BNB
-export const DEFAULT_INPUT_CURRENCY = 'BNB'
+export const DEFAULT_INPUT_CURRENCY =
+  '0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5'
 // CAKE
-export const DEFAULT_OUTPUT_CURRENCY =
-  '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82'
+export const DEFAULT_OUTPUT_CURRENCY = 'ETH'
 
 // Handler string is passed to Gelato to use PCS router
 export const GELATO_HANDLER = 'pancakeswap'

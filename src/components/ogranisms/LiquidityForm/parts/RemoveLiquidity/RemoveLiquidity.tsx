@@ -26,7 +26,7 @@ import {
   StyledTokenPrice,
 } from './styled'
 import styled from 'styled-components'
-import { useModalRef } from 'hooks'
+import { ApprovalState, useModalRef } from 'hooks'
 import { Field } from 'store'
 import { ConfirmRemoveLiquidity } from '../ConfirmRemoveLiquidity'
 import { useRemoveLiquidity } from './hooks'
@@ -88,6 +88,7 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
       tokenB,
       onAttempToApprove,
       onLiquidityInput,
+      approval,
     } = useRemoveLiquidity(userCurrencyA, userCurrencyB)
 
     useEffect(() => {
@@ -96,13 +97,21 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
       }
     }, [txHash])
 
-    const isDisabled = Boolean(!currencyA || !currencyB)
-    const isDisabledRemove = isDisabled || !parsedAmounts.LIQUIDITY
+    const isDisabled =
+      approval === ApprovalState.NOT_APPROVED ||
+      approval === ApprovalState.PENDING
+
+    const isDisabledRemove =
+      isDisabled ||
+      !parsedAmounts.LIQUIDITY ||
+      Boolean(!currencyA || !currencyB)
 
     const handleOnRemove = () => {
       onRemove()
       confirmModalRef?.current?.close()
     }
+
+    console.log('approve', approval)
 
     return (
       <>
@@ -221,12 +230,12 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
 
         <StyledSupplyWrapper>
           <Button
-            isDisabled={isDisabled}
+            isDisabled={!isDisabled}
             title={t('Enable')}
             onClick={onAttempToApprove}
           />
           <Button
-            isDisabled={isDisabledRemove}
+            isDisabled={false}
             title={t('remove')}
             onClick={() => confirmModalRef.current?.open()}
           />

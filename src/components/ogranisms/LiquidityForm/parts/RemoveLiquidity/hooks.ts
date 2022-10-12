@@ -148,7 +148,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
       { name: 'verifyingContract', type: 'address' },
     ]
     const domain = {
-      name: 'Pancake LPs',
+      name: 'Sevn LPs',
       version: '1',
       chainId,
       verifyingContract: pair.liquidityToken.address,
@@ -403,5 +403,6 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
     tokenB,
     onAttempToApprove,
     onLiquidityInput,
+    approval,
   }
 }

@@ -15,6 +15,9 @@ interface IInitialState {
   // the timestamp of the last updateVersion action
   lastUpdateVersionTimestamp?: number
 
+  // only allow swaps on direct pairs
+  userSingleHopOnly: boolean
+
   // matchesDarkMode: boolean // whether the dark mode media query matches
 
   // userDarkMode: boolean | null // the user's choice for dark mode or light mode
@@ -60,6 +63,7 @@ const initialState: IInitialState = {
   gasPrice: GAS_PRICE_GWEI.testnet,
   userDeadline: 900,
   timestamp: currentTimestamp(),
+  userSingleHopOnly: false,
   //   userExpertMode: false,
   //   userLocale: null,
   //   userClientSideRouter: false,
@@ -142,6 +146,9 @@ const userSlice = createSlice({
       }
       state.timestamp = currentTimestamp()
     },
+    updateUserSingleHopOnly(state, action) {
+      state.userSingleHopOnly = action.payload.userSingleHopOnly
+    },
   },
 })
 
@@ -155,6 +162,7 @@ export const {
   removeSerializedToken,
   addSerializedPair,
   removeSerializedPair,
+  updateUserSingleHopOnly,
 } = userSlice.actions
 
 export default userSlice.reducer

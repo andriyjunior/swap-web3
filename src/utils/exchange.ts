@@ -12,19 +12,20 @@ import {
 import {
   ROUTER_ADDRESS,
   BIPS_BASE,
-  // ONE_HUNDRED_PERCENT,
-  // INPUT_FRACTION_AFTER_FEE,
-  // BLOCKED_PRICE_IMPACT_NON_EXPERT,
-  // ALLOWED_PRICE_IMPACT_HIGH,
-  // ALLOWED_PRICE_IMPACT_MEDIUM,
-  // ALLOWED_PRICE_IMPACT_LOW,
+  ONE_HUNDRED_PERCENT,
+  INPUT_FRACTION_AFTER_FEE,
+  BLOCKED_PRICE_IMPACT_NON_EXPERT,
+  ALLOWED_PRICE_IMPACT_HIGH,
+  ALLOWED_PRICE_IMPACT_MEDIUM,
+  ALLOWED_PRICE_IMPACT_LOW,
 } from 'config'
 import { getContract, getProviderOrSigner } from './index'
+import { Field } from 'store/features/swap/actions'
 
 // // converts a basis points value to a sdk percent
-// export function basisPointsToPercent(num: number): Percent {
-//   return new Percent(JSBI.BigInt(num), BIPS_BASE)
-// }
+export function basisPointsToPercent(num: number): Percent {
+  return new Percent(JSBI.BigInt(num), BIPS_BASE)
+}
 
 export function calculateSlippageAmount(
   value: CurrencyAmount,
@@ -94,34 +95,39 @@ export const getRouterContract = (
 // }
 
 // // computes the minimum amount out and maximum amount in for a trade given a user specified allowed slippage in bips
-// export function computeSlippageAdjustedAmounts(
-//   trade: Trade | undefined,
-//   allowedSlippage: number,
-// ): { [field in Field]?: CurrencyAmount } {
-//   const pct = basisPointsToPercent(allowedSlippage)
-//   return {
-//     [Field.INPUT]: trade?.maximumAmountIn(pct),
-//     [Field.OUTPUT]: trade?.minimumAmountOut(pct),
-//   }
-// }
+export function computeSlippageAdjustedAmounts(
+  trade: Trade | undefined,
+  allowedSlippage: number
+): { [field in Field]?: CurrencyAmount } {
+  const pct = basisPointsToPercent(allowedSlippage)
+  return {
+    [Field.INPUT]: trade?.maximumAmountIn(pct),
+    [Field.OUTPUT]: trade?.minimumAmountOut(pct),
+  }
+}
 
-// export function warningSeverity(priceImpact: Percent | undefined): 0 | 1 | 2 | 3 | 4 {
-//   if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4
-//   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) return 3
-//   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)) return 2
-//   if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_LOW)) return 1
-//   return 0
-// }
+export function warningSeverity(
+  priceImpact: Percent | undefined
+): 0 | 1 | 2 | 3 | 4 {
+  if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4
+  if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) return 3
+  if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)) return 2
+  if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_LOW)) return 1
+  return 0
+}
 
-// export function formatExecutionPrice(trade?: Trade, inverted?: boolean): string {
-//   if (!trade) {
-//     return ''
-//   }
-//   return inverted
-//     ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${
-//         trade.outputAmount.currency.symbol
-//       }`
-//     : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${
-//         trade.inputAmount.currency.symbol
-//       }`
-// }
+export function formatExecutionPrice(
+  trade?: Trade,
+  inverted?: boolean
+): string {
+  if (!trade) {
+    return ''
+  }
+  return inverted
+    ? `${trade.executionPrice.invert().toSignificant(6)} ${
+        trade.inputAmount.currency.symbol
+      } / ${trade.outputAmount.currency.symbol}`
+    : `${trade.executionPrice.toSignificant(6)} ${
+        trade.outputAmount.currency.symbol
+      } / ${trade.inputAmount.currency.symbol}`
+}
