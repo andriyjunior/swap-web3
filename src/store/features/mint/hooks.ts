@@ -9,7 +9,7 @@ import {
   TokenAmount,
 } from 'packages/swap-sdk'
 import { useWeb3React } from '@web3-react/core'
-import { BIG_INT_ZERO } from 'const'
+import { BIG_INT_ZERO } from 'config'
 import {
   PairState,
   usePair,

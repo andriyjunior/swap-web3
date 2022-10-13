@@ -118,7 +118,7 @@ export const Settings: FC = () => {
   return (
     <>
       <Typography.Title>
-        {t('swapSettings.defaultTransactionSpeed')}
+        {t('userSettings.defaultTransactionSpeed')}
       </Typography.Title>
       <Flex justifyContent="space-between" alignItems="center">
         {data.options.map((item) => {
@@ -135,7 +135,7 @@ export const Settings: FC = () => {
         })}
       </Flex>
       <HorizontalSeparator />
-      <Typography.Title>{t('swapSettings.slippageTolerance')}</Typography.Title>
+      <Typography.Title>{t('userSettings.slippageTolerance')}</Typography.Title>
       <Flex justifyContent="space-between" alignItems="center">
         {data2.options.map((item) => {
           return (
@@ -166,7 +166,7 @@ export const Settings: FC = () => {
       )}
       <HorizontalSeparator />
       <Typography.Title>
-        {t('swapSettings.transactionDeadline')}
+        {t('userSettings.transactionDeadline')}
       </Typography.Title>
       <NumberInput
         value={(userDeadline / 60).toString()}

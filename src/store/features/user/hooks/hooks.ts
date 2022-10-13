@@ -10,7 +10,11 @@ import farms from 'config/constants/farms'
 import { flatMap } from 'lodash'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { addSerializedToken, removeSerializedToken } from '../reducer'
+import {
+  addSerializedToken,
+  removeSerializedToken,
+  updateUserSingleHopOnly,
+} from '../reducer'
 import { serializeToken } from './helpers'
 
 export const useGasPrice = (): string => {
@@ -148,4 +152,25 @@ export const useRemoveUserAddedToken = (): ((
     },
     [dispatch]
   )
+}
+
+export const useUserSingleHopOnly = (): [
+  boolean,
+  (newSingleHopOnly: boolean) => void
+] => {
+  const dispatch = useAppDispatch()
+
+  const singleHopOnly = useSelector<
+    RootState,
+    RootState['user']['userSingleHopOnly']
+  >((state) => state.user.userSingleHopOnly)
+
+  const setSingleHopOnly = useCallback(
+    (newSingleHopOnly: boolean) => {
+      dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }))
+    },
+    [dispatch]
+  )
+
+  return [singleHopOnly, setSingleHopOnly]
 }

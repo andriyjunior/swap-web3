@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 // import { logError } from 'utils/sentry'
 import { useWeb3React } from '@web3-react/core'
 // import { useTranslation } from '@pancakeswap/localization'
-import { ROUTER_ADDRESS } from 'const'
+import { ROUTER_ADDRESS } from 'config'
 
 import { useTokenContract } from './useContract'
 
@@ -17,6 +17,8 @@ import {
   useHasPendingApproval,
   useTransactionAdder,
 } from 'store'
+import { computeSlippageAdjustedAmounts } from 'utils'
+import { Field } from 'store/features/swap/actions'
 
 export enum ApprovalState {
   UNKNOWN,
@@ -144,17 +146,21 @@ export const useApproveCallback = (
 }
 
 // // wraps useApproveCallback in the context of a swap
-// export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0, chainId?: number) {
-//   const amountToApprove = useMemo(
-//     () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
-//     [trade, allowedSlippage],
-//   )
+export function useApproveCallbackFromTrade(
+  trade?: Trade,
+  allowedSlippage = 0,
+  chainId?: number
+) {
+  const amountToApprove = useMemo(
+    () =>
+      trade
+        ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT]
+        : undefined,
+    [trade, allowedSlippage]
+  )
 
-//   if(chainId){
-//     return useApproveCallback(amountToApprove, ROUTER_ADDRESS[chainId])
-//   }
-
-// }
+  return useApproveCallback(amountToApprove, ROUTER_ADDRESS[chainId || 1])
+}
 
 // // Wraps useApproveCallback in the context of a Gelato Limit Orders
 // export function useApproveCallbackFromInputCurrencyAmount(currencyAmountIn: CurrencyAmount | undefined) {

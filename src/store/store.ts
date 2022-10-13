@@ -17,6 +17,7 @@ import multicall from './features/multicall/reducer'
 import transactions from './features/transactions/reducer'
 import burn from './features/burn/reducer'
 import lists from './features/lists/reducer'
+import swap from './features/swap/reducer'
 
 const reducers = combineReducers({
   user,
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   transactions,
   burn,
   lists,
+  swap,
 })
 
 const persistConfig = {
