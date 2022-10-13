@@ -2410,7 +2410,7 @@ export const bscTestnetTokens = {
   sevn: SEVN[ChainId.TESTNET],
   erc20: new Token(
     ChainId.TESTNET,
-    '0xB919cfF0AffaFa68D12C8219E8a4D08924Ad6eed',
+    '0xE5b4385d52B6a700fC77f84F0c61A0079933B3e6',
     18,
     'ERC',
     'ERC 20',

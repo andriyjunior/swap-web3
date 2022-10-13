@@ -42,7 +42,8 @@ import {
   maxAmountSpend,
 } from 'utils'
 import { useCurrencySelectRoute } from 'pages/Swap/hooks'
-import { ONE_BIPS, ROUTER_ADDRESS, SEVN, USDT } from 'const'
+import { SEVN, USDT } from 'const'
+import { ONE_BIPS, ROUTER_ADDRESS } from 'config'
 import { BigNumber } from 'ethers'
 import { TransactionResponse } from '@ethersproject/providers'
 

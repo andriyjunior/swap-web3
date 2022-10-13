@@ -1,6 +1,6 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { ROUTER_ADDRESS } from 'const'
+import { ROUTER_ADDRESS } from 'config'
 import { BigNumber, Contract } from 'ethers'
 import { splitSignature } from 'ethers/lib/utils'
 import {
@@ -148,7 +148,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
       { name: 'verifyingContract', type: 'address' },
     ]
     const domain = {
-      name: 'Pancake LPs',
+      name: 'SevnFinance LPs',
       version: '1',
       chainId,
       verifyingContract: pair.liquidityToken.address,
@@ -189,6 +189,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
         })
       })
       .catch((err) => {
+        console.log(err)
         // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
         if (err?.code !== 4001) {
           approveCallback()
@@ -403,5 +404,6 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
     tokenB,
     onAttempToApprove,
     onLiquidityInput,
+    approval,
   }
 }

@@ -20,6 +20,9 @@ export * from './wallet'
 export * from './web3React'
 export * from './isUndefinedOrNull'
 export * from './serializeTokens'
+export * from './isZero'
+export * from './transactionErrorToUserReadableMessage'
+export * from './truncateHash'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 

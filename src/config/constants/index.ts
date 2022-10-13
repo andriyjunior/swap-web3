@@ -1,5 +1,6 @@
 export * from './lists'
 export * from './tokens'
+export * from './exchange'
 
 import { ChainTokenList } from 'abis'
 import { WETH } from 'const'
@@ -20,7 +21,7 @@ export const PINNED_PAIRS: {
   [ChainId.MAINNET]: [],
   [ChainId.TESTNET]: [
     [bscTestnetTokens.weth, bscTestnetTokens.sevn],
-    [bscTestnetTokens.erc20, bscTestnetTokens.sevn],
+    [bscTestnetTokens.erc20, bscTestnetTokens.usdt],
     [bscTestnetTokens.weth, bscTestnetTokens.usdt],
   ],
 }

@@ -21,6 +21,7 @@
   "enable": "Enable",
   "burned": "Burned",
   "confirm": "Confirm",
+  "importToken": "Import token",
 
   "menu": {
     "swap": "Swap",
@@ -33,7 +34,12 @@
     "swapTokens": "Swap tokens",
     "tradeTokensInAnInstant": "Trade tokens in an instant",
     "youSell": "You sell",
-    "youBuy": "You buy"
+    "youBuy": "You buy",
+    "confirmSwap": "Confirm Swap",
+    "confirmDescription": "Output is estimated. If the price changes more than {{percent}}% your transaction will revert.",
+    "minimumReceived": "Minimum received",
+    "priceImpact": "Price Impact",
+    "liquidityProviderFee": "Liquidity Provider Fee"
   },
 
   "liquidityForm": {
@@ -77,7 +83,7 @@
     "connectToAWallet": "Connect to a wallet"
   },
 
-  "swapSettings": {
+  "userSettings": {
     "defaultTransactionSpeed": "Default Transaction Speed (GWEI)",
     "slippageTolerance": "Slippage tolerance",
     "transactionDeadline": "Transaction deadline"

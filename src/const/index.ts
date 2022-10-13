@@ -1,6 +1,5 @@
 export * from './lists'
 export * from './GWEI'
 export * from './tokens'
-export * from './exchange'
 export * from './etherscan'
 export * from './paths'
