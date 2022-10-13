@@ -36,7 +36,10 @@
     "youSell": "You sell",
     "youBuy": "You buy",
     "confirmSwap": "Confirm Swap",
-    "confirmDescription": "Output is estimated. If the price changes more than {{percent}}% your transaction will revert."
+    "confirmDescription": "Output is estimated. If the price changes more than {{percent}}% your transaction will revert.",
+    "minimumReceived": "Minimum received",
+    "priceImpact": "Price Impact",
+    "liquidityProviderFee": "Liquidity Provider Fee"
   },
 
   "liquidityForm": {

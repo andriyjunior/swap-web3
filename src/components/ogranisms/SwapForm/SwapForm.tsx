@@ -294,7 +294,7 @@ export const SwapForm: FC = () => {
         <WalletConnection onClick={() => walletsRef.current?.close()} />
       </Modal>
       <Modal title={t('swapForm.confirmSwap')} ref={confirmSwapRef}>
-        <SwapConfirm />
+        <SwapConfirm onConfirm={() => {}} />
       </Modal>
       <AnimatePresence>
         <motion.div

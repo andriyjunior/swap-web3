@@ -111,8 +111,6 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
       confirmModalRef?.current?.close()
     }
 
-    console.log('approve', approval)
-
     return (
       <>
         <Modal ref={confirmModalRef}>

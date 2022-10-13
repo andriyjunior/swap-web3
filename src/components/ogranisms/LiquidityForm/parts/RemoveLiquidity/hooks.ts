@@ -148,7 +148,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
       { name: 'verifyingContract', type: 'address' },
     ]
     const domain = {
-      name: 'Sevn LPs',
+      name: 'SevnFinance LPs',
       version: '1',
       chainId,
       verifyingContract: pair.liquidityToken.address,
@@ -189,6 +189,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
         })
       })
       .catch((err) => {
+        console.log(err)
         // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
         if (err?.code !== 4001) {
           approveCallback()
