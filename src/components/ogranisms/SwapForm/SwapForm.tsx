@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Flex,
@@ -12,9 +12,12 @@ import {
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
+  ApprovalState,
   useAllTokens,
+  useApproveCallbackFromTrade,
   useCurrency,
   useModalRef,
+  useSwapCallback,
   useWrapCallback,
   WrapType,
 } from 'hooks'
@@ -25,20 +28,25 @@ import {
   useDerivedSwapInfo,
   useSingleTokenSwapInfo,
   useSwapState,
+  useUserSingleHopOnly,
 } from 'store'
 import { useWeb3React } from '@web3-react/core'
-import { useSwapForm } from './hooks'
+import { confirmPriceImpactWithoutFee, useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import { Token } from 'packages/swap-sdk'
+import { Token, Trade } from 'packages/swap-sdk'
 import { Field } from 'store/features/swap/actions'
 import { useSwapActionHandlers } from 'store/features/swap/useSwapActionHandlers'
+import { BIG_INT_ZERO } from 'config'
+import { computeTradePriceBreakdown, warningSeverity } from 'utils'
+import { SwapConfirm } from './parts'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   const walletsRef = useModalRef()
+  const confirmSwapRef = useModalRef()
   const settingsModalRef = useModalRef()
 
   const { state, handleOnChange, handleSwapInputs } = useSwapForm()
@@ -139,6 +147,22 @@ export const SwapForm: FC = () => {
   const dependentField: Field =
     independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
 
+  // modal and loading
+  const [
+    { tradeToConfirm, swapErrorMessage, attemptingTxn, txHash },
+    setSwapState,
+  ] = useState<{
+    tradeToConfirm: Trade | undefined
+    attemptingTxn: boolean
+    swapErrorMessage: string | undefined
+    txHash: string | undefined
+  }>({
+    tradeToConfirm: undefined,
+    attemptingTxn: false,
+    swapErrorMessage: undefined,
+    txHash: undefined,
+  })
+
   const handleTypeInput = useCallback(
     (value: string) => {
       onUserInput(Field.INPUT, value)
@@ -159,10 +183,118 @@ export const SwapForm: FC = () => {
       : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
+  const route = trade?.route
+  const userHasSpecifiedInputOutput = Boolean(
+    currencies[Field.INPUT] &&
+      currencies[Field.OUTPUT] &&
+      parsedAmounts[independentField]?.greaterThan(BIG_INT_ZERO)
+  )
+  const noRoute = !route
+
+  // check whether the user has approved the router on the input token
+  const [approval, approveCallback]: any = useApproveCallbackFromTrade(
+    trade,
+    chainId,
+    Number(allowedSlippage)
+  )
+
+  // check if user has gone through approval process, used to show two step buttons, reset on token change
+  const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
+
+  // mark when a user has submitted an approval, reset onTokenSelection for input field
+  useEffect(() => {
+    if (approval === ApprovalState.PENDING) {
+      setApprovalSubmitted(true)
+    }
+  }, [approval, approvalSubmitted])
+
+  // the callback to execute the swap
+  const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
+    trade,
+    recipient,
+    Number(allowedSlippage)
+  )
+
+  const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
+
+  const [singleHopOnly] = useUserSingleHopOnly()
+
+  const handleSwap = useCallback(() => {
+    if (
+      priceImpactWithoutFee &&
+      !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)
+    ) {
+      return
+    }
+    if (!swapCallback) {
+      return
+    }
+    setSwapState({
+      attemptingTxn: true,
+      tradeToConfirm,
+      swapErrorMessage: undefined,
+      txHash: undefined,
+    })
+    swapCallback()
+      .then((hash) => {
+        setSwapState({
+          attemptingTxn: false,
+          tradeToConfirm,
+          swapErrorMessage: undefined,
+          txHash: hash,
+        })
+      })
+      .catch((error) => {
+        setSwapState({
+          attemptingTxn: false,
+          tradeToConfirm,
+          swapErrorMessage: error.message,
+          txHash: undefined,
+        })
+      })
+  }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, t])
+
+  // errors
+  const [showInverted, setShowInverted] = useState<boolean>(false)
+
+  // warnings on slippage
+  const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
+
+  const handleInputSelect = useCallback(
+    (currencyInput) => {
+      setApprovalSubmitted(false) // reset 2 step UI for approvals
+      onCurrencySelection(Field.INPUT, currencyInput)
+      // const showSwapWarning = shouldShowSwapWarning(currencyInput)
+      // if (showSwapWarning) {
+      //   setSwapWarningCurrency(currencyInput)
+      // } else {
+      //   setSwapWarningCurrency(null)
+      // }
+    },
+    [onCurrencySelection]
+  )
+
+  const handleOutputSelect = useCallback(
+    (currencyOutput) => {
+      onCurrencySelection(Field.OUTPUT, currencyOutput)
+      // const showSwapWarning = shouldShowSwapWarning(currencyOutput)
+      // if (showSwapWarning) {
+      //   setSwapWarningCurrency(currencyOutput)
+      // } else {
+      //   setSwapWarningCurrency(null)
+      // }
+    },
+
+    [onCurrencySelection]
+  )
+
   return (
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
         <WalletConnection onClick={() => walletsRef.current?.close()} />
+      </Modal>
+      <Modal title={t('swapForm.confirmSwap')} ref={confirmSwapRef}>
+        <SwapConfirm />
       </Modal>
       <AnimatePresence>
         <motion.div
@@ -189,13 +321,13 @@ export const SwapForm: FC = () => {
           </Flex>
 
           <TokenInput
-            currency={inputCurrency || undefined}
+            currency={currencies[Field.INPUT] || undefined}
             tokenName={inputCurrency?.symbol || ''}
             title={t('swapForm.youSell')}
             icon={state.inputToken.logoURI}
             amount={formattedAmounts[Field.INPUT]}
             onInput={handleTypeInput}
-            onSelectToken={() => {}}
+            onSelectToken={handleInputSelect}
           />
 
           <Flex justifyContent="center">
@@ -203,20 +335,26 @@ export const SwapForm: FC = () => {
           </Flex>
 
           <TokenInput
-            currency={outputCurrency || undefined}
+            currency={currencies[Field.OUTPUT] || undefined}
             tokenName={outputCurrency?.symbol || ''}
             title={t('swapForm.youBuy')}
             icon={state.outputToken.logoURI}
             amount={formattedAmounts[Field.OUTPUT]}
             onInput={handleTypeOutput}
-            onSelectToken={() => {}}
+            onSelectToken={handleOutputSelect}
           />
 
-          {!account && (
+          {!account ? (
             <Button
-              title={t('Connect wallet')}
+              title={t('connectWallet')}
               icon={wallet_icon}
               onClick={() => walletsRef.current?.open()}
+            />
+          ) : (
+            <Button
+              title={t('swap')}
+              icon={wallet_icon}
+              onClick={() => confirmSwapRef.current?.open()}
             />
           )}
         </motion.div>

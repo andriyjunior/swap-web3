@@ -8,6 +8,8 @@ import { Typography } from '../Typography'
 import arrow_icon from 'assets/icons/arrow.svg'
 import BNB_icon from 'assets/coins/BNB.png'
 import { useAddUserToken } from 'store'
+import { Button } from '../Button'
+import { useTranslation } from 'react-i18next'
 
 interface ITokenSelectorProps {
   hasArrow?: boolean
@@ -33,6 +35,13 @@ const StyledRoot = styled.button`
   }
 `
 
+const StyledBody = styled.div`
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+`
+
 const StyledCoinIcon = styled(Icon)`
   width: 24px;
   height: 24px;
@@ -51,9 +60,14 @@ const StyledArrowIcon = styled(Icon)`
   }
 `
 
+const StyledImportButton = styled.div`
+  min-width: 134px;
+`
+
 export const TokenSelector: FC<ITokenSelectorProps> = memo(
   ({ icon, onClick, hasArrow, token, title, hasImport }) => {
     const addToken = useAddUserToken()
+    const { t } = useTranslation()
 
     const handleImport = () => {
       if (hasImport && token) {
@@ -64,9 +78,15 @@ export const TokenSelector: FC<ITokenSelectorProps> = memo(
     return (
       <StyledRoot onClick={onClick}>
         <StyledCoinIcon loading="lazy" src={icon || BNB_icon} />
-        <StyledText>{title || token?.symbol || 'BNB'}</StyledText>
-        {hasArrow && <StyledArrowIcon src={arrow_icon} />}
-        {hasImport && <button onClick={handleImport}>import</button>}
+        <StyledBody>
+          <StyledText>{title || token?.symbol || 'BNB'}</StyledText>
+          {hasArrow && <StyledArrowIcon src={arrow_icon} />}
+          {hasImport && (
+            <StyledImportButton>
+              <Button title={t('importToken')} onClick={handleImport} />
+            </StyledImportButton>
+          )}
+        </StyledBody>
       </StyledRoot>
     )
   }
