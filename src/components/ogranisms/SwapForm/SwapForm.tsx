@@ -86,6 +86,7 @@ export const SwapForm: FC = () => {
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
   } = useSwapState()
 
+  console.log('recipient', recipient)
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
 
@@ -219,6 +220,16 @@ export const SwapForm: FC = () => {
 
   const [singleHopOnly] = useUserSingleHopOnly()
 
+  useEffect(() => {
+    console.table({
+      title: 'has',
+      tradeToConfirm,
+      swapErrorMessage,
+      attemptingTxn,
+      txHash,
+    })
+  }, [tradeToConfirm, swapErrorMessage, attemptingTxn, txHash])
+
   const handleSwap = useCallback(() => {
     if (
       priceImpactWithoutFee &&
@@ -226,6 +237,7 @@ export const SwapForm: FC = () => {
     ) {
       return
     }
+
     if (!swapCallback) {
       return
     }
@@ -235,6 +247,7 @@ export const SwapForm: FC = () => {
       swapErrorMessage: undefined,
       txHash: undefined,
     })
+
     swapCallback()
       .then((hash) => {
         setSwapState({
@@ -294,7 +307,7 @@ export const SwapForm: FC = () => {
         <WalletConnection onClick={() => walletsRef.current?.close()} />
       </Modal>
       <Modal title={t('swapForm.confirmSwap')} ref={confirmSwapRef}>
-        <SwapConfirm onConfirm={() => {}} />
+        <SwapConfirm onConfirm={handleSwap} />
       </Modal>
       <AnimatePresence>
         <motion.div

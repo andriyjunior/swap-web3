@@ -12,7 +12,11 @@ import { useMemo } from 'react'
 import { BIPS_BASE } from 'config/constants/exchange'
 import { INITIAL_ALLOWED_SLIPPAGE } from 'config/constants'
 import { getRouterContract } from 'utils/exchange'
-import { selectUserDeadline, useAppSelector } from 'store'
+import {
+  selectUserDeadline,
+  selectUserDeadlineRaw,
+  useAppSelector,
+} from 'store'
 import { useWeb3React } from '@web3-react/core'
 
 interface SwapCall {
@@ -33,14 +37,15 @@ export function useSwapCallArguments(
 ): SwapCall[] {
   const { account, chainId, library } = useWeb3React()
 
-  const recipient = recipientAddress === null ? account : recipientAddress
-  const deadline = useAppSelector(selectUserDeadline)
+  const recipient = !recipientAddress ? account : recipientAddress
+  const deadline = useAppSelector(selectUserDeadlineRaw)
 
   return useMemo(() => {
     if (!trade || !recipient || !library || !account || !chainId || !deadline)
       return []
 
     const contract = getRouterContract(chainId, library, account)
+
     if (!contract) {
       return []
     }

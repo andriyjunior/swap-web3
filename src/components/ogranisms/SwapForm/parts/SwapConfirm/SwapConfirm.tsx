@@ -62,7 +62,7 @@ interface ISwapConfirmProps {
   onConfirm: () => void
 }
 
-export const SwapConfirm: FC<ISwapConfirmProps> = () => {
+export const SwapConfirm: FC<ISwapConfirmProps> = ({ onConfirm }) => {
   const { t } = useTranslation()
 
   return (
@@ -112,7 +112,7 @@ export const SwapConfirm: FC<ISwapConfirmProps> = () => {
       </StyledRow>
 
       <StyledButton>
-        <Button title={t('swapForm.confirmSwap')} onClick={() => {}} />
+        <Button title={t('swapForm.confirmSwap')} onClick={onConfirm} />
       </StyledButton>
     </>
   )
