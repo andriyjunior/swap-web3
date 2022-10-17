@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { FC } from 'react'
 
 import {
@@ -12,6 +13,7 @@ interface IMenuButtonProps {
   title: string
   icon: string
   isCollapsed: boolean
+  onClick?: () => void
 }
 
 export const MenuButton: FC<IMenuButtonProps> = ({
@@ -19,6 +21,7 @@ export const MenuButton: FC<IMenuButtonProps> = ({
   icon,
   to,
   isCollapsed,
+  onClick,
 }) => {
   return to ? (
     <StyledButtonLink to={to}>
@@ -26,7 +29,7 @@ export const MenuButton: FC<IMenuButtonProps> = ({
       {!isCollapsed && <StyledTitle>{title}</StyledTitle>}
     </StyledButtonLink>
   ) : (
-    <StyledButton>
+    <StyledButton onClick={onClick}>
       <StyledIcon src={icon} />
       {!isCollapsed && <StyledTitle>{title}</StyledTitle>}
     </StyledButton>

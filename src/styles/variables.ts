@@ -3,10 +3,11 @@ export const colors = {
   black: '#000000',
   cyan: '#00FFF0',
   purple: '#BD00FF',
-  green: '#00DF67',
   orange: '#FF8700',
   yellow: 'FFF500',
   error: '#FF005C',
+  success: '#00DF67',
+  warning: '#ffcc00',
 }
 
 export const gradients = {

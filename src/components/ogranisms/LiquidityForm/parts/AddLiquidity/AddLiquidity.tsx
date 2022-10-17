@@ -98,6 +98,12 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
   const confirmSupplyRef = useModalRef()
   const txSubmitedRef = useModalRef()
 
+  useEffect(() => {
+    if (userCurrencyA || userCurrencyB) {
+      setLiquidityFormShown(true)
+    }
+  }, [userCurrencyA, userCurrencyB])
+
   const SEVN_ADDRESS = chainId && SEVN[chainId].address
   const USDT_ADDRESS = chainId && USDT[chainId].address
 

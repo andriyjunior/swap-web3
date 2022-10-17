@@ -63,7 +63,7 @@ export function useSwapCallback(
 
   const addTransaction = useTransactionAdder()
 
-  const recipient = recipientAddress === null ? account : recipientAddress
+  const recipient = !recipientAddress ? account : recipientAddress
 
   return useMemo(() => {
     if (!trade || !library || !account || !chainId) {

@@ -1,9 +1,21 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import BNB_icon from 'assets/coins/BNB.png'
-import { Button, HorizontalSeparator, Typography } from 'components/atoms'
+import { Button, HorizontalSeparator, Icon, Typography } from 'components/atoms'
 import { useTranslation } from 'react-i18next'
 import { colors, getTransparentColor } from 'styles'
+import { Trade, TradeType } from 'packages/swap-sdk'
+import {
+  computeSlippageAdjustedAmounts,
+  computeTradePriceBreakdown,
+  formatExecutionPrice,
+  warningSeverity,
+} from 'utils'
+import { selectUserSlippageTolerance, useAppSelector } from 'store'
+import { ONE_BIPS } from 'config'
+import { Field } from 'store/features/swap/actions'
+
+import arrows_icon from 'assets/icons/blue-arrows.svg'
 
 const StyledCurrencies = styled.div``
 
@@ -51,19 +63,61 @@ const StyledRow = styled.div`
   }
 `
 
-const StyledRight = styled.div``
+const StyledRight = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 const StyledButton = styled.div`
   padding-top: 16px;
 `
 
-interface ISwapConfirmProps {
-  children?: ReactNode
-  onConfirm: () => void
+const errorTextColors = {
+  [0]: colors.success,
+  [1]: colors.black,
+  [2]: colors.warning,
+  [3]: colors.error,
+  [4]: colors.error,
 }
 
-export const SwapConfirm: FC<ISwapConfirmProps> = () => {
+const StyledErrorText = styled(Typography.Body)<{
+  severity: 0 | 1 | 2 | 3 | 4
+}>`
+  color: ${({ severity }) => errorTextColors[severity]};
+  opacity: 0.5;
+`
+
+interface ISwapConfirmProps {
+  originalTrade?: Trade
+  attemptingTxn: boolean
+  recipient: string | null
+  allowedSlippage: number
+  onAcceptChanges: () => void
+  onConfirm: () => void
+  trade?: Trade
+  txHash?: string
+  swapErrorMessage?: string
+  customOnDismiss?: () => void
+}
+
+export const SwapConfirm: FC<ISwapConfirmProps> = ({
+  onConfirm,
+  trade,
+  allowedSlippage,
+}) => {
   const { t } = useTranslation()
+
+  const userSlippage = useAppSelector(selectUserSlippageTolerance)
+
+  const { priceImpactWithoutFee, realizedLPFee } = useMemo(
+    () => computeTradePriceBreakdown(trade),
+    [trade]
+  )
+
+  const slippageAdjustedAmounts = useMemo(
+    () => computeSlippageAdjustedAmounts(trade, allowedSlippage),
+    [allowedSlippage, trade]
+  )
 
   return (
     <>
@@ -71,48 +125,90 @@ export const SwapConfirm: FC<ISwapConfirmProps> = () => {
         <StyledCurrency>
           <StyledCoinAndAmount>
             <StyledCoin src={BNB_icon} />
-            <Typography.Header4>0.02346234</Typography.Header4>
+            <Typography.Header4>
+              {trade?.inputAmount.toSignificant(6)}
+            </Typography.Header4>
           </StyledCoinAndAmount>
-          <Typography.Header4>BNB</Typography.Header4>
+          <Typography.Header4>
+            {trade?.inputAmount.currency.symbol}
+          </Typography.Header4>
         </StyledCurrency>
         <StyledCurrency>
           <StyledCoinAndAmount>
             <StyledCoin src={BNB_icon} />
-            <Typography.Header4>0.02346234</Typography.Header4>
+            <Typography.Header4>
+              {trade?.outputAmount.toSignificant(6)}
+            </Typography.Header4>
           </StyledCoinAndAmount>
-          <Typography.Header4>BNB</Typography.Header4>
+          <Typography.Header4>
+            {trade?.outputAmount.currency.symbol}
+          </Typography.Header4>
         </StyledCurrency>
       </StyledCurrencies>
       <StyledDescription>
-        {t('swapForm.confirmDescription', { percent: '0.5' })}
+        {t('swapForm.confirmDescription', { percent: userSlippage })}
       </StyledDescription>
       <HorizontalSeparator />
       <StyledRow>
         <StyledText>{t('price')}</StyledText>
+        <StyledRight>
+          <StyledText>{formatExecutionPrice(trade, false)}</StyledText>
+          <Icon src={arrows_icon} />
+        </StyledRight>
       </StyledRow>
 
       <StyledRow>
-        <StyledText>{t('swapForm.minimumReceived')}</StyledText>
+        {trade && (
+          <StyledText>
+            {trade.tradeType === TradeType.EXACT_INPUT
+              ? t('swapForm.minimumReceived')
+              : t('swapForm.maximumSold')}
+          </StyledText>
+        )}
         <StyledRight>
-          <StyledText>0.0011134 MANA</StyledText>
+          {trade && (
+            <StyledText>
+              {trade.tradeType === TradeType.EXACT_INPUT
+                ? slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4) ?? '-'
+                : slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4) ?? '-'}
+              &nbsp;
+              {trade.tradeType === TradeType.EXACT_INPUT
+                ? trade.outputAmount.currency.symbol
+                : trade.inputAmount.currency.symbol}
+            </StyledText>
+          )}
         </StyledRight>
       </StyledRow>
 
       <StyledRow>
         <StyledText>{t('swapForm.priceImpact')}</StyledText>
         <StyledRight>
-          <StyledText>0.01%</StyledText>
+          <StyledErrorText severity={warningSeverity(priceImpactWithoutFee)}>
+            {priceImpactWithoutFee
+              ? priceImpactWithoutFee.lessThan(ONE_BIPS)
+                ? '<0.01%'
+                : `${priceImpactWithoutFee.toFixed(2)}%`
+              : '-'}
+          </StyledErrorText>
         </StyledRight>
       </StyledRow>
       <StyledRow>
         <StyledText>{t('swapForm.liquidityProviderFee')}</StyledText>
         <StyledRight>
-          <StyledText>0.00000075 BNB</StyledText>
+          {trade && (
+            <StyledText>
+              {realizedLPFee
+                ? `${realizedLPFee?.toSignificant(6)} ${
+                    trade?.inputAmount.currency.symbol
+                  }`
+                : '-'}
+            </StyledText>
+          )}
         </StyledRight>
       </StyledRow>
 
       <StyledButton>
-        <Button title={t('swapForm.confirmSwap')} onClick={() => {}} />
+        <Button title={t('swapForm.confirmSwap')} onClick={onConfirm} />
       </StyledButton>
     </>
   )
