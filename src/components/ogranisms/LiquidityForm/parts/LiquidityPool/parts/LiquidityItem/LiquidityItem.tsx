@@ -134,6 +134,12 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
     navigate(paths.removeLiquidity(pair?.token0.address, pair?.token1.address))
   }
 
+  const handleOnAdd = () => {
+    navigate(paths.addLiquidity(pair?.token0.address, pair?.token1.address), {
+      replace: true,
+    })
+  }
+
   const {
     totalUSDValue,
     poolTokenPercentage,
@@ -141,8 +147,6 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
     token1Deposited,
     userPoolBalance,
   } = useLPValues(account, pair, pair?.token0, pair?.token1)
-
-  console.log(token0Deposited)
 
   return (
     <>
@@ -209,7 +213,7 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
         </StyledTextRow>
 
         <StyledButtons>
-          <Button title={t('add')} onClick={() => {}} />
+          <Button title={t('add')} onClick={handleOnAdd} />
           <Button title={t('remove')} onClick={handleOnRemove} />
         </StyledButtons>
       </Accordion>

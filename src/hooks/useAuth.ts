@@ -9,6 +9,10 @@ import {
   setupNetwork,
 } from 'utils'
 
+const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 1
+
+console.log(defaultNetwork)
+
 export const useAuth = () => {
   const dispatch = useAppDispatch()
 
@@ -28,7 +32,7 @@ export const useAuth = () => {
           if (error instanceof UnsupportedChainIdError) {
             setError(error)
             const provider = await connector.getProvider()
-            const hasSetup = await setupNetwork(1, provider)
+            const hasSetup = await setupNetwork(defaultNetwork, provider)
             if (hasSetup) {
               activate(connector)
             }
