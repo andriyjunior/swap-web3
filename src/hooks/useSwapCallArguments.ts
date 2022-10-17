@@ -18,6 +18,7 @@ import {
   useAppSelector,
 } from 'store'
 import { useWeb3React } from '@web3-react/core'
+import { useTransactionDeadline } from './useTransactionDeadline'
 
 interface SwapCall {
   contract: Contract
@@ -38,7 +39,7 @@ export function useSwapCallArguments(
   const { account, chainId, library } = useWeb3React()
 
   const recipient = !recipientAddress ? account : recipientAddress
-  const deadline = useAppSelector(selectUserDeadlineRaw)
+  const deadline = useTransactionDeadline()
 
   return useMemo(() => {
     if (!trade || !recipient || !library || !account || !chainId || !deadline)
@@ -57,7 +58,7 @@ export function useSwapCallArguments(
         feeOnTransfer: false,
         allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
         recipient,
-        deadline: deadline,
+        deadline: deadline.toNumber(),
       })
     )
 
@@ -67,7 +68,7 @@ export function useSwapCallArguments(
           feeOnTransfer: true,
           allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
           recipient,
-          deadline: deadline,
+          deadline: deadline.toNumber(),
         })
       )
     }

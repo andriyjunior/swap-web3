@@ -220,16 +220,6 @@ export const SwapForm: FC = () => {
 
   const [singleHopOnly] = useUserSingleHopOnly()
 
-  useEffect(() => {
-    console.table({
-      title: 'has',
-      tradeToConfirm,
-      swapErrorMessage,
-      attemptingTxn,
-      txHash,
-    })
-  }, [tradeToConfirm, swapErrorMessage, attemptingTxn, txHash])
-
   const handleSwap = useCallback(() => {
     if (
       priceImpactWithoutFee &&
