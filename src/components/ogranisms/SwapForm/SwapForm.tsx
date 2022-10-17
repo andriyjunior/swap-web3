@@ -9,6 +9,7 @@ import {
   Modal,
   Settings,
   WalletConnection,
+  TransactionSubmited,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -46,6 +47,7 @@ export const SwapForm: FC = () => {
   const { account, chainId } = useWeb3React()
 
   const walletsRef = useModalRef()
+  const submitedRef = useModalRef()
   const confirmSwapRef = useModalRef()
   const settingsModalRef = useModalRef()
 
@@ -163,6 +165,21 @@ export const SwapForm: FC = () => {
     txHash: undefined,
   })
 
+  useEffect(() => {
+    if (txHash && submitedRef.current) {
+      submitedRef.current.open()
+    }
+  }, [txHash, submitedRef])
+
+  const handleAcceptChanges = useCallback(() => {
+    setSwapState({
+      tradeToConfirm: trade,
+      swapErrorMessage,
+      txHash,
+      attemptingTxn,
+    })
+  }, [attemptingTxn, swapErrorMessage, trade, txHash])
+
   const handleTypeInput = useCallback(
     (value: string) => {
       onUserInput(Field.INPUT, value)
@@ -226,6 +243,7 @@ export const SwapForm: FC = () => {
     ) {
       return
     }
+
     if (!swapCallback) {
       return
     }
@@ -235,6 +253,7 @@ export const SwapForm: FC = () => {
       swapErrorMessage: undefined,
       txHash: undefined,
     })
+
     swapCallback()
       .then((hash) => {
         setSwapState({
@@ -243,6 +262,10 @@ export const SwapForm: FC = () => {
           swapErrorMessage: undefined,
           txHash: hash,
         })
+
+        if (confirmSwapRef.current) {
+          confirmSwapRef.current.close()
+        }
       })
       .catch((error) => {
         setSwapState({
@@ -288,13 +311,36 @@ export const SwapForm: FC = () => {
     [onCurrencySelection]
   )
 
+  const swapIsDisabled =
+    !formattedAmounts[Field.INPUT] || !formattedAmounts[Field.OUTPUT]
+
   return (
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
         <WalletConnection onClick={() => walletsRef.current?.close()} />
       </Modal>
+      <Modal
+        ref={submitedRef}
+        title={t('transactionSubmited.transactionSubmited')}
+      >
+        <TransactionSubmited
+          txHash={txHash}
+          onClose={() => submitedRef.current?.close()}
+        />
+      </Modal>
       <Modal title={t('swapForm.confirmSwap')} ref={confirmSwapRef}>
-        <SwapConfirm onConfirm={() => {}} />
+        <SwapConfirm
+          trade={trade}
+          originalTrade={tradeToConfirm}
+          onAcceptChanges={handleAcceptChanges}
+          attemptingTxn={attemptingTxn}
+          txHash={txHash}
+          recipient={recipient}
+          allowedSlippage={Number(allowedSlippage)}
+          onConfirm={handleSwap}
+          swapErrorMessage={swapErrorMessage}
+          // customOnDismiss={handleConfirmDismiss}
+        />
       </Modal>
       <AnimatePresence>
         <motion.div
@@ -355,6 +401,7 @@ export const SwapForm: FC = () => {
               title={t('swap')}
               icon={wallet_icon}
               onClick={() => confirmSwapRef.current?.open()}
+              isDisabled={swapIsDisabled}
             />
           )}
         </motion.div>

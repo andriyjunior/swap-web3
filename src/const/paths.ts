@@ -6,4 +6,9 @@ export const paths = {
       curr2 ? `/${curr2}` : ''
     }`
   },
+  addLiquidity(curr1?, curr2?) {
+    return `${this.liquidity}${curr1 ? `/${curr1}` : ''}${
+      curr2 ? `/${curr2}` : ''
+    }`
+  },
 }

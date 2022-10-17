@@ -18,7 +18,7 @@ export const WalletConnection: FC<IWalletConnection> = ({ onClick }) => {
 
   const { connect } = useMetamaskConnection()
 
-  // const [connectedWallets, addWalletToConnectedWallets] = useConnectedWallets()
+  // const [connectedWallets, addWalletToConnectedWallets] =            ctedWallets()
   const walletType = 'MetaMask'
 
   const handleOnClick = () => {
