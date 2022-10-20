@@ -13,7 +13,9 @@ import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
 import { TokenDTO } from 'types'
 import { Currency, Token } from 'packages/swap-sdk'
 import { useUSDTCurrencyAmount } from 'hooks'
-import { formatNumber } from 'utils'
+import { formatNumber, getTokenUrlByAddress } from 'utils'
+
+import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
 
 const StyledRoot = styled.div`
   padding: 18px 0;
@@ -47,15 +49,17 @@ interface ITokenInputProps {
   currency?: Currency
   title?: string
   tokenName: string
+  tokenAddress?: string
   amount: string
-  icon: string
+  icon?: string
   onInput: (value: string) => void
-  onSelectToken: (value: Token) => void
+  onSelectToken: (value: Currency) => void
 }
 
 export const TokenInput: FC<ITokenInputProps> = ({
   title,
   tokenName,
+  tokenAddress,
   amount,
   icon,
   onSelectToken,
@@ -70,7 +74,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
     onInput(e)
   }
 
-  const handleOnSelect = (value: Token) => {
+  const handleOnSelect = (value: Currency) => {
     onSelectToken(value)
     modalRef.current?.close()
   }
@@ -88,7 +92,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
           <StyledBlockTop>
             <TokenSelector
               title={tokenName}
-              icon={icon}
+              icon={icon ? icon : getTokenUrlByAddress(tokenAddress)}
               onClick={() => modalRef.current?.open()}
               hasArrow
             />

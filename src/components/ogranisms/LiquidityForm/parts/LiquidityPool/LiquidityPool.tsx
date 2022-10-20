@@ -77,7 +77,12 @@ export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
 
       {!allV2PairsWithLiquidity.length ||
         allV2PairsWithLiquidity.map((pair) => {
-          return <LiquidityItem key={pair?.token0.symbol} pair={pair} />
+          return (
+            <LiquidityItem
+              key={pair?.token0?.symbol + '' + pair?.token0?.address}
+              pair={pair}
+            />
+          )
         })}
     </>
   )

@@ -1,18 +1,30 @@
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InnerContainer, Input, TokenSelector, Typography } from 'components'
+import {
+  Button,
+  InnerContainer,
+  Input,
+  TokenSelector,
+  Typography,
+} from 'components'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
-import { useAllTokens, useDebounce, useToken } from 'hooks'
-import { Token } from 'packages/swap-sdk'
+import { useAllTokens, useDebounce, useToken, wrappedCurrency } from 'hooks'
+import { Currency, ETHER, Token } from 'packages/swap-sdk'
+import { useWeb3React } from '@web3-react/core'
+import { useAddUserToken } from 'store'
+
+import ETH_icon from 'assets/coins/ETH.png'
+import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
+import { getTokenUrlByAddress } from 'utils'
 
 interface ISelectTokenProps {
-  onSelect: (value: Token) => void
+  onSelect: (value: Token | Currency) => void
 }
 
 const StyledList = styled(InnerContainer)`
   padding: 12px 10px;
-  height: 400px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -29,7 +41,12 @@ const StyledList = styled(InnerContainer)`
   }
 `
 
+const StyledButton = styled.div`
+  margin-top: 16px;
+`
+
 export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
+  const { chainId } = useWeb3React()
   const allTokensList = useAllTokens()
 
   const [tokenList, setTokenList] = useState<Token[]>([])
@@ -37,6 +54,7 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
   const debouncedQuery = useDebounce(input, 200)
 
   const foundToken = useToken(debouncedQuery)
+  const addToken = useAddUserToken()
 
   const { t } = useTranslation()
 
@@ -59,6 +77,8 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
     setTokenList(filteredTokens || allTokensList)
   }, [debouncedQuery])
 
+  const ETH_TOKEN = chainId && (wrappedCurrency(ETHER, chainId) as Token)
+
   return (
     <>
       <Input
@@ -68,11 +88,19 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
       />
       <Typography.Title>{t('selectToken.tokenName')}</Typography.Title>
       <StyledList>
+        {ETH_TOKEN && (
+          <TokenSelector
+            key={ETH_TOKEN?.address}
+            icon={ETH_icon}
+            token={ETHER}
+            onClick={() => onSelect(ETHER)}
+          />
+        )}
         {tokenList.map((item) => {
           return (
             <TokenSelector
               key={item.address}
-              icon={''}
+              icon={getTokenUrlByAddress(item.address) || QUESTION_MARK_icon}
               token={item}
               onClick={() => onSelect(item)}
             />
@@ -81,12 +109,17 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
         {foundToken && !allTokensList[foundToken.address] && (
           <TokenSelector
             key={foundToken?.address}
-            icon={''}
+            icon={
+              getTokenUrlByAddress(foundToken.address) || QUESTION_MARK_icon
+            }
             token={foundToken}
-            hasImport
+            onImport={() => addToken(foundToken)}
           />
         )}
       </StyledList>
+      <StyledButton>
+        <Button title={t('manageTokens')} onClick={() => {}} />
+      </StyledButton>
     </>
   )
 }

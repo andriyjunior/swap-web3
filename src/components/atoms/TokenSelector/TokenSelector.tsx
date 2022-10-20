@@ -1,23 +1,23 @@
-import { FC, memo } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Token } from 'packages/swap-sdk'
+import { Currency, Token } from 'packages/swap-sdk'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 import { Icon } from '../Icon'
 import { Typography } from '../Typography'
 
 import arrow_icon from 'assets/icons/arrow.svg'
-import BNB_icon from 'assets/coins/BNB.png'
+import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
 import { useAddUserToken } from 'store'
 import { Button } from '../Button'
 import { useTranslation } from 'react-i18next'
 
 interface ITokenSelectorProps {
   hasArrow?: boolean
-  token?: Token
+  token?: Token | Currency
   title?: string
   icon?: string
   onClick?: () => void
-  hasImport?: boolean
+  onImport?: () => void
 }
 
 const StyledRoot = styled.button`
@@ -65,25 +65,28 @@ const StyledImportButton = styled.div`
 `
 
 export const TokenSelector: FC<ITokenSelectorProps> = memo(
-  ({ icon, onClick, hasArrow, token, title, hasImport }) => {
-    const addToken = useAddUserToken()
+  ({ icon, onClick, hasArrow, token, title, onImport }) => {
+    const [imgError, setImgError] = useState(false)
+
     const { t } = useTranslation()
 
-    const handleImport = () => {
-      if (hasImport && token) {
-        addToken(token)
-      }
-    }
+    useEffect(() => {
+      setImgError(false)
+    }, [icon])
 
     return (
       <StyledRoot onClick={onClick}>
-        <StyledCoinIcon loading="lazy" src={icon || BNB_icon} />
+        <StyledCoinIcon
+          onError={() => setImgError(true)}
+          loading="lazy"
+          src={imgError ? QUESTION_MARK_icon : icon}
+        />
         <StyledBody>
-          <StyledText>{title || token?.symbol || 'BNB'}</StyledText>
+          <StyledText>{title || token?.symbol || 'ETH'}</StyledText>
           {hasArrow && <StyledArrowIcon src={arrow_icon} />}
-          {hasImport && (
+          {onImport && (
             <StyledImportButton>
-              <Button title={t('importToken')} onClick={handleImport} />
+              <Button title={t('importToken')} onClick={onImport} />
             </StyledImportButton>
           )}
         </StyledBody>

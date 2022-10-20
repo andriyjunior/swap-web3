@@ -194,7 +194,6 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
         })
       })
       .catch((err) => {
-        console.log(err)
         // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
         if (err?.code !== 4001) {
           approveCallback()

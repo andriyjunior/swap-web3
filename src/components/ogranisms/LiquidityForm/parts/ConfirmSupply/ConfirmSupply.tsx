@@ -4,6 +4,7 @@ import {
   CoinPair,
   HorizontalSeparator,
   Button,
+  Coin,
 } from 'components'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -28,14 +29,9 @@ const StyledTextRow = styled(Flex)`
   padding-right: 18px;
 `
 
-const StyledText = styled(Typography.Body)`
+const StyledText = styled(Typography.Body)<{ hasPaddingRight?: boolean }>`
+  padding-right: ${({ hasPaddingRight }) => (hasPaddingRight ? '8px' : '')};
   color: ${getTransparentColor(colors.black, 0.5)};
-`
-
-const StyledCoin = styled.img`
-  margin-left: 10px;
-  width: 24px;
-  height: 24px;
 `
 
 const StyledCoinPair = styled.div`
@@ -54,6 +50,7 @@ interface IConfirmSupply {
   shareOfPool: string
   price?: Price
   liquidityMinted?: TokenAmount
+  icons: string[]
 }
 
 export const ConfirmSupply: FC<IConfirmSupply> = ({
@@ -63,6 +60,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
   shareOfPool,
   price,
   liquidityMinted,
+  icons,
 }) => {
   const { t } = useTranslation()
 
@@ -75,7 +73,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
           {liquidityMinted?.toSignificant(6)}
         </StyledLiquidityMinted>
         <StyledCoinPair>
-          <CoinPair size="large" inputToken={bnb} outputToken={bnb} />
+          <CoinPair size="large" inputToken={icons[0]} outputToken={icons[1]} />
         </StyledCoinPair>
       </Flex>
       <Typography.Title>
@@ -83,7 +81,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
         {currencies[Field.CURRENCY_B]?.symbol}&nbsp;
         {t('confirmSupply.poolTokens')}
       </Typography.Title>
-      <StyledText>
+      <StyledText hasPaddingRight>
         {t('confirmSupply.outputIsEstimated', { percent: userSlippage })}
       </StyledText>
       <HorizontalSeparator />
@@ -93,8 +91,8 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
           {currencies[Field.CURRENCY_A]?.symbol ?? ''}&nbsp; {t('deposited')}:
         </StyledText>
         <Flex alignItems="center">
-          <StyledText>{amounts[Field.CURRENCY_A]}</StyledText>
-          <StyledCoin src={bnb} />
+          <StyledText hasPaddingRight>{amounts[Field.CURRENCY_A]}</StyledText>
+          <Coin src={icons[0]} />
         </Flex>
       </StyledTextRow>
 
@@ -103,8 +101,8 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
           {currencies[Field.CURRENCY_B]?.symbol ?? ''}&nbsp; {t('deposited')}:
         </StyledText>
         <Flex alignItems="center">
-          <StyledText>{amounts[Field.CURRENCY_B]}</StyledText>
-          <StyledCoin src={bnb} />
+          <StyledText hasPaddingRight>{amounts[Field.CURRENCY_B]}</StyledText>
+          <Coin src={icons[1]} />
         </Flex>
       </StyledTextRow>
 

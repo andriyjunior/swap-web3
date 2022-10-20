@@ -32,6 +32,7 @@ import { ConfirmRemoveLiquidity } from '../ConfirmRemoveLiquidity'
 import { useRemoveLiquidity } from './hooks'
 
 import icon_arrow from 'assets/icons/back-arrow.svg'
+import { getTokenUrlByAddress } from 'utils'
 
 const StyledSupplyWrapper = styled.div`
   display: flex;
@@ -111,10 +112,16 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
       confirmModalRef?.current?.close()
     }
 
+    const icons = [
+      getTokenUrlByAddress(tokenA?.address),
+      getTokenUrlByAddress(tokenB?.address),
+    ]
+
     return (
       <>
         <Modal ref={confirmModalRef}>
           <ConfirmRemoveLiquidity
+            icons={icons}
             currencies={{
               [Field.CURRENCY_A]: currencyA,
               [Field.CURRENCY_B]: currencyB,
@@ -195,13 +202,13 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
               <StyledTokenLiquidityAmount>
                 {formattedAmounts[Field.CURRENCY_A] || '0.0'}
               </StyledTokenLiquidityAmount>
-              <TokenSelector title={currencyA?.symbol ?? ''} />
+              <TokenSelector title={currencyA?.symbol ?? ''} icon={icons[0]} />
             </Flex>
             <Flex justifyContent="space-between" alignItems="center">
               <StyledTokenLiquidityAmount>
                 {formattedAmounts[Field.CURRENCY_B] || '0.0'}
               </StyledTokenLiquidityAmount>
-              <TokenSelector title={currencyB?.symbol ?? ''} />
+              <TokenSelector title={currencyB?.symbol ?? ''} icon={icons[1]} />
             </Flex>
           </Flex>
         </StyledContainer>

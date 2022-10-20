@@ -1,7 +1,7 @@
 import { FC, ReactNode, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import BNB_icon from 'assets/coins/BNB.png'
-import { Button, HorizontalSeparator, Icon, Typography } from 'components/atoms'
+import { Button, HorizontalSeparator, Icon, Typography, Coin } from 'components'
 import { useTranslation } from 'react-i18next'
 import { colors, getTransparentColor } from 'styles'
 import { Trade, TradeType } from 'packages/swap-sdk'
@@ -34,12 +34,6 @@ const StyledCoinAndAmount = styled.div`
   align-items: center;
 `
 
-const StyledCoin = styled.img`
-  margin-right: 16px;
-  width: 48px;
-  height: 48px;
-`
-
 const halfBlackCSS = css`
   color: ${getTransparentColor(colors.black, 0.5)};
 `
@@ -47,6 +41,10 @@ const halfBlackCSS = css`
 const StyledDescription = styled(Typography.Body)`
   padding-top: 12px;
   ${halfBlackCSS}
+`
+
+const StyledAmount = styled(Typography.Header4)<{ hasPaddingLeft?: boolean }>`
+  padding-left: ${({ hasPaddingLeft }) => (hasPaddingLeft ? '8px' : '')};
 `
 
 const StyledText = styled(Typography.Body)`
@@ -98,12 +96,14 @@ interface ISwapConfirmProps {
   txHash?: string
   swapErrorMessage?: string
   customOnDismiss?: () => void
+  icons: string[]
 }
 
 export const SwapConfirm: FC<ISwapConfirmProps> = ({
   onConfirm,
   trade,
   allowedSlippage,
+  icons,
 }) => {
   const { t } = useTranslation()
 
@@ -124,21 +124,19 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
       <StyledCurrencies>
         <StyledCurrency>
           <StyledCoinAndAmount>
-            <StyledCoin src={BNB_icon} />
-            <Typography.Header4>
+            <Coin width="large" src={icons[0]} />
+            <StyledAmount hasPaddingLeft>
               {trade?.inputAmount.toSignificant(6)}
-            </Typography.Header4>
+            </StyledAmount>
           </StyledCoinAndAmount>
-          <Typography.Header4>
-            {trade?.inputAmount.currency.symbol}
-          </Typography.Header4>
+          <StyledAmount>{trade?.inputAmount.currency.symbol}</StyledAmount>
         </StyledCurrency>
         <StyledCurrency>
           <StyledCoinAndAmount>
-            <StyledCoin src={BNB_icon} />
-            <Typography.Header4>
+            <Coin width="large" src={icons[1]} />
+            <StyledAmount hasPaddingLeft>
               {trade?.outputAmount.toSignificant(6)}
-            </Typography.Header4>
+            </StyledAmount>
           </StyledCoinAndAmount>
           <Typography.Header4>
             {trade?.outputAmount.currency.symbol}

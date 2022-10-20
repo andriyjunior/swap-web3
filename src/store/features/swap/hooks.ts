@@ -39,7 +39,7 @@ import { useTradeExactIn, useTradeExactOut } from 'hooks'
 import { selectUserSlippageTolerance } from 'store/selectors'
 import { getTokenAddress } from 'components/molecules/Chart/utils'
 
-export function useSwapState(): RootState['swap'] {
+export const useSwapState = (): RootState['swap'] => {
   return useSelector<RootState, RootState['swap']>((state) => state.swap)
 }
 
@@ -170,11 +170,11 @@ export function useDerivedSwapInfo(
     inputError = inputError ?? t('Invalid recipient')
   }
 
-  const [allowedSlippage] = useAppSelector(selectUserSlippageTolerance)
+  const allowedSlippage = useAppSelector(selectUserSlippageTolerance)
 
   const slippageAdjustedAmounts =
     v2Trade &&
-    allowedSlippage &&
+    !!allowedSlippage &&
     computeSlippageAdjustedAmounts(v2Trade, Number(allowedSlippage))
 
   // compare input balance to max input based on version

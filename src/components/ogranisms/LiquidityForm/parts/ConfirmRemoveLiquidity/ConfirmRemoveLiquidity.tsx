@@ -47,6 +47,7 @@ interface IConfirmRemoveLiquidity {
   amounts: { [x: string]: string }
   onSupply: () => void
   liquidityMinted?: TokenAmount
+  icons: string[]
 }
 
 export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
@@ -54,6 +55,7 @@ export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
   amounts,
   onSupply,
   liquidityMinted,
+  icons,
 }) => {
   const { t } = useTranslation()
 
@@ -66,7 +68,7 @@ export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
           {liquidityMinted?.toSignificant(6)}
         </StyledLiquidityMinted>
         <StyledCoinPair>
-          <CoinPair size="large" inputToken={bnb} outputToken={bnb} />
+          <CoinPair size="large" inputToken={icons[0]} outputToken={icons[1]} />
         </StyledCoinPair>
       </Flex>
       <Typography.Title>
@@ -85,7 +87,7 @@ export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
         </StyledText>
         <Flex alignItems="center">
           <StyledText>{amounts[Field.CURRENCY_A]}</StyledText>
-          <StyledCoin src={bnb} />
+          <StyledCoin src={icons[0]} />
         </Flex>
       </StyledTextRow>
 
@@ -95,7 +97,7 @@ export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
         </StyledText>
         <Flex alignItems="center">
           <StyledText>{amounts[Field.CURRENCY_B]}</StyledText>
-          <StyledCoin src={bnb} />
+          <StyledCoin src={icons[1]} />
         </Flex>
       </StyledTextRow>
 
