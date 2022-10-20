@@ -195,6 +195,11 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           ? '<0.01'
           : poolTokenPercentage?.toFixed(2)) ?? '0'
 
+  const icons = [
+    getTokenUrlByAddress(currencyIdA),
+    getTokenUrlByAddress(currencyIdB),
+  ]
+
   return (
     <>
       <Typography.Header4>{t('liquidityForm.addLiquidity')}</Typography.Header4>
@@ -210,6 +215,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           currencies={currencies}
           shareOfPool={poolTokenPercentageAmount}
           liquidityMinted={liquidityMinted}
+          icons={icons}
         />
       </Modal>
 
@@ -255,7 +261,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           <TokenInput
             currency={currencies[Field.CURRENCY_A]}
             tokenName={currencies[Field.CURRENCY_A]?.symbol ?? ''}
-            tokenAddress={currencyIdA}
+            icon={icons[0]}
             amount={formattedAmounts[Field.CURRENCY_A]}
             onInput={onFieldAInput}
             onSelectToken={handleCurrencyASelect}
@@ -266,7 +272,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           <TokenInput
             currency={currencies[Field.CURRENCY_B]}
             tokenName={currencies[Field.CURRENCY_B]?.symbol ?? ''}
-            tokenAddress={currencyIdB}
+            icon={icons[1]}
             amount={formattedAmounts[Field.CURRENCY_B]}
             onInput={onFieldBInput}
             onSelectToken={handleCurrencyBSelect}

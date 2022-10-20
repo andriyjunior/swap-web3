@@ -4,11 +4,10 @@ import SEVN_icon from 'assets/coins/SEVN.png'
 import { SEVN } from 'const'
 
 export const getTokenUrlByAddress = (address) => {
-  console.log(address)
   if (
     address?.toLowerCase().includes('eth') ||
-    address === WETH9[ChainId.MAINNET] ||
-    address === WETH9[ChainId.TESTNET]
+    address === WETH9[ChainId.MAINNET].address ||
+    address === WETH9[ChainId.TESTNET].address
   ) {
     return ETH_icon
   }

@@ -1,6 +1,12 @@
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InnerContainer, Input, TokenSelector, Typography } from 'components'
+import {
+  Button,
+  InnerContainer,
+  Input,
+  TokenSelector,
+  Typography,
+} from 'components'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 import { useAllTokens, useDebounce, useToken, wrappedCurrency } from 'hooks'
@@ -18,7 +24,7 @@ interface ISelectTokenProps {
 
 const StyledList = styled(InnerContainer)`
   padding: 12px 10px;
-  height: 400px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -33,6 +39,10 @@ const StyledList = styled(InnerContainer)`
     background-color: ${getTransparentColor(colors.black, 0.25)};
     border-radius: 2px;
   }
+`
+
+const StyledButton = styled.div`
+  margin-top: 16px;
 `
 
 export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
@@ -107,6 +117,9 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
           />
         )}
       </StyledList>
+      <StyledButton>
+        <Button title={t('manageTokens')} onClick={() => {}} />
+      </StyledButton>
     </>
   )
 }

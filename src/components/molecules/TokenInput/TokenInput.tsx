@@ -92,7 +92,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
           <StyledBlockTop>
             <TokenSelector
               title={tokenName}
-              icon={getTokenUrlByAddress(tokenAddress)}
+              icon={icon ? icon : getTokenUrlByAddress(tokenAddress)}
               onClick={() => modalRef.current?.open()}
               hasArrow
             />

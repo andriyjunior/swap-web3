@@ -54,6 +54,7 @@ interface IConfirmSupply {
   shareOfPool: string
   price?: Price
   liquidityMinted?: TokenAmount
+  icons: string[]
 }
 
 export const ConfirmSupply: FC<IConfirmSupply> = ({
@@ -63,6 +64,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
   shareOfPool,
   price,
   liquidityMinted,
+  icons,
 }) => {
   const { t } = useTranslation()
 
@@ -75,7 +77,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
           {liquidityMinted?.toSignificant(6)}
         </StyledLiquidityMinted>
         <StyledCoinPair>
-          <CoinPair size="large" inputToken={bnb} outputToken={bnb} />
+          <CoinPair size="large" inputToken={icons[0]} outputToken={icons[1]} />
         </StyledCoinPair>
       </Flex>
       <Typography.Title>
@@ -94,7 +96,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
         </StyledText>
         <Flex alignItems="center">
           <StyledText>{amounts[Field.CURRENCY_A]}</StyledText>
-          <StyledCoin src={bnb} />
+          <StyledCoin src={icons[0]} />
         </Flex>
       </StyledTextRow>
 
@@ -104,7 +106,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
         </StyledText>
         <Flex alignItems="center">
           <StyledText>{amounts[Field.CURRENCY_B]}</StyledText>
-          <StyledCoin src={bnb} />
+          <StyledCoin src={icons[1]} />
         </Flex>
       </StyledTextRow>
 
