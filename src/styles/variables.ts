@@ -7,7 +7,7 @@ export const colors = {
   yellow: 'FFF500',
   error: '#FF005C',
   success: '#00DF67',
-  warning: '#ffcc00',
+  warning: '#FFF500',
 }
 
 export const gradients = {

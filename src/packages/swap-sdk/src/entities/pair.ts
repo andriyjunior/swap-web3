@@ -32,7 +32,7 @@ export class Pair {
 
   public static getAddress(tokenA: Token, tokenB: Token): string {
     const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA] // does safety checks
-    console.log([token0, token1])
+
     const key = composeKey(token0, token1)
 
     if (PAIR_ADDRESS_CACHE?.[key] === undefined) {

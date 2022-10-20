@@ -1,4 +1,5 @@
 import { Loader } from 'components'
+import { ToastListener } from 'context'
 import { Common } from 'layouts'
 import { FC } from 'react'
 import { GlobalStyle } from 'styles'
@@ -10,6 +11,7 @@ export const App: FC = () => {
     <>
       <Updaters />
       <GlobalStyle />
+      <ToastListener />
       <Common>
         <Loader />
         <Routes />

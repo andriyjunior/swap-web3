@@ -8,11 +8,13 @@ import {
   useApproveCallback,
   useCurrency,
   usePairContract,
+  useToast,
   useTransactionDeadline,
   wrappedCurrency,
 } from 'hooks'
 import { ETHER } from 'packages/swap-sdk'
 import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Field,
   selectUserSlippageTolerance,
@@ -30,6 +32,9 @@ import {
 } from 'utils'
 
 export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
+  const { toastError } = useToast()
+  const { t } = useTranslation()
+
   // allowance handling
   const [signatureData, setSignatureData] = useState<{
     v: number
@@ -134,7 +139,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
       throw new Error('missing dependencies')
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) {
-      // toastError(t('Error'), t('Missing liquidity amount'))
+      toastError(t('Error'), t('Missing liquidity amount'))
       throw new Error('missing liquidity amount')
     }
 
@@ -208,7 +213,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
     } = parsedAmounts
 
     if (!currencyAmountA || !currencyAmountB) {
-      // toastError(t('Error'), t('Missing currency amounts'))
+      toastError(t('Error'), t('Missing currency amounts'))
       throw new Error('missing currency amounts')
     }
 
@@ -226,12 +231,12 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
     }
 
     if (!currencyA || !currencyB) {
-      // toastError(t('Error'), t('Missing tokens'))
+      toastError(t('Error'), t('Missing tokens'))
       throw new Error('missing tokens')
     }
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) {
-      // toastError(t('Error'), t('Missing liquidity amount'))
+      toastError(t('Error'), t('Missing liquidity amount'))
       throw new Error('missing liquidity amount')
     }
 
@@ -239,7 +244,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
     const oneCurrencyIsETH = currencyA === ETHER || currencyBIsETH
 
     if (!tokenA || !tokenB) {
-      // toastError(t('Error'), t('Could not wrap'))
+      toastError(t('Error'), t('Could not wrap'))
       throw new Error('could not wrap')
     }
 
@@ -323,10 +328,10 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
         ]
       }
     } else {
-      // toastError(
-      //   t('Error'),
-      //   t('Attempting to confirm without approval or a signature')
-      // )
+      toastError(
+        t('Error'),
+        t('Attempting to confirm without approval or a signature')
+      )
       throw new Error('Attempting to confirm without approval or a signature')
     }
 
@@ -348,7 +353,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
     // all estimations failed...
     if (indexOfSuccessfulEstimation === -1) {
       console.error('This transaction would fail')
-      // toastError(t('Error'), t('This transaction would fail'))
+      toastError(t('Error'), t('This transaction would fail'))
     } else {
       const methodName = methodNames[indexOfSuccessfulEstimation]
       const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]

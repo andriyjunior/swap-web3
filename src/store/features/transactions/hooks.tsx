@@ -1,10 +1,10 @@
 import { TransactionResponse } from '@ethersproject/providers'
+import { Order } from '@gelatonetwork/limit-orders-lib'
 import { useWeb3React } from '@web3-react/core'
 import { ReactNode, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { useAppDispatch } from 'store/utils'
-// import { Order } from '@gelatonetwork/limit-orders-lib'
 import { addTransaction, TransactionType } from './actions'
 import { TransactionDetails } from './reducer'
 
@@ -17,7 +17,7 @@ export function useTransactionAdder(): (
     approval?: { tokenAddress: string; spender: string }
     claim?: { recipient: string }
     type?: TransactionType
-    // order?: Order
+    order?: Order
   }
 ) => void {
   const { chainId, account } = useWeb3React()
@@ -32,14 +32,14 @@ export function useTransactionAdder(): (
         approval,
         claim,
         type,
-      }: // order,
-      {
+        order,
+      }: {
         summary?: string
         translatableSummary?: { text: string; data: Record<string, ReactNode> }
         claim?: { recipient: string }
         approval?: { tokenAddress: string; spender: string }
         type?: TransactionType
-        // order?: Order
+        order?: Order
       } = {}
     ) => {
       if (!account) return
@@ -56,10 +56,10 @@ export function useTransactionAdder(): (
           chainId,
           approval,
           summary,
-          // translatableSummary,
+          translatableSummary,
           claim,
           type,
-          // order,
+          order,
         })
       )
     },

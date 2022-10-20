@@ -1,7 +1,8 @@
+import { Order } from '@gelatonetwork/limit-orders-lib'
 import { createAction } from '@reduxjs/toolkit'
 import { ChainId } from 'packages/swap-sdk'
 // import { Order } from '@gelatonetwork/limit-orders-lib'
-import { ReactText } from 'react'
+import { ReactNode, ReactText } from 'react'
 
 export type TransactionType =
   | 'approve'
@@ -31,9 +32,9 @@ export const addTransaction = createAction<{
   approval?: { tokenAddress: string; spender: string }
   claim?: { recipient: string }
   summary?: string
-  translatableSummary?: { text: string; data: Record<string, ReactText> }
+  translatableSummary?: { text: string; data: Record<string, ReactNode> }
   type?: TransactionType
-  // order?: Order
+  order?: Order
 }>('transactions/addTransaction')
 export const clearAllTransactions = createAction<{ chainId: ChainId }>(
   'transactions/clearAllTransactions'

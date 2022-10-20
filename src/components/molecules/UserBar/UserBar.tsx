@@ -2,9 +2,15 @@ import { FC, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ProfileButton, Typography } from 'components'
 import { useTranslation } from 'react-i18next'
-import { StyledRoot, StyledAvatarWrap, StyledProfileButtons } from './styled'
+import {
+  StyledRoot,
+  StyledAvatarWrap,
+  StyledProfileButtons,
+  StyledAvatar,
+} from './styled'
 
 import logout_icon from 'assets/icons/logout.svg'
+import avatar_by_default_icon from 'assets/avatar_by_default.png'
 
 interface IUserBarProps {
   username: string
@@ -31,7 +37,9 @@ export const UserBar: FC<IUserBarProps> = ({ username, disconnect }) => {
       onMouseLeave={handleClose}
     >
       <Typography.ButtonBold> {username}</Typography.ButtonBold>
-      <StyledAvatarWrap></StyledAvatarWrap>
+      <StyledAvatarWrap>
+        <StyledAvatar src={avatar_by_default_icon} />
+      </StyledAvatarWrap>
       <AnimatePresence>
         {isOpened && (
           <StyledProfileButtons
