@@ -98,12 +98,14 @@ interface ISwapConfirmProps {
   txHash?: string
   swapErrorMessage?: string
   customOnDismiss?: () => void
+  icons: string[]
 }
 
 export const SwapConfirm: FC<ISwapConfirmProps> = ({
   onConfirm,
   trade,
   allowedSlippage,
+  icons,
 }) => {
   const { t } = useTranslation()
 
@@ -124,7 +126,7 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
       <StyledCurrencies>
         <StyledCurrency>
           <StyledCoinAndAmount>
-            <StyledCoin src={BNB_icon} />
+            <StyledCoin src={icons[0]} />
             <Typography.Header4>
               {trade?.inputAmount.toSignificant(6)}
             </Typography.Header4>
@@ -135,7 +137,7 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
         </StyledCurrency>
         <StyledCurrency>
           <StyledCoinAndAmount>
-            <StyledCoin src={BNB_icon} />
+            <StyledCoin src={icons[1]} />
             <Typography.Header4>
               {trade?.outputAmount.toSignificant(6)}
             </Typography.Header4>

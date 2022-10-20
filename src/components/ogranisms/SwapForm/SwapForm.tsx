@@ -39,7 +39,11 @@ import { Token, Trade } from 'packages/swap-sdk'
 import { Field } from 'store/features/swap/actions'
 import { useSwapActionHandlers } from 'store/features/swap/useSwapActionHandlers'
 import { BIG_INT_ZERO } from 'config'
-import { computeTradePriceBreakdown, warningSeverity } from 'utils'
+import {
+  computeTradePriceBreakdown,
+  getTokenUrlByAddress,
+  warningSeverity,
+} from 'utils'
 import { SwapConfirm } from './parts'
 
 export const SwapForm: FC = () => {
@@ -309,6 +313,11 @@ export const SwapForm: FC = () => {
     [onCurrencySelection]
   )
 
+  const icons = [
+    getTokenUrlByAddress(inputCurrencyId),
+    getTokenUrlByAddress(outputCurrencyId),
+  ]
+
   const swapIsDisabled =
     !formattedAmounts[Field.INPUT] || !formattedAmounts[Field.OUTPUT]
 
@@ -338,6 +347,7 @@ export const SwapForm: FC = () => {
           onConfirm={handleSwap}
           swapErrorMessage={swapErrorMessage}
           // customOnDismiss={handleConfirmDismiss}
+          icons={icons}
         />
       </Modal>
       <AnimatePresence>
@@ -368,7 +378,7 @@ export const SwapForm: FC = () => {
             currency={currencies[Field.INPUT] || undefined}
             tokenName={inputCurrency?.symbol || ''}
             title={t('swapForm.youSell')}
-            tokenAddress={inputCurrencyId}
+            icon={icons[0]}
             amount={formattedAmounts[Field.INPUT]}
             onInput={handleTypeInput}
             onSelectToken={handleInputSelect}
@@ -382,7 +392,7 @@ export const SwapForm: FC = () => {
             currency={currencies[Field.OUTPUT] || undefined}
             tokenName={outputCurrency?.symbol || ''}
             title={t('swapForm.youBuy')}
-            tokenAddress={outputCurrencyId}
+            icon={icons[1]}
             amount={formattedAmounts[Field.OUTPUT]}
             onInput={handleTypeOutput}
             onSelectToken={handleOutputSelect}
