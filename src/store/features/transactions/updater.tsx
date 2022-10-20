@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useAppDispatch, RootState } from 'store'
+import { truncateHash } from 'utils'
 
 import { checkedTransaction, finalizeTransaction } from './actions'
 
@@ -30,7 +31,7 @@ export function shouldCheck(
   return true
 }
 
-export default function Updater(): null {
+export const Updater = (): null => {
   const { library, chainId } = useWeb3React()
   const { t } = useTranslation()
 
@@ -79,7 +80,9 @@ export default function Updater(): null {
 
               toast(
                 t('Transaction receipt'),
-                <DescriptionWithTx>{receipt.transactionHash}</DescriptionWithTx>
+                <DescriptionWithTx>
+                  {truncateHash(receipt.transactionHash)}
+                </DescriptionWithTx>
               )
             } else {
               dispatch(

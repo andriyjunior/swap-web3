@@ -43,8 +43,11 @@ const StyledDescription = styled(Typography.Body)`
   ${halfBlackCSS}
 `
 
-const StyledText = styled(Typography.Body)<{ hasPaddingLeft?: boolean }>`
+const StyledAmount = styled(Typography.Header4)<{ hasPaddingLeft?: boolean }>`
   padding-left: ${({ hasPaddingLeft }) => (hasPaddingLeft ? '8px' : '')};
+`
+
+const StyledText = styled(Typography.Body)`
   ${halfBlackCSS}
 `
 
@@ -122,20 +125,18 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
         <StyledCurrency>
           <StyledCoinAndAmount>
             <Coin width="large" src={icons[0]} />
-            <Typography.Header4>
+            <StyledAmount hasPaddingLeft>
               {trade?.inputAmount.toSignificant(6)}
-            </Typography.Header4>
+            </StyledAmount>
           </StyledCoinAndAmount>
-          <Typography.Header4>
-            {trade?.inputAmount.currency.symbol}
-          </Typography.Header4>
+          <StyledAmount>{trade?.inputAmount.currency.symbol}</StyledAmount>
         </StyledCurrency>
         <StyledCurrency>
           <StyledCoinAndAmount>
             <Coin width="large" src={icons[1]} />
-            <Typography.Header4>
+            <StyledAmount hasPaddingLeft>
               {trade?.outputAmount.toSignificant(6)}
-            </Typography.Header4>
+            </StyledAmount>
           </StyledCoinAndAmount>
           <Typography.Header4>
             {trade?.outputAmount.currency.symbol}

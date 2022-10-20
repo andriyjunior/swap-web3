@@ -1,13 +1,19 @@
 import { FC } from 'react'
-import { Route, Routes as ReactRoutes, useParams } from 'react-router-dom'
+import {
+  Navigate,
+  Route,
+  Routes as ReactRoutes,
+  useParams,
+} from 'react-router-dom'
 import { Home, SwapPage } from 'pages'
 import { LiquidityForm, SwapForm } from 'components'
+
 // interface IRoutesProps {}
 
 export const Routes: FC = () => {
   return (
     <ReactRoutes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Navigate to={'/swap'} />} />
       <Route path="/swap" element={<SwapPage />}>
         <Route path="" element={<SwapForm />} />
         <Route path=":userCurrencyA" element={<SwapForm />} />
