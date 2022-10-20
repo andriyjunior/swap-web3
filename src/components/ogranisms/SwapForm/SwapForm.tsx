@@ -80,7 +80,7 @@ export const SwapForm: FC = () => {
     })
 
   // get custom setting values for user
-  const [allowedSlippage] = useAppSelector(selectUserSlippageTolerance)
+  const allowedSlippage = useAppSelector(selectUserSlippageTolerance)
 
   const {
     independentField,
