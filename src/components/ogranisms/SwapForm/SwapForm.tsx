@@ -51,8 +51,6 @@ export const SwapForm: FC = () => {
   const confirmSwapRef = useModalRef()
   const settingsModalRef = useModalRef()
 
-  const { state, handleOnChange, handleSwapInputs } = useSwapForm()
-
   const loadedUrlParams = useDefaultsFromURLSearch()
 
   // token warning stuff
@@ -370,7 +368,7 @@ export const SwapForm: FC = () => {
             currency={currencies[Field.INPUT] || undefined}
             tokenName={inputCurrency?.symbol || ''}
             title={t('swapForm.youSell')}
-            icon={state.inputToken.logoURI}
+            tokenAddress={inputCurrencyId}
             amount={formattedAmounts[Field.INPUT]}
             onInput={handleTypeInput}
             onSelectToken={handleInputSelect}
@@ -384,7 +382,7 @@ export const SwapForm: FC = () => {
             currency={currencies[Field.OUTPUT] || undefined}
             tokenName={outputCurrency?.symbol || ''}
             title={t('swapForm.youBuy')}
-            icon={state.outputToken.logoURI}
+            tokenAddress={outputCurrencyId}
             amount={formattedAmounts[Field.OUTPUT]}
             onInput={handleTypeOutput}
             onSelectToken={handleOutputSelect}

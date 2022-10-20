@@ -11,7 +11,7 @@ import { paths } from 'const'
 import { useTranslation } from 'react-i18next'
 import { useTotalSupply, useUSDTPrice } from 'hooks'
 import { useTokenBalance } from 'store'
-import { multiplyPriceByAmount } from 'utils'
+import { getTokenUrlByAddress, multiplyPriceByAmount } from 'utils'
 import { useWeb3React } from '@web3-react/core'
 
 const StyledPairTitle = styled(Typography.Body)`
@@ -155,8 +155,8 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
         element={
           <Flex alignItems="center">
             <CoinPair
-              inputToken={state.inputToken.logoURI}
-              outputToken={state.outputToken.logoURI}
+              inputToken={getTokenUrlByAddress(pair?.token0.address)}
+              outputToken={getTokenUrlByAddress(pair?.token1.address)}
             />
             <StyledPairTitle>
               {pair?.token0.symbol}/{pair?.token1.symbol}
@@ -174,7 +174,9 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
               <StyledText>{token0Deposited?.toSignificant(6)}</StyledText>
             )}
             <StyledCoinWrapper>
-              <StyledCoinIcon src={state.inputToken.logoURI} />
+              <StyledCoinIcon
+                src={getTokenUrlByAddress(pair?.token0.address)}
+              />
             </StyledCoinWrapper>
           </Flex>
         </StyledTextRow>
@@ -189,7 +191,9 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
               <StyledText>{token1Deposited?.toSignificant(6)}</StyledText>
             )}
             <StyledCoinWrapper>
-              <StyledCoinIcon src={state.outputToken.logoURI} />
+              <StyledCoinIcon
+                src={getTokenUrlByAddress(pair?.token1.address)}
+              />
             </StyledCoinWrapper>
           </Flex>
         </StyledTextRow>

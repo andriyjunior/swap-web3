@@ -39,6 +39,7 @@ import { ChainId, ETHER, TokenAmount } from 'packages/swap-sdk'
 import {
   calculateSlippageAmount,
   getRouterContract,
+  getTokenUrlByAddress,
   maxAmountSpend,
 } from 'utils'
 import { useCurrencySelectRoute } from 'pages/Swap/hooks'
@@ -49,24 +50,6 @@ import { TransactionResponse } from '@ethersproject/providers'
 
 import wallet_icon from 'assets/icons/wallet.svg'
 import { useOnAdd } from './hooks'
-
-const DAIInfo = {
-  name: 'DAI',
-  symbol: 'DAI',
-  decimals: 18,
-  logoURI: 'https://gliaswaptest.ckbapp.dev/token/dai.png',
-  address: '0xC4401D8D5F05B958e6f1b884560F649CdDfD9615',
-  chainId: ChainId.TESTNET,
-}
-
-const USDTInfo = {
-  name: 'USDT',
-  symbol: 'USDT',
-  decimals: 6,
-  logoURI: 'https://gliaswaptest.ckbapp.dev/token/usdt.png',
-  address: '0x1cf98d2a2f5b0BFc365EAb6Ae1913C275bE2618F',
-  chainId: ChainId.TESTNET,
-}
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;
@@ -272,7 +255,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           <TokenInput
             currency={currencies[Field.CURRENCY_A]}
             tokenName={currencies[Field.CURRENCY_A]?.symbol ?? ''}
-            icon={DAIInfo.logoURI}
+            tokenAddress={currencyIdA}
             amount={formattedAmounts[Field.CURRENCY_A]}
             onInput={onFieldAInput}
             onSelectToken={handleCurrencyASelect}
@@ -283,7 +266,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           <TokenInput
             currency={currencies[Field.CURRENCY_B]}
             tokenName={currencies[Field.CURRENCY_B]?.symbol ?? ''}
-            icon={USDTInfo.logoURI}
+            tokenAddress={currencyIdB}
             amount={formattedAmounts[Field.CURRENCY_B]}
             onInput={onFieldBInput}
             onSelectToken={handleCurrencyBSelect}

@@ -26,6 +26,7 @@ export * from './isZero'
 export * from './transactionErrorToUserReadableMessage'
 export * from './truncateHash'
 export * from './localStorageOrders'
+export * from './getTokenUrlByAddress'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 
