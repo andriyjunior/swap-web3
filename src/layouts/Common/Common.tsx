@@ -1,5 +1,5 @@
 import { FC, ReactNode, useState } from 'react'
-import { Menu } from 'components'
+import { Menu, Toast, ToastsContainer } from 'components'
 import styled from 'styled-components'
 import { gradients } from 'styles'
 import { Header } from 'components'

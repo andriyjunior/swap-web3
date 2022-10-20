@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { Web3ReactProvider } from '@web3-react/core'
-import { BlockNumberProvider } from 'context'
+import { BlockNumberProvider, ToastsProvider } from 'context'
 import { ReactNode, FC } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
@@ -19,7 +19,9 @@ export const Providers: FC<IProvidersProps> = ({ children }) => {
             <Web3ReactProvider
               getLibrary={(provider) => new Web3Provider(provider)}
             >
-              <BlockNumberProvider>{children}</BlockNumberProvider>
+              <BlockNumberProvider>
+                <ToastsProvider>{children}</ToastsProvider>
+              </BlockNumberProvider>
             </Web3ReactProvider>
           </Provider>
         </BrowserRouter>

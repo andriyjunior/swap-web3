@@ -2,6 +2,8 @@ import { Web3Provider, JsonRpcSigner, Provider } from '@ethersproject/providers'
 import { Contract } from '@ethersproject/contracts'
 import { isAddress } from './isAddress'
 import { BigNumber, Signer } from 'ethers'
+import { BASE_BSC_SCAN_URLS } from 'config'
+import { ChainId } from 'packages/swap-sdk'
 
 export * from './isDev'
 export * from './getTokenList'
@@ -23,6 +25,7 @@ export * from './serializeTokens'
 export * from './isZero'
 export * from './transactionErrorToUserReadableMessage'
 export * from './truncateHash'
+export * from './localStorageOrders'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 
@@ -63,4 +66,29 @@ export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
   return value
     .mul(BigNumber.from(10000).add(BigNumber.from(margin)))
     .div(BigNumber.from(10000))
+}
+
+export function getBscScanLink(
+  data: string | number,
+  type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
+  chainIdOverride?: number
+): string {
+  const chainId = chainIdOverride || ChainId.MAINNET
+  switch (type) {
+    case 'transaction': {
+      return `${BASE_BSC_SCAN_URLS[chainId]}/tx/${data}`
+    }
+    case 'token': {
+      return `${BASE_BSC_SCAN_URLS[chainId]}/token/${data}`
+    }
+    case 'block': {
+      return `${BASE_BSC_SCAN_URLS[chainId]}/block/${data}`
+    }
+    case 'countdown': {
+      return `${BASE_BSC_SCAN_URLS[chainId]}/block/countdown/${data}`
+    }
+    default: {
+      return `${BASE_BSC_SCAN_URLS[chainId]}/address/${data}`
+    }
+  }
 }

@@ -25,7 +25,15 @@ export const StyledAvatarWrap = styled.div`
   background: ${colors.white};
   border: 2px solid ${colors.cyan};
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
+`
+
+export const StyledAvatar = styled.img`
+  width: 34px;
+  height: 34px;
 `
 
 export const StyledProfileButtons = styled(motion.div)`

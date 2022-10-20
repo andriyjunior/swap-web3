@@ -4,12 +4,11 @@ import { Trade, TokenAmount, CurrencyAmount, ETHER } from 'packages/swap-sdk'
 import { useCallback, useMemo } from 'react'
 // import { logError } from 'utils/sentry'
 import { useWeb3React } from '@web3-react/core'
-// import { useTranslation } from '@pancakeswap/localization'
 import { ROUTER_ADDRESS } from 'config'
 
 import { useTokenContract } from './useContract'
 
-import { useTokenAllowance } from 'hooks'
+import { useToast, useTokenAllowance } from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import {
@@ -35,7 +34,7 @@ export const useApproveCallback = (
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { t } = useTranslation()
-  // const { toastError } = useToast()
+  const { toastError } = useToast()
   const token =
     amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined
   const currentAllowance = useTokenAllowance(
@@ -65,30 +64,35 @@ export const useApproveCallback = (
 
   const approve = useCallback(async (): Promise<void> => {
     if (approvalState !== ApprovalState.NOT_APPROVED) {
-      // toastError(t('Error'), t('Approve was called unnecessarily'))
+      toastError(t('Error'), t('Approve was called unnecessarily'))
       console.error('approve was called unnecessarily')
       return
     }
     if (!token) {
-      // toastError(t('Error'), t('No token'))
+      toastError(t('Error'), t('No token'))
       console.error('no token')
       return
     }
 
     if (!tokenContract) {
-      // toastError(t('Error'), t('Cannot find contract of the token %tokenAddress%', { tokenAddress: token?.address }))
+      toastError(
+        t('Error'),
+        t('Cannot find contract of the token %tokenAddress%', {
+          tokenAddress: token?.address,
+        })
+      )
       console.error('tokenContract is null')
       return
     }
 
     if (!amountToApprove) {
-      // toastError(t('Error'), t('Missing amount to approve'))
+      toastError(t('Error'), t('Missing amount to approve'))
       console.error('missing amount to approve')
       return
     }
 
     if (!spender) {
-      // toastError(t('Error'), t('No spender'))
+      toastError(t('Error'), t('No spender'))
       console.error('no spender')
       return
     }
@@ -125,9 +129,9 @@ export const useApproveCallback = (
       .catch((error: any) => {
         // logError(error)
         console.error('Failed to approve token', error)
-        // if (error?.code !== 4001) {
-        //   toastError(t('Error'), error.message)
-        // }
+        if (error?.code !== 4001) {
+          toastError(t('Error'), error.message)
+        }
         throw error
       })
   }, [
@@ -139,7 +143,7 @@ export const useApproveCallback = (
     addTransaction,
     callWithGasPrice,
     t,
-    // toastError,
+    toastError,
   ])
 
   return [approvalState, approve]

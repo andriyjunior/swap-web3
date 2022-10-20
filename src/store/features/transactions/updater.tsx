@@ -1,5 +1,7 @@
 import { useWeb3React } from '@web3-react/core'
+import { DescriptionWithTx } from 'components'
 import { useBlockNumber } from 'context'
+import { useToast } from 'hooks'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -32,6 +34,8 @@ export default function Updater(): null {
   const { library, chainId } = useWeb3React()
   const { t } = useTranslation()
 
+  const { toastError, toastSuccess } = useToast()
+
   const currentBlock = useBlockNumber()
 
   const dispatch = useAppDispatch()
@@ -43,8 +47,6 @@ export default function Updater(): null {
     () => (chainId ? state[chainId] ?? {} : {}),
     [chainId, state]
   )
-
-  // const { toastError, toastSuccess } = useToast()
 
   useEffect(() => {
     if (!chainId || !library || !currentBlock) return
@@ -73,11 +75,12 @@ export default function Updater(): null {
                 })
               )
 
-              // const toast = receipt.status === 1 ? toastSuccess : toastError
-              // toast(
-              //   t('Transaction receipt'),
-              //   <ToastDescriptionWithTx txHash={receipt.transactionHash} />
-              // )
+              const toast = receipt.status === 1 ? toastSuccess : toastError
+
+              toast(
+                t('Transaction receipt'),
+                <DescriptionWithTx>{receipt.transactionHash}</DescriptionWithTx>
+              )
             } else {
               dispatch(
                 checkedTransaction({ chainId, hash, blockNumber: currentBlock })
@@ -94,8 +97,8 @@ export default function Updater(): null {
     transactions,
     currentBlock,
     dispatch,
-    // toastSuccess,
-    // toastError,
+    toastSuccess,
+    toastError,
     t,
   ])
 
