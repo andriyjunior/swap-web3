@@ -1,7 +1,7 @@
 import { FC, ReactNode, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import BNB_icon from 'assets/coins/BNB.png'
-import { Button, HorizontalSeparator, Icon, Typography } from 'components/atoms'
+import { Button, HorizontalSeparator, Icon, Typography, Coin } from 'components'
 import { useTranslation } from 'react-i18next'
 import { colors, getTransparentColor } from 'styles'
 import { Trade, TradeType } from 'packages/swap-sdk'
@@ -126,7 +126,7 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
       <StyledCurrencies>
         <StyledCurrency>
           <StyledCoinAndAmount>
-            <StyledCoin src={icons[0]} />
+            <Coin width="large" src={icons[0]} />
             <Typography.Header4>
               {trade?.inputAmount.toSignificant(6)}
             </Typography.Header4>
@@ -137,7 +137,7 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
         </StyledCurrency>
         <StyledCurrency>
           <StyledCoinAndAmount>
-            <StyledCoin src={icons[1]} />
+            <Coin width="large" src={icons[1]} />
             <Typography.Header4>
               {trade?.outputAmount.toSignificant(6)}
             </Typography.Header4>
