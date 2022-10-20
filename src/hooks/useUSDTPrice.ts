@@ -124,7 +124,6 @@ export const useUSDTCurrencyAmount = (
   amount?: number
 ): number | undefined => {
   const usdtPrice = useUSDTPrice(currency)
-  console.log(usdtPrice)
 
   if (!amount) {
     return undefined

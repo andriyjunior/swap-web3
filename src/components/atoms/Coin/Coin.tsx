@@ -9,7 +9,6 @@ interface ICoinProps {
 }
 
 const StyledCoin = styled.img<{ size: number }>`
-  margin-right: 16px;
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
 `

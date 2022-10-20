@@ -29,7 +29,8 @@ const StyledTextRow = styled(Flex)`
   padding-right: 18px;
 `
 
-const StyledText = styled(Typography.Body)`
+const StyledText = styled(Typography.Body)<{ hasPaddingRight?: boolean }>`
+  padding-right: ${({ hasPaddingRight }) => (hasPaddingRight ? '8px' : '')};
   color: ${getTransparentColor(colors.black, 0.5)};
 `
 
@@ -80,7 +81,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
         {currencies[Field.CURRENCY_B]?.symbol}&nbsp;
         {t('confirmSupply.poolTokens')}
       </Typography.Title>
-      <StyledText>
+      <StyledText hasPaddingRight>
         {t('confirmSupply.outputIsEstimated', { percent: userSlippage })}
       </StyledText>
       <HorizontalSeparator />
@@ -90,7 +91,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
           {currencies[Field.CURRENCY_A]?.symbol ?? ''}&nbsp; {t('deposited')}:
         </StyledText>
         <Flex alignItems="center">
-          <StyledText>{amounts[Field.CURRENCY_A]}</StyledText>
+          <StyledText hasPaddingRight>{amounts[Field.CURRENCY_A]}</StyledText>
           <Coin src={icons[0]} />
         </Flex>
       </StyledTextRow>
@@ -100,7 +101,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
           {currencies[Field.CURRENCY_B]?.symbol ?? ''}&nbsp; {t('deposited')}:
         </StyledText>
         <Flex alignItems="center">
-          <StyledText>{amounts[Field.CURRENCY_B]}</StyledText>
+          <StyledText hasPaddingRight>{amounts[Field.CURRENCY_B]}</StyledText>
           <Coin src={icons[1]} />
         </Flex>
       </StyledTextRow>

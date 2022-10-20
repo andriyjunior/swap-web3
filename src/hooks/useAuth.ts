@@ -11,8 +11,6 @@ import {
 
 const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 1
 
-console.log(defaultNetwork)
-
 export const useAuth = () => {
   const dispatch = useAppDispatch()
 
