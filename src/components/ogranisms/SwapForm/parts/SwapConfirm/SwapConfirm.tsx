@@ -34,12 +34,6 @@ const StyledCoinAndAmount = styled.div`
   align-items: center;
 `
 
-const StyledCoin = styled.img`
-  margin-right: 16px;
-  width: 48px;
-  height: 48px;
-`
-
 const halfBlackCSS = css`
   color: ${getTransparentColor(colors.black, 0.5)};
 `
@@ -49,7 +43,8 @@ const StyledDescription = styled(Typography.Body)`
   ${halfBlackCSS}
 `
 
-const StyledText = styled(Typography.Body)`
+const StyledText = styled(Typography.Body)<{ hasPaddingLeft?: boolean }>`
+  padding-left: ${({ hasPaddingLeft }) => (hasPaddingLeft ? '8px' : '')};
   ${halfBlackCSS}
 `
 
