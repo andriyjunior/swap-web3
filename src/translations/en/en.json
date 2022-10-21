@@ -22,7 +22,9 @@
   "burned": "Burned",
   "confirm": "Confirm",
   "importToken": "Import token",
+  "removeToken": "Remove token",
   "manageTokens": "Manage tokens",
+  "goBack": "Go back",
 
   "menu": {
     "swap": "Swap",

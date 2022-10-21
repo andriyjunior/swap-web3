@@ -4,12 +4,19 @@ import {
   Button,
   InnerContainer,
   Input,
+  Modal,
   TokenSelector,
   Typography,
 } from 'components'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
-import { useAllTokens, useDebounce, useToken, wrappedCurrency } from 'hooks'
+import {
+  useAllTokens,
+  useDebounce,
+  useModalRef,
+  useToken,
+  wrappedCurrency,
+} from 'hooks'
 import { Currency, ETHER, Token } from 'packages/swap-sdk'
 import { useWeb3React } from '@web3-react/core'
 import { useAddUserToken } from 'store'
@@ -20,6 +27,7 @@ import { getTokenUrlByAddress } from 'utils'
 
 interface ISelectTokenProps {
   onSelect: (value: Token | Currency) => void
+  onManageTokens?: () => void
 }
 
 const StyledList = styled(InnerContainer)`
@@ -45,7 +53,10 @@ const StyledButton = styled.div`
   margin-top: 16px;
 `
 
-export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
+export const SelectToken: FC<ISelectTokenProps> = ({
+  onSelect,
+  onManageTokens,
+}) => {
   const { chainId } = useWeb3React()
   const allTokensList = useAllTokens()
 
@@ -75,9 +86,15 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
       }
     })
     setTokenList(filteredTokens || allTokensList)
-  }, [debouncedQuery])
+  }, [debouncedQuery, allTokensList])
 
   const ETH_TOKEN = chainId && (wrappedCurrency(ETHER, chainId) as Token)
+
+  const handleManageTokens = () => {
+    if (onManageTokens) {
+      onManageTokens()
+    }
+  }
 
   return (
     <>
@@ -118,7 +135,7 @@ export const SelectToken: FC<ISelectTokenProps> = ({ onSelect }) => {
         )}
       </StyledList>
       <StyledButton>
-        <Button title={t('manageTokens')} onClick={() => {}} />
+        <Button title={t('manageTokens')} onClick={handleManageTokens} />
       </StyledButton>
     </>
   )

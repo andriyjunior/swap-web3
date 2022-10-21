@@ -8,6 +8,7 @@ import {
   TModal,
   Modal,
   SelectToken,
+  ManageTokens,
 } from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
 import { TokenDTO } from 'types'
@@ -69,6 +70,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   const { t } = useTranslation()
 
   const modalRef = useRef<TModal>(null)
+  const manageTokensRef = useRef<TModal>(null)
 
   const handleOnInput = (e: string) => {
     onInput(e)
@@ -79,12 +81,28 @@ export const TokenInput: FC<ITokenInputProps> = ({
     modalRef.current?.close()
   }
 
+  const handleOnBack = () => {
+    modalRef.current?.open()
+    manageTokensRef.current?.close()
+  }
+
+  const handleManageTokensOpen = () => {
+    modalRef.current?.close()
+    manageTokensRef.current?.open()
+  }
+
   const amountInDollar = useUSDTCurrencyAmount(currency, Number(amount))
 
   return (
     <>
       <Modal ref={modalRef} title={t('selectToken.selectToken')}>
-        <SelectToken onSelect={handleOnSelect} />
+        <SelectToken
+          onSelect={handleOnSelect}
+          onManageTokens={handleManageTokensOpen}
+        />
+      </Modal>
+      <Modal ref={manageTokensRef} title={t('manageTokens')}>
+        <ManageTokens goBack={handleOnBack} />
       </Modal>
       <StyledRoot>
         {title && <StyledTitle>{title}</StyledTitle>}
