@@ -59,7 +59,7 @@ interface IInitialState {
 
 const initialState: IInitialState = {
   selectedWallet: undefined,
-  userSlippageTolerance: '1',
+  userSlippageTolerance: '4',
   gasPrice: GAS_PRICE_GWEI.testnet,
   userDeadline: 900,
   timestamp: currentTimestamp(),

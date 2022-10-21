@@ -37,16 +37,18 @@ export function useTrackedTokenPairs(): [Token, Token][] {
     [chainId]
   )
 
-  const farmPairs: [Token, Token][] = useMemo(
-    () =>
-      farms
-        .filter((farm) => farm.pid !== 0)
-        .map((farm) => [
-          deserializeToken(farm.token),
-          deserializeToken(farm.quoteToken),
-        ]),
-    []
-  )
+  const farmPairs: [Token, Token][] = []
+
+  // const farmPairs: [Token, Token][] = useMemo(
+  //   () =>
+  //     farms
+  //       .filter((farm) => farm.pid !== 0)
+  //       .map((farm) => [
+  //         deserializeToken(farm.token),
+  //         deserializeToken(farm.quoteToken),
+  //       ]),
+  //   []
+  // )
 
   // pairs for every token against every base
   const generatedPairs: [Token, Token][] = useMemo(

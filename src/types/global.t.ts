@@ -2,7 +2,7 @@ export enum GAS_PRICE {
   Default = '5',
   Fast = '6',
   Instant = '7',
-  Testnet = '20',
+  Testnet = '69',
 }
 
 export enum Field {

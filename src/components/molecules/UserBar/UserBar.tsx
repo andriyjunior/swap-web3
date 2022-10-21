@@ -7,10 +7,12 @@ import {
   StyledAvatarWrap,
   StyledProfileButtons,
   StyledAvatar,
+  StyledPendingCircle,
 } from './styled'
 
 import logout_icon from 'assets/icons/logout.svg'
 import avatar_by_default_icon from 'assets/avatar_by_default.png'
+import { usePendingTransactions } from 'store'
 
 interface IUserBarProps {
   username: string
@@ -20,6 +22,8 @@ interface IUserBarProps {
 export const UserBar: FC<IUserBarProps> = ({ username, disconnect }) => {
   const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
+
+  const { hasPendingTransactions } = usePendingTransactions()
 
   const handleClose = () => {
     setOpened(false)
@@ -38,7 +42,11 @@ export const UserBar: FC<IUserBarProps> = ({ username, disconnect }) => {
     >
       <Typography.ButtonBold> {username}</Typography.ButtonBold>
       <StyledAvatarWrap>
-        <StyledAvatar src={avatar_by_default_icon} />
+        {hasPendingTransactions ? (
+          <StyledPendingCircle />
+        ) : (
+          <StyledAvatar src={avatar_by_default_icon} />
+        )}
       </StyledAvatarWrap>
       <AnimatePresence>
         {isOpened && (

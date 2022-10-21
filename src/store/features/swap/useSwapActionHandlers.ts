@@ -30,7 +30,7 @@ export const useSwapActionHandlers = (): {
             currency instanceof Token
               ? currency.address
               : currency === ETHER
-              ? 'BNB'
+              ? 'ETH'
               : '',
         })
       )
