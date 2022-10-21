@@ -18,6 +18,7 @@ interface ITokenSelectorProps {
   icon?: string
   onClick?: () => void
   onImport?: () => void
+  onRemove?: () => void
 }
 
 const StyledRoot = styled.button`
@@ -65,7 +66,7 @@ const StyledImportButton = styled.div`
 `
 
 export const TokenSelector: FC<ITokenSelectorProps> = memo(
-  ({ icon, onClick, hasArrow, token, title, onImport }) => {
+  ({ icon, onClick, hasArrow, token, title, onImport, onRemove }) => {
     const [imgError, setImgError] = useState(false)
 
     const { t } = useTranslation()
@@ -87,6 +88,11 @@ export const TokenSelector: FC<ITokenSelectorProps> = memo(
           {onImport && (
             <StyledImportButton>
               <Button title={t('importToken')} onClick={onImport} />
+            </StyledImportButton>
+          )}
+          {onRemove && (
+            <StyledImportButton>
+              <Button title={t('removeToken')} onClick={onRemove} />
             </StyledImportButton>
           )}
         </StyledBody>
