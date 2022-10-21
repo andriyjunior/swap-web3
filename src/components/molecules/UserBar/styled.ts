@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { colors } from 'styles'
 
 export const StyledRoot = styled.div<{ isOpened: boolean }>`
@@ -47,4 +47,30 @@ export const StyledProfileButtons = styled(motion.div)`
   background-color: ${colors.white};
   border-radius: 0 0 22px 22px;
   overflow: hidden;
+`
+
+const animation = css``
+
+export const StyledPendingCircle = styled.div`
+  &::before {
+    position: absolute;
+    content: '';
+    border-radius: 50%;
+    border: 6px dashed ${colors.purple};
+    top: 6px;
+    left: 6px;
+    width: 20px;
+    height: 20px;
+
+    @keyframes animation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    animation: animation 2s linear infinite;
+  }
 `

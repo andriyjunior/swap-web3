@@ -1,5 +1,5 @@
 import { SEVN, USDT, WETH } from 'const'
-import { ChainId, Token, WBNB } from 'packages/swap-sdk'
+import { ChainId, Token } from 'packages/swap-sdk'
 
 const CAKE_MAINNET = new Token(
   ChainId.MAINNET,
@@ -71,16 +71,16 @@ export const BUSD: Record<ChainId, Token> = {
 }
 
 export const bscTokens = {
-  wbnb: WBNB[ChainId.MAINNET],
-  // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
-  bnb: new Token(
-    ChainId.MAINNET,
-    '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    18,
-    'BNB',
-    'BNB',
-    'https://www.binance.com/'
-  ),
+  // wbnb: WBNB[ChainId.MAINNET],
+  // // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
+  // bnb: new Token(
+  //   ChainId.MAINNET,
+  //   '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+  //   18,
+  //   'BNB',
+  //   'BNB',
+  //   'https://www.binance.com/'
+  // ),
   cake: CAKE_MAINNET,
   gmi: new Token(
     ChainId.MAINNET,

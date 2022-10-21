@@ -86,7 +86,7 @@ export const SelectToken: FC<ISelectTokenProps> = ({
       }
     })
     setTokenList(filteredTokens || allTokensList)
-  }, [debouncedQuery, allTokensList])
+  }, [debouncedQuery])
 
   const ETH_TOKEN = chainId && (wrappedCurrency(ETHER, chainId) as Token)
 
