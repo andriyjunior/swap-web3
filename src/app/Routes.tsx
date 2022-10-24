@@ -16,8 +16,8 @@ export const Routes: FC = () => {
       <Route path="/" element={<Navigate to={'/swap'} />} />
       <Route path="/swap" element={<SwapPage />}>
         <Route path="" element={<SwapForm />} />
-        <Route path=":userCurrencyA" element={<SwapForm />} />
-        <Route path=":userCurrencyA/:userCurrencyB" element={<SwapForm />} />
+        <Route path=":inputCurrency" element={<SwapForm />} />
+        <Route path=":inputCurrency/:outputCurrency" element={<SwapForm />} />
       </Route>
       <Route path="/liquidity" element={<SwapPage />}>
         <Route path="" element={<LiquidityForm />}>

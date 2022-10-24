@@ -44,7 +44,8 @@
     "priceImpact": "Price Impact",
     "liquidityProviderFee": "Liquidity Provider Fee",
     "thisSwapHasAPriceImpactOfAtLeast1": "This swap has a price impact of at least {{amount}}. Please type the word '{{word}}' to continue with this swap.",
-    "thisSwapHasAPriceImpactOfAtLeast2": "This swap has a price impact of at least {{amount}}. Please confirm that you would like to continue with this swap."
+    "thisSwapHasAPriceImpactOfAtLeast2": "This swap has a price impact of at least {{amount}}. Please confirm that you would like to continue with this swap.",
+    "unsupportedAsset": "Unsupported Asset"
   },
 
   "liquidityForm": {

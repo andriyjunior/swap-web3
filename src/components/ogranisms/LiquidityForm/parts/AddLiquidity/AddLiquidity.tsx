@@ -120,7 +120,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
 
   const { handleCurrencyASelect, handleCurrencyBSelect } =
-    useCurrencySelectRoute()
+    useCurrencySelectRoute({ path: 'liquidity' })
 
   const formattedAmounts = useMemo(
     () => ({

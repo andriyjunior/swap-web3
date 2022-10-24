@@ -4,7 +4,11 @@ import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import currencyId from 'utils/currencyId'
 
-export const useCurrencySelectRoute = () => {
+export const useCurrencySelectRoute = ({
+  path,
+}: {
+  path: 'swap' | 'liquidity'
+}) => {
   const { userCurrencyA, userCurrencyB } = useParams()
   const navigate = useNavigate()
 
@@ -14,15 +18,15 @@ export const useCurrencySelectRoute = () => {
     (currencyA_: Currency) => {
       const newCurrencyIdA = currencyId(currencyA_)
       if (newCurrencyIdA === currencyIdB) {
-        navigate(`${paths.liquidity}/${currencyIdB}/${currencyIdA}`, {
+        navigate(`/${path}/${currencyIdB}/${currencyIdA}`, {
           replace: true,
         })
       } else if (currencyIdB) {
-        navigate(`${paths.liquidity}/${newCurrencyIdA}/${currencyIdB}`, {
+        navigate(`/${path}/${newCurrencyIdA}/${currencyIdB}`, {
           replace: true,
         })
       } else {
-        navigate(`${paths.liquidity}/${newCurrencyIdA}`, {
+        navigate(`/${path}/${newCurrencyIdA}`, {
           replace: true,
         })
       }
@@ -34,21 +38,18 @@ export const useCurrencySelectRoute = () => {
       const newCurrencyIdB = currencyId(currencyB_)
       if (currencyIdA === newCurrencyIdB) {
         if (currencyIdB) {
-          navigate(`${paths.liquidity}/${currencyIdB}/${newCurrencyIdB}`, {
+          navigate(`/${path}/${currencyIdB}/${newCurrencyIdB}`, {
             replace: true,
           })
         } else {
-          navigate(`${paths.liquidity}/${newCurrencyIdB}`, {
+          navigate(`/${path}/${newCurrencyIdB}`, {
             replace: true,
           })
         }
       } else {
-        navigate(
-          `${paths.liquidity}/${currencyIdA || 'ETH'}/${newCurrencyIdB}`,
-          {
-            replace: true,
-          }
-        )
+        navigate(`/${path}/${currencyIdA || 'ETH'}/${newCurrencyIdB}`, {
+          replace: true,
+        })
       }
     },
     [currencyIdA, navigate, currencyIdB]

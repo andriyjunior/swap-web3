@@ -17,6 +17,7 @@ import {
   useAllTokens,
   useApproveCallbackFromTrade,
   useCurrency,
+  useIsTransactionUnsupported,
   useModalRef,
   useSwapCallback,
   useWrapCallback,
@@ -313,13 +314,29 @@ export const SwapForm: FC = () => {
     [onCurrencySelection]
   )
 
+  const swapIsUnsupported = useIsTransactionUnsupported(
+    currencies?.INPUT,
+    currencies?.OUTPUT
+  )
+
   const icons = [
     getTokenUrlByAddress(inputCurrencyId),
     getTokenUrlByAddress(outputCurrencyId),
   ]
 
   const swapIsDisabled =
-    !formattedAmounts[Field.INPUT] || !formattedAmounts[Field.OUTPUT]
+    !formattedAmounts[Field.INPUT] ||
+    !formattedAmounts[Field.OUTPUT] ||
+    // !isValid ||
+    // approval !== ApprovalState.APPROVED ||
+    priceImpactSeverity > 3
+
+  const showApproveFlow =
+    !swapInputError &&
+    (approval === ApprovalState.NOT_APPROVED ||
+      approval === ApprovalState.PENDING ||
+      (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
+    !(priceImpactSeverity > 3)
 
   return (
     <>
@@ -398,19 +415,62 @@ export const SwapForm: FC = () => {
             onSelectToken={handleOutputSelect}
           />
 
-          {!account ? (
+          {userHasSpecifiedInputOutput && noRoute ? (
+            <>
+              {t('Insufficient liquidity for this trade')}
+              {singleHopOnly && <p>{t('Try enabling multi-hop trades.')}</p>}
+            </>
+          ) : !account ? (
             <Button
               title={t('connectWallet')}
               icon={wallet_icon}
               onClick={() => walletsRef.current?.open()}
             />
-          ) : (
+          ) : swapIsUnsupported ? (
             <Button
-              title={t('swap')}
-              icon={wallet_icon}
-              onClick={() => confirmSwapRef.current?.open()}
-              isDisabled={swapIsDisabled}
+              title={t('swapForm.unsupportedAsset')}
+              onClick={() => {}}
+              isDisabled
             />
+          ) : (
+            <Flex gap="16px">
+              {showApproveFlow && (
+                <Button
+                  // variant={
+                  //   approval === ApprovalState.APPROVED ? 'success' : 'primary'
+                  // }
+                  title={t('enable')}
+                  onClick={approveCallback}
+                  isDisabled={
+                    approval !== ApprovalState.NOT_APPROVED || approvalSubmitted
+                  }
+                />
+              )}
+              {/* {approval === ApprovalState.PENDING ? (
+              <AutoRow gap="6px" justify="center">
+                {t('Enabling')} <CircleLoader stroke="white" />
+              </AutoRow>
+            ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
+              t('Enabled')
+            ) : (
+              t('Enable %asset%', {
+                asset: currencies[Field.INPUT]?.symbol ?? '',
+              })
+            )} */}
+              {/* </Button> */}
+              <Button
+                title={
+                  priceImpactSeverity > 3
+                    ? t('Price Impact High')
+                    : priceImpactSeverity > 2
+                    ? t('Swap Anyway')
+                    : t('swap')
+                }
+                icon={wallet_icon}
+                onClick={() => confirmSwapRef.current?.open()}
+                isDisabled={swapIsDisabled}
+              />
+            </Flex>
           )}
         </motion.div>
       </AnimatePresence>
