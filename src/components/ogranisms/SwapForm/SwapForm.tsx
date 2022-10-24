@@ -171,7 +171,7 @@ export const SwapForm: FC = () => {
   })
 
   useEffect(() => {
-    if (swapErrorMessage) {
+    if (swapErrorMessage?.trim()?.length) {
       txErrorRef.current?.open()
     }
   }, [swapErrorMessage])
@@ -351,12 +351,14 @@ export const SwapForm: FC = () => {
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
         <WalletConnection onClick={() => walletsRef.current?.close()} />
       </Modal>
+
       <Modal ref={txErrorRef} title={t('error')}>
         <TransactionErrorContent
           onClose={() => txErrorRef.current?.close()}
           description={swapErrorMessage}
         />
       </Modal>
+
       <Modal
         ref={submitedRef}
         title={t('transactionSubmited.transactionSubmited')}
