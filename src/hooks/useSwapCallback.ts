@@ -237,7 +237,7 @@ export function useSwapCallback(
               // otherwise, the error was unexpected and we need to convey that
               console.error(`Swap failed`, error, methodName, args, value)
               throw new Error(
-                t('Swap failed: %message%', {
+                t('swapForm.swapFailed: ', {
                   message: transactionErrorToUserReadableMessage(error, t),
                 })
               )

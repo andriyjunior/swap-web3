@@ -10,6 +10,7 @@ import {
   Settings,
   WalletConnection,
   TransactionSubmited,
+  TransactionErrorContent,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -52,6 +53,7 @@ export const SwapForm: FC = () => {
   const { account, chainId } = useWeb3React()
 
   const walletsRef = useModalRef()
+  const txErrorRef = useModalRef()
   const submitedRef = useModalRef()
   const confirmSwapRef = useModalRef()
   const settingsModalRef = useModalRef()
@@ -167,6 +169,12 @@ export const SwapForm: FC = () => {
     swapErrorMessage: undefined,
     txHash: undefined,
   })
+
+  useEffect(() => {
+    if (swapErrorMessage) {
+      txErrorRef.current?.open()
+    }
+  }, [swapErrorMessage])
 
   useEffect(() => {
     if (txHash && submitedRef.current) {
@@ -342,6 +350,12 @@ export const SwapForm: FC = () => {
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
         <WalletConnection onClick={() => walletsRef.current?.close()} />
+      </Modal>
+      <Modal ref={txErrorRef} title={t('error')}>
+        <TransactionErrorContent
+          onClose={() => txErrorRef.current?.close()}
+          description={swapErrorMessage}
+        />
       </Modal>
       <Modal
         ref={submitedRef}
