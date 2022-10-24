@@ -37,13 +37,14 @@ import { useWeb3React } from '@web3-react/core'
 import { confirmPriceImpactWithoutFee, useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import { Token, Trade } from 'packages/swap-sdk'
+import { CurrencyAmount, Token, Trade } from 'packages/swap-sdk'
 import { Field } from 'store/features/swap/actions'
 import { useSwapActionHandlers } from 'store/features/swap/useSwapActionHandlers'
 import { BIG_INT_ZERO } from 'config'
 import {
   computeTradePriceBreakdown,
   getTokenUrlByAddress,
+  maxAmountSpend,
   warningSeverity,
 } from 'utils'
 import { SwapConfirm } from './parts'
@@ -211,6 +212,8 @@ export const SwapForm: FC = () => {
       : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
+  console.log(formattedAmounts[dependentField], 'formattedAmounts')
+
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
     currencies[Field.INPUT] &&
@@ -235,6 +238,14 @@ export const SwapForm: FC = () => {
       setApprovalSubmitted(true)
     }
   }, [approval, approvalSubmitted])
+
+  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(
+    currencyBalances[Field.INPUT]
+  )
+
+  const atMaxAmountInput = Boolean(
+    maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
+  )
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
