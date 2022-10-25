@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import {
   ApprovalState,
+  useActiveWeb3React,
   useApproveCallback,
   useCurrency,
   useModalRef,
-  useTransactionDeadline,
-  wrappedCurrency,
 } from 'hooks'
 import { Field } from 'types'
 import {
@@ -24,7 +23,7 @@ import {
 
 import icon_plus from 'assets/icons/plus.svg'
 import { ConfirmSupply } from '../ConfirmSupply'
-import { useWeb3React } from '@web3-react/core'
+
 import {
   useAppSelector,
   useMintState,
@@ -75,7 +74,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
 }) => {
   const [liquidityFormShown, setLiquidityFormShown] = useState(false)
 
-  const { account, chainId } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const walletsRef = useModalRef()
   const confirmSupplyRef = useModalRef()

@@ -1,7 +1,6 @@
-import { useWeb3React } from '@web3-react/core'
 import { DescriptionWithTx } from 'components'
 import { useBlockNumber } from 'context'
-import { useToast } from 'hooks'
+import { useActiveWeb3React, useToast } from 'hooks'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -32,7 +31,7 @@ export function shouldCheck(
 }
 
 export const Updater = (): null => {
-  const { library, chainId } = useWeb3React()
+  const { library, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
   const { toastError, toastSuccess } = useToast()

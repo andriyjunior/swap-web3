@@ -1,5 +1,4 @@
 import { Currency, ETHER, Token, WETH9, WNATIVE } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 import { SerializedToken } from 'abis'
 
 import allTokens_mock from 'const/token-list.json'
@@ -18,6 +17,7 @@ import { useBytes32TokenContract, useTokenContract } from './useContract'
 import { createSelector } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import useUserAddedTokens from 'store/features/user/hooks/useUserAddedTokens'
+import { useActiveWeb3React } from 'hooks'
 
 export function deserializeToken(serializedToken: SerializedToken): Token {
   if (serializedToken.logoURI) {
@@ -53,7 +53,7 @@ const mapWithoutUrls = (tokenMap: TokenAddressMap, chainId: number) =>
   )
 
 export const useAllTokens = (): { [address: string]: Token } => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const userTokens = useUserAddedTokens().map(deserializeToken)
 
   const wrappedTokens = [...allTokens_mock.tokens, ...userTokens].map(
@@ -87,7 +87,7 @@ function parseStringOrBytes32(
 }
 
 export function useToken(tokenAddress?: string): Token | undefined | null {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const tokens = useAllTokens()
 
   const address = isAddress(tokenAddress)
@@ -209,6 +209,6 @@ const allOfficialsAndUserAddedTokensSelector = (chainId: number) =>
  * Returns all tokens that are from officials token list and user added tokens
  */
 export function useOfficialsAndUserAddedTokens(): { [address: string]: Token } {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   return useSelector(allOfficialsAndUserAddedTokensSelector(chainId || 1))
 }

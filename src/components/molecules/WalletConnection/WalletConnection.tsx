@@ -1,17 +1,15 @@
 import { FC, useEffect, useState } from 'react'
-import { useMetamaskConnection } from 'hooks'
+import { useActiveWeb3React, useMetamaskConnection } from 'hooks'
 import { Flex, Wallet } from 'components'
 
 import metamask_icon from 'assets/wallets/metamask.png'
-import { useAppDispatch } from 'store'
-import { useWeb3React } from '@web3-react/core'
 
 interface IWalletConnection {
   onClick: () => void
 }
 
 export const WalletConnection: FC<IWalletConnection> = ({ onClick }) => {
-  const { connector, account, chainId } = useWeb3React()
+  const { connector, account, chainId } = useActiveWeb3React()
   const [lastActiveWalletAddress, setLastActiveWalletAddress] = useState<
     string | undefined | null
   >(account)

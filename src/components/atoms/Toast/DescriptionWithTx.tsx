@@ -1,4 +1,3 @@
-import { useWeb3React } from '@web3-react/core'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'

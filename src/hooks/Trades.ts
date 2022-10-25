@@ -10,16 +10,16 @@ import {
   ADDITIONAL_BASES,
 } from 'config/constants/exchange'
 import { PairState, usePairs } from './usePairs'
-import { useWeb3React } from '@web3-react/core'
 import { wrappedCurrency } from './wrappedCurrency'
 import { useUserSingleHopOnly } from 'store'
 import isTradeBetter from 'utils/trades'
+import { useActiveWeb3React } from 'hooks'
 
 export function useAllCommonPairs(
   currencyA?: Currency,
   currencyB?: Currency
 ): Pair[] {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const [tokenA, tokenB] = chainId
     ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
@@ -220,7 +220,7 @@ export function useIsTransactionUnsupported(
 ): boolean {
   // const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens()
   const unsupportedTokens: { [address: string]: Token } = {}
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const tokenIn = wrappedCurrency(currencyIn, chainId)
   const tokenOut = wrappedCurrency(currencyOut, chainId)
@@ -244,7 +244,7 @@ export function useIsTransactionWarning(
 ): boolean {
   // const unsupportedTokens: { [address: string]: Token } = useWarningTokens()
   const unsupportedTokens: { [address: string]: Token } = {}
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const tokenIn = wrappedCurrency(currencyIn, chainId)
   const tokenOut = wrappedCurrency(currencyOut, chainId)

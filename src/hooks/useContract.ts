@@ -1,4 +1,3 @@
-import { useWeb3React } from '@web3-react/core'
 import { Contract } from '@ethersproject/contracts'
 import ERC20_ABI from 'abis/erc20.json'
 import SevnPair from 'abis/SevnPair.json'
@@ -11,15 +10,16 @@ import { infuraProvider } from 'utils'
 import { Weth } from 'abis/types/Weth'
 
 import WETH_ABI from 'abis/weth.json'
+import { useActiveWeb3React } from './useActiveWeb3React'
 
 function useContract<T extends Contract = Contract>(
   address: string | undefined,
   ABI: any,
   withSignerIfPossible = true
 ): T | null {
-  const { library, account, chainId } = useWeb3React()
+  const { library, account, chainId } = useActiveWeb3React()
 
-  if (!account) return null
+  if (!account || !library) return null
 
   const signer = withSignerIfPossible
     ? getProviderOrSigner(library, account)
@@ -59,7 +59,7 @@ export function useBytes32TokenContract(
 }
 
 export function useMulticallContract() {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   return useContract<Multicall>(
     getMulticallAddress(chainId),
     multiCallAbi,
@@ -77,7 +77,7 @@ export function usePairContract(
 export const useWETHContract = (
   withSignerIfPossible?: boolean
 ): Contract | null => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   return useContract<Weth>(
     chainId ? WNATIVE[chainId].address : undefined,
     WETH_ABI,

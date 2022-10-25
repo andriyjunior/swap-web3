@@ -9,10 +9,9 @@ import icon_USDT from 'assets/coins/Tether.png'
 import { useNavigate } from 'react-router-dom'
 import { paths } from 'const'
 import { useTranslation } from 'react-i18next'
-import { useTotalSupply, useUSDTPrice } from 'hooks'
+import { useActiveWeb3React, useTotalSupply, useUSDTPrice } from 'hooks'
 import { useTokenBalance } from 'store'
 import { getTokenUrlByAddress, multiplyPriceByAmount } from 'utils'
-import { useWeb3React } from '@web3-react/core'
 
 const StyledPairTitle = styled(Typography.Body)`
   padding-left: 16px;
@@ -126,7 +125,7 @@ const useLPValues = (account, pair, currency0, currency1) => {
 export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
   const { t } = useTranslation()
 
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
 
   const navigate = useNavigate()
 

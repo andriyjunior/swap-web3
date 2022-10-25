@@ -15,6 +15,7 @@ import {
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ApprovalState,
+  useActiveWeb3React,
   useAllTokens,
   useApproveCallbackFromTrade,
   useCurrency,
@@ -34,7 +35,6 @@ import {
   useSwapState,
   useUserSingleHopOnly,
 } from 'store'
-import { useWeb3React } from '@web3-react/core'
 import { confirmPriceImpactWithoutFee, useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
@@ -52,7 +52,7 @@ import { SwapConfirm } from './parts'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
-  const { account, chainId } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const walletsRef = useModalRef()
   const txErrorRef = useModalRef()

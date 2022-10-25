@@ -1,7 +1,10 @@
 import { TransactionResponse } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
 import { BigNumber } from 'ethers'
-import { useTransactionDeadline, wrappedCurrency } from 'hooks'
+import {
+  useActiveWeb3React,
+  useTransactionDeadline,
+  wrappedCurrency,
+} from 'hooks'
 import { ETHER } from 'packages/swap-sdk'
 import { useState } from 'react'
 import {
@@ -23,7 +26,7 @@ export const useOnAdd = (
 ) => {
   const addTransaction = useTransactionAdder()
 
-  const { account, chainId, library } = useWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
 
   // txn values
   const deadline = useTransactionDeadline() // custom from users settings

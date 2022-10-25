@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { useWeb3React } from '@web3-react/core'
 import { SwapParameters, Trade, TradeType } from 'packages/swap-sdk'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +13,7 @@ import {
   truncateHash,
 } from '../utils'
 import { basisPointsToPercent } from '../utils/exchange'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useSwapCallArguments } from './useSwapCallArguments'
 
 export enum SwapCallbackState {
@@ -50,7 +50,7 @@ export function useSwapCallback(
   callback: null | (() => Promise<string>)
   error: string | null
 } {
-  const { account, chainId, library } = useWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   const gasPrice = useGasPrice()
 
   const swapCalls = useSwapCallArguments(

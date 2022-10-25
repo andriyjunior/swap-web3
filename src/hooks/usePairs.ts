@@ -1,10 +1,10 @@
 import { Currency, Pair, TokenAmount } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from 'store'
 import { wrappedCurrency } from './wrappedCurrency'
 import IPair from 'abis/SevnPair.json'
 import { Interface } from '@ethersproject/abi'
+import { useActiveWeb3React } from './useActiveWeb3React'
 
 const PAIR_INTERFACE = new Interface(IPair.abi)
 
@@ -18,7 +18,7 @@ export enum PairState {
 export function usePairs(
   currencies: [Currency | undefined, Currency | undefined][]
 ): [PairState, Pair | null][] {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const tokens = useMemo(
     () =>

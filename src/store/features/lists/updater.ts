@@ -2,17 +2,16 @@ import { getVersionUpgrade, VersionUpgrade } from '@uniswap/token-lists'
 import { useCallback, useEffect, useMemo } from 'react'
 import { UNSUPPORTED_LIST_URLS } from 'config/constants/lists'
 
-import { useFetchListCallback } from 'hooks'
+import { useActiveWeb3React, useFetchListCallback } from 'hooks'
 import { useInterval } from 'hooks'
 import { useIsWindowVisible } from 'hooks'
 import { acceptListUpdate } from './actions'
 import { useActiveListUrls, useAllLists } from './hooks'
 import { useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'store/utils'
-import { useWeb3React } from '@web3-react/core'
 
 export default function Updater(): null {
-  const { library } = useWeb3React()
+  const { library } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const isWindowVisible = useIsWindowVisible()
   const location = useLocation()

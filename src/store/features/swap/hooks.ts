@@ -5,7 +5,6 @@ import {
   Pair,
   Trade,
 } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 import { ParsedUrlQuery } from 'querystring'
 import { useEffect, useMemo, useState } from 'react'
 import { SLOW_INTERVAL } from 'config/constants'
@@ -35,7 +34,7 @@ import { RootState } from 'store/store'
 import { useAppDispatch, useAppSelector } from 'store/utils'
 import { useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useTradeExactIn, useTradeExactOut } from 'hooks'
+import { useActiveWeb3React, useTradeExactIn, useTradeExactOut } from 'hooks'
 import { selectUserSlippageTolerance } from 'store/selectors'
 import { getTokenAddress } from 'components/molecules/Chart/utils'
 
@@ -108,7 +107,7 @@ export function useDerivedSwapInfo(
   v2Trade: Trade | undefined
   inputError?: string
 } {
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
   const { t } = useTranslation()
 
   const to: string | null =
@@ -270,7 +269,7 @@ export const useDefaultsFromURLSearch = ():
       outputCurrencyId: string | undefined
     }
   | undefined => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const query = useParams()
   const dispatch = useAppDispatch()
   // const { pathname } = useLocation()

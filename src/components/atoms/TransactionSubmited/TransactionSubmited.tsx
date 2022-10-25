@@ -9,10 +9,9 @@ import { Button } from '../Button'
 import txSubmited_image from 'assets/transaction-success.png'
 import link_icon from 'assets/icons/linkTo.svg'
 import { etherscan } from 'const'
-import { useWeb3React } from '@web3-react/core'
 import { SimpleButton } from '../SimpleButton'
 import { registerToken } from 'utils'
-import { wrappedCurrency } from 'hooks'
+import { useActiveWeb3React, wrappedCurrency } from 'hooks'
 
 const StyledImage = styled.img`
   margin-top: 24px;
@@ -37,7 +36,7 @@ export const TransactionSubmited: FC<ITransactionSubmited> = ({
   currencyToAdd,
   txHash,
 }) => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
   const token = wrappedCurrency(currencyToAdd, chainId)
