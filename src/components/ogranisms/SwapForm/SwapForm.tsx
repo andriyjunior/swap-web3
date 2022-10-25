@@ -356,8 +356,6 @@ export const SwapForm: FC = () => {
       (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
     !(priceImpactSeverity > 3)
 
-  const token = wrappedCurrency(trade?.outputAmount.currency, chainId)
-
   return (
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
@@ -376,9 +374,7 @@ export const SwapForm: FC = () => {
         title={t('transactionSubmited.transactionSubmited')}
       >
         <TransactionSubmited
-          tokenAddress={token?.address}
-          tokenSymbol={token?.symbol}
-          tokenDecimals={token?.decimals}
+          currencyToAdd={trade?.outputAmount.currency}
           txHash={txHash}
           onClose={() => submitedRef.current?.close()}
         />

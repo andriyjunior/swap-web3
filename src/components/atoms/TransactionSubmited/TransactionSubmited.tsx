@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
-import { colors } from 'styles'
+import { Currency } from 'packages/swap-sdk'
 
 import { Flex } from '../Flex'
 import { Button } from '../Button'
@@ -12,6 +12,7 @@ import { etherscan } from 'const'
 import { useWeb3React } from '@web3-react/core'
 import { SimpleButton } from '../SimpleButton'
 import { registerToken } from 'utils'
+import { wrappedCurrency } from 'hooks'
 
 const StyledImage = styled.img`
   margin-top: 24px;
@@ -26,29 +27,24 @@ const StyledButtons = styled.div`
 `
 
 interface ITransactionSubmited {
-  tokenAddress?: string
-  tokenSymbol?: string
-  tokenDecimals?: number
-  tokenLogo?: string
   onClose: () => void
+  currencyToAdd?: Currency | undefined
   txHash?: string
 }
 
 export const TransactionSubmited: FC<ITransactionSubmited> = ({
-  tokenAddress,
-  tokenSymbol,
-  tokenDecimals,
-  tokenLogo,
   onClose,
+  currencyToAdd,
   txHash,
 }) => {
   const { chainId } = useWeb3React()
   const { t } = useTranslation()
-  console.log(tokenAddress, 'tokenAddress')
+
+  const token = wrappedCurrency(currencyToAdd, chainId)
+
   const handleRegisterToken = () => {
-    console.log('tokenAddress, tokenSymbol, tokenDecimals')
-    if (tokenAddress && tokenSymbol && tokenDecimals) {
-      registerToken(tokenAddress, tokenSymbol, tokenDecimals, tokenLogo)
+    if (token && token.address && token.symbol && token.decimals) {
+      registerToken(token.address, token.symbol, token.decimals)
     }
   }
 
@@ -62,9 +58,9 @@ export const TransactionSubmited: FC<ITransactionSubmited> = ({
           </SimpleButton>
         )}
 
-        {tokenAddress && (
+        {token && (
           <SimpleButton onClick={handleRegisterToken}>
-            {t('transactionSubmited.addToken', { token: tokenSymbol })}
+            {t('transactionSubmited.addToken', { token: token?.symbol })}
           </SimpleButton>
         )}
       </StyledButtons>
