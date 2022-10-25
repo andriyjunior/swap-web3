@@ -224,6 +224,9 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
         ref={txSubmitedRef}
       >
         <TransactionSubmited
+          tokenAddress={pair?.liquidityToken.address}
+          tokenSymbol={pair?.liquidityToken.symbol}
+          tokenDecimals={pair?.liquidityToken.decimals}
           onClose={() => txSubmitedRef.current?.close()}
           txHash={txHash}
         />

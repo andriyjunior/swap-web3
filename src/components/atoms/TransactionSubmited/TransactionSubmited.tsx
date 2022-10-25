@@ -10,57 +10,64 @@ import txSubmited_image from 'assets/transaction-success.png'
 import link_icon from 'assets/icons/linkTo.svg'
 import { etherscan } from 'const'
 import { useWeb3React } from '@web3-react/core'
+import { SimpleButton } from '../SimpleButton'
+import { registerToken } from 'utils'
 
 const StyledImage = styled.img`
   margin-top: 24px;
   width: 250px;
   height: 250px;
 `
-const StyledIcon = styled.img`
-  width: 22px;
-  height: 22px;
-`
-
-const StyledLink = styled.a`
-  margin: 34px 0;
+const StyledButtons = styled.div`
+  padding: 24px 0;
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  color: ${colors.orange};
-
-  &:hover {
-    text-decoration: underline;
-  }
+  gap: 24px;
 `
 
 interface ITransactionSubmited {
+  tokenAddress?: string
+  tokenSymbol?: string
+  tokenDecimals?: number
+  tokenLogo?: string
   onClose: () => void
   txHash?: string
 }
 
 export const TransactionSubmited: FC<ITransactionSubmited> = ({
+  tokenAddress,
+  tokenSymbol,
+  tokenDecimals,
+  tokenLogo,
   onClose,
   txHash,
 }) => {
   const { chainId } = useWeb3React()
   const { t } = useTranslation()
+  console.log(tokenAddress, 'tokenAddress')
+  const handleRegisterToken = () => {
+    console.log('tokenAddress, tokenSymbol, tokenDecimals')
+    if (tokenAddress && tokenSymbol && tokenDecimals) {
+      registerToken(tokenAddress, tokenSymbol, tokenDecimals, tokenLogo)
+    }
+  }
 
   return (
     <Flex flexDirection="column" alignItems="center">
       <StyledImage src={txSubmited_image} />
-      <Flex alignItems="center">
+      <StyledButtons>
         {chainId && (
-          <StyledLink
-            href={`${etherscan[chainId]}tx/${txHash}`}
-            target="_blank"
-          >
-            {t('transactionSubmited.viewOnEtherScan')}
-            <StyledIcon src={link_icon} />
-          </StyledLink>
+          <SimpleButton href={`${etherscan[chainId]}tx/${txHash}`}>
+            EtherScan
+          </SimpleButton>
         )}
-      </Flex>
+
+        {tokenAddress && (
+          <SimpleButton onClick={handleRegisterToken}>
+            {t('transactionSubmited.addToken', { token: tokenSymbol })}
+          </SimpleButton>
+        )}
+      </StyledButtons>
       <Button title={t('close')} onClick={onClose} />
     </Flex>
   )

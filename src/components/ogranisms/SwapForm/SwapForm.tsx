@@ -22,6 +22,7 @@ import {
   useModalRef,
   useSwapCallback,
   useWrapCallback,
+  wrappedCurrency,
   WrapType,
 } from 'hooks'
 import {
@@ -212,8 +213,6 @@ export const SwapForm: FC = () => {
       : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
-  console.log(formattedAmounts[dependentField], 'formattedAmounts')
-
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
     currencies[Field.INPUT] &&
@@ -357,6 +356,8 @@ export const SwapForm: FC = () => {
       (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
     !(priceImpactSeverity > 3)
 
+  const token = wrappedCurrency(trade?.outputAmount.currency, chainId)
+
   return (
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
@@ -375,6 +376,9 @@ export const SwapForm: FC = () => {
         title={t('transactionSubmited.transactionSubmited')}
       >
         <TransactionSubmited
+          tokenAddress={token?.address}
+          tokenSymbol={token?.symbol}
+          tokenDecimals={token?.decimals}
           txHash={txHash}
           onClose={() => submitedRef.current?.close()}
         />

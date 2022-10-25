@@ -72,7 +72,8 @@
 
   "transactionSubmited": {
     "transactionSubmited": "Transaction submited",
-    "viewOnEtherScan": "View on EtherScan"
+    "viewOnEtherScan": "View on EtherScan",
+    "addToken": "Add {{token}}"
   },
 
   "userBar": {

@@ -1,5 +1,6 @@
 import { ExternalProvider } from '@ethersproject/providers'
 import { ChainId } from 'packages/swap-sdk'
+import { BAD_SRCS } from './getTokenUrlByAddress'
 
 const NETWORK_CONFIG = {
   [ChainId.MAINNET]: {
@@ -56,3 +57,49 @@ export const setupNetwork = async (
     }
   }
 }
+
+/**
+ * Prompt the user to add a custom token to metamask
+ * @param tokenAddress
+ * @param tokenSymbol
+ * @param tokenDecimals
+ * @returns {boolean} true if the token has been added, false otherwise
+ */
+export const registerToken = async (
+  tokenAddress: string,
+  tokenSymbol: string,
+  tokenDecimals: number,
+  tokenLogo?: string
+) => {
+  if (!window?.ethereum?.request) {
+    return undefined
+  }
+  // better leave this undefined for default image instead of broken image url
+  const image = tokenLogo
+    ? BAD_SRCS[tokenLogo]
+      ? undefined
+      : tokenLogo
+    : undefined
+
+  const tokenAdded = await window.ethereum.request({
+    method: 'wallet_watchAsset',
+    params: {
+      type: 'ERC20',
+      options: {
+        address: tokenAddress,
+        symbol: tokenSymbol,
+        decimals: tokenDecimals,
+        image,
+      },
+    },
+  })
+
+  return tokenAdded
+}
+
+// export const canRegisterToken = () =>
+//   typeof window !== 'undefined' &&
+//   (window?.ethereum?.isMetaMask ||
+//     window?.ethereum?.isTrust ||
+//     window?.ethereum?.isCoinbaseWallet ||
+//     window?.ethereum?.isTokenPocket)
