@@ -1,4 +1,4 @@
-import { Accordion, Button, CoinPair, Flex, Typography } from 'components'
+import { Accordion, Button, Coin, CoinPair, Flex, Typography } from 'components'
 import { FC } from 'react'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
@@ -35,23 +35,6 @@ const StyledText = styled(Typography.Body)`
 const StyledCoinWrapper = styled.span`
   padding-left: 10px;
 `
-
-const StyledCoinIcon = styled.img`
-  width: 24px;
-  height: 24px;
-`
-
-const state = {
-  inputToken: {
-    logoURI: icon_USDT,
-    symbol: 'USDT',
-  },
-
-  outputToken: {
-    logoURI: icon_BNB,
-    symbol: 'BNB',
-  },
-}
 
 interface ILiquidityItemProps {
   pair?: Pair | null
@@ -173,9 +156,7 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
               <StyledText>{token0Deposited?.toSignificant(6)}</StyledText>
             )}
             <StyledCoinWrapper>
-              <StyledCoinIcon
-                src={getTokenUrlByAddress(pair?.token0.address)}
-              />
+              <Coin src={getTokenUrlByAddress(pair?.token0.address)} />
             </StyledCoinWrapper>
           </Flex>
         </StyledTextRow>
@@ -190,9 +171,7 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
               <StyledText>{token1Deposited?.toSignificant(6)}</StyledText>
             )}
             <StyledCoinWrapper>
-              <StyledCoinIcon
-                src={getTokenUrlByAddress(pair?.token1.address)}
-              />
+              <Coin src={getTokenUrlByAddress(pair?.token1.address)} />
             </StyledCoinWrapper>
           </Flex>
         </StyledTextRow>
