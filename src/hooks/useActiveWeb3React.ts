@@ -4,18 +4,40 @@ import { Web3Provider } from '@ethersproject/providers'
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { ChainId } from 'packages/swap-sdk'
 import { infuraProvider } from 'utils'
+import { getProvider } from 'utils/getProvider'
+import { useEffect, useRef, useState } from 'react'
 
 /**
  * Provides a web3 provider with or without user's signer
  * Recreate web3 instance only if the provider change
  */
-export const useActiveWeb3React =
-  (): Web3ReactContextInterface<Web3Provider> => {
-    const { library, chainId, ...web3React } = useWeb3React()
+export const useActiveWeb3React = () => {
+  const { library, chainId, account, ...web3React } = useWeb3React()
 
+  const appChainId = 5
+  const appProvider = getProvider(appChainId)
+  const currChainId = chainId || appChainId
+  const refChainId = useRef(currChainId)
+  const refEth = useRef(library || appProvider)
+  const [provider, setProvider] = useState(library || appProvider)
+  console.log(refEth)
+  useEffect(() => {
+    if (library !== refEth.current || appProvider !== refEth.current) {
+      setProvider(library || appProvider)
+      refEth.current = library || appProvider
+      refChainId.current = currChainId
+    }
+  }, [library, appProvider, currChainId])
+
+  // To allow the app to update before passing a chainId !== provider
+  if (currChainId !== refChainId.current) {
     return {
-      library: library ?? infuraProvider,
-      chainId: chainId ?? ChainId.TESTNET,
+      library: refEth.current,
+      chainId: refChainId.current,
+      account,
       ...web3React,
     }
   }
+
+  return { library: provider, chainId: currChainId, account, ...web3React }
+}

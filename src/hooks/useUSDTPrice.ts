@@ -5,12 +5,12 @@ import {
   Price,
   WNATIVE,
 } from 'packages/swap-sdk'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { USDT } from 'const'
 import { useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils'
 import { PairState, usePairs } from './usePairs'
 import { wrappedCurrency } from './wrappedCurrency'
-import { useActiveWeb3React } from './useActiveWeb3React'
 
 /**
  * Returns the price in USDT of the input currency

@@ -23,8 +23,6 @@ function useContract<T extends Contract = Contract>(
 
   const signer = withSignerIfPossible
     ? getProviderOrSigner(library, account)
-    : chainId === ChainId.MAINNET
-    ? infuraProvider
     : library
 
   const canReturnContract =
