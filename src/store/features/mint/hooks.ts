@@ -8,10 +8,10 @@ import {
   Price,
   TokenAmount,
 } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 import { BIG_INT_ZERO } from 'config'
 import {
   PairState,
+  useActiveWeb3React,
   usePair,
   useTotalSupply,
   wrappedCurrency,
@@ -49,7 +49,7 @@ export const useDerivedMintInfo = (
   error?: string
   addError?: string
 } => {
-  const { account, chainId } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const { independentField, typedValue, otherTypedValue } = useMintState()
 

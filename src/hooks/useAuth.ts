@@ -1,5 +1,4 @@
-import { Web3Provider } from '@ethersproject/providers'
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
+import { UnsupportedChainIdError } from '@web3-react/core'
 import { useCallback } from 'react'
 import { removeSelectedWallet, useAppDispatch } from 'store'
 import {
@@ -8,6 +7,7 @@ import {
   ConnectorType,
   setupNetwork,
 } from 'utils'
+import { useActiveWeb3React } from './useActiveWeb3React'
 
 const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 1
 
@@ -15,7 +15,7 @@ export const useAuth = () => {
   const dispatch = useAppDispatch()
 
   const { active, account, activate, deactivate, setError } =
-    useWeb3React<Web3Provider>()
+    useActiveWeb3React()
 
   const login = useCallback(
     async (connectorID: ConnectorNames) => {

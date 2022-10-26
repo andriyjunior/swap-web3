@@ -1,4 +1,4 @@
-import { useWeb3React } from '@web3-react/core'
+import { useActiveWeb3React } from 'hooks'
 import {
   createContext,
   ReactNode,
@@ -32,7 +32,7 @@ export const useBlockNumber = (): number | undefined => {
 }
 
 export const BlockNumberProvider = ({ children }: { children: ReactNode }) => {
-  const { library, chainId: activeChainId } = useWeb3React()
+  const { library, chainId: activeChainId } = useActiveWeb3React()
   const [{ chainId, block }, setChainBlock] = useState<{
     chainId?: number
     block?: number

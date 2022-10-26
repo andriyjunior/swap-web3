@@ -17,9 +17,8 @@ import mediumOL_icon from 'assets/socials/medium-outlined.svg'
 import twitterOL_icon from 'assets/socials/twitter-outlined.svg'
 import discordOL_icon from 'assets/socials/discord-outlined.svg'
 import wallet_icon from 'assets/icons/wallet.svg'
-import { useMetamaskConnection, useModalRef } from 'hooks'
+import { useActiveWeb3React, useMetamaskConnection, useModalRef } from 'hooks'
 import { selectUser, useAppSelector } from 'store'
-import { useWeb3React } from '@web3-react/core'
 import { sliceAccAddress } from 'utils'
 
 // interface IHeaderProps {}
@@ -82,7 +81,7 @@ const Icon: React.FC<IconProps> = ({ src, srcOnHover, alt }) => (
 export const Header: FC<IHeader> = memo(
   ({ isCollapsed, handleCollapsedToogle }) => {
     const { t } = useTranslation()
-    const { account } = useWeb3React()
+    const { account } = useActiveWeb3React()
     const { disconnect } = useMetamaskConnection()
 
     // const currWallet = useAppSelector(

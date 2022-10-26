@@ -5,7 +5,7 @@ import {
   Price,
   WNATIVE,
 } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { USDT } from 'const'
 import { useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils'
@@ -17,7 +17,7 @@ import { wrappedCurrency } from './wrappedCurrency'
  * @param currency currency to compute the BUSD price of
  */
 export const useUSDTPrice = (currency?: Currency): Price | undefined => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const wrapped = wrappedCurrency(currency, chainId)
 
   const WETH = chainId && WNATIVE[chainId]

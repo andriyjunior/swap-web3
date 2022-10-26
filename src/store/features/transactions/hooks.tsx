@@ -1,6 +1,6 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { Order } from '@gelatonetwork/limit-orders-lib'
-import { useWeb3React } from '@web3-react/core'
+import { useActiveWeb3React } from 'hooks'
 import { ReactNode, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
@@ -20,7 +20,7 @@ export function useTransactionAdder(): (
     order?: Order
   }
 ) => void {
-  const { chainId, account } = useWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const dispatch = useAppDispatch()
 
   return useCallback(
@@ -69,7 +69,7 @@ export function useTransactionAdder(): (
 
 // returns all the transactions for the current chain
 export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const state = useSelector<RootState, RootState['transactions']>(
     (s) => s.transactions

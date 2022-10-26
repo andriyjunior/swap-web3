@@ -12,8 +12,7 @@ import {
   useTokenBalancesWithLoadingIndicator,
   useTrackedTokenPairs,
 } from 'store'
-import { PairState, usePairs } from 'hooks'
-import { useWeb3React } from '@web3-react/core'
+import { PairState, useActiveWeb3React, usePairs } from 'hooks'
 import { LiquidityItem } from './parts'
 
 interface ILiquidityPool {
@@ -21,7 +20,7 @@ interface ILiquidityPool {
 }
 
 export const LiquidityPool: FC<ILiquidityPool> = ({ onRemove }) => {
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
 
   const { t } = useTranslation()
 

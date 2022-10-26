@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { useActiveWeb3React } from 'hooks'
 import { Token } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
@@ -15,6 +15,6 @@ export const userAddedTokenSelector = (chainId: number) =>
   )
 
 export default function useUserAddedTokens(): Token[] {
-  const { chainId } = useWeb3React()
-  return useSelector(userAddedTokenSelector(chainId || 1))
+  const { chainId } = useActiveWeb3React()
+  return useSelector(userAddedTokenSelector(chainId!))
 }

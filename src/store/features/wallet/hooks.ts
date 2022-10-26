@@ -7,12 +7,11 @@ import {
   TokenAmount,
 } from 'packages/swap-sdk'
 import { useMemo } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import ERC20_ABI from 'abis/erc20.json'
 import { useAllTokens } from 'hooks/Tokens'
 import { isAddress } from 'utils'
 import orderBy from 'lodash/orderBy'
-import { useMulticallContract } from 'hooks'
+import { useActiveWeb3React, useMulticallContract } from 'hooks'
 import {
   useMultipleContractSingleData,
   useSingleContractMultipleData,
@@ -177,7 +176,7 @@ export function useCurrencyBalance(
 export function useAllTokenBalances(): {
   [tokenAddress: string]: TokenAmount | undefined
 } {
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
   const allTokens = useAllTokens()
   const allTokensArray = useMemo(
     () => Object.values(allTokens ?? {}),

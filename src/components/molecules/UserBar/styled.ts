@@ -52,16 +52,9 @@ export const StyledProfileButtons = styled(motion.div)`
 const animation = css``
 
 export const StyledPendingCircle = styled.div`
-  &::before {
-    position: absolute;
-    content: '';
-    border-radius: 50%;
-    border: 6px dashed ${colors.purple};
-    top: 6px;
-    left: 6px;
-    width: 20px;
-    height: 20px;
-
+  width: 28px;
+  height: 28px;
+  
     @keyframes animation {
       0% {
         transform: rotate(0deg);

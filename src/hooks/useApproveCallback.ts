@@ -3,12 +3,11 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { Trade, TokenAmount, CurrencyAmount, ETHER } from 'packages/swap-sdk'
 import { useCallback, useMemo } from 'react'
 // import { logError } from 'utils/sentry'
-import { useWeb3React } from '@web3-react/core'
 import { ROUTER_ADDRESS } from 'config'
 
 import { useTokenContract } from './useContract'
 
-import { useToast, useTokenAllowance } from 'hooks'
+import { useActiveWeb3React, useToast, useTokenAllowance } from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import {
@@ -31,7 +30,7 @@ export const useApproveCallback = (
   amountToApprove?: CurrencyAmount,
   spender?: string
 ): [ApprovalState, () => Promise<void>] => {
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { t } = useTranslation()
   const { toastError } = useToast()

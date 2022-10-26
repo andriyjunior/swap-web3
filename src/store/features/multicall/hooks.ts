@@ -1,6 +1,5 @@
 import { Interface, FunctionFragment } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useWeb3React } from '@web3-react/core'
 import { useBlockNumber } from 'context'
 // import { Contract } from '@ethersproject/contracts'
 // import { useEffect, useMemo } from 'react'
@@ -18,6 +17,7 @@ import { useBlockNumber } from 'context'
 // } from './actions'
 
 import { Contract } from 'ethers'
+import { useActiveWeb3React } from 'hooks'
 import { useEffect, useMemo } from 'react'
 import { selectMulticallResults } from 'store/selectors'
 import { useAppDispatch, useAppSelector } from 'store/utils'
@@ -77,7 +77,7 @@ function useCallsData(
   calls: (Call | undefined)[],
   options?: ListenerOptions
 ): CallResult[] {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const callResults = useAppSelector(selectMulticallResults)
   const dispatch = useAppDispatch()
 
@@ -206,7 +206,7 @@ export function useSingleContractMultipleData(
   callInputs: OptionalMethodInputs[],
   options?: ListenerOptions
 ): CallState[] {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const fragment = useMemo(
     () => contract?.interface?.getFunction(methodName),
     [contract, methodName]
@@ -271,7 +271,7 @@ export function useMultipleContractSingleData(
   )
 
   const results = useCallsData(calls, options)
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const currentBlockNumber = useBlockNumber()
 
@@ -305,7 +305,7 @@ export function useSingleCallResult(
   }, [contract, fragment, inputs])
   const result = useCallsData(calls, options)[0]
 
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const currentBlockNumber = useBlockNumber()
 
   return useMemo(() => {

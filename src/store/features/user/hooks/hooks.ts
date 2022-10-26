@@ -1,9 +1,12 @@
 import { ChainId, Pair, Token } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 import { GAS_PRICE_GWEI } from 'const'
 import { selectGasPrice } from 'store/selectors'
 import { useAppDispatch, useAppSelector } from 'store/utils'
-import { deserializeToken, useOfficialsAndUserAddedTokens } from 'hooks'
+import {
+  deserializeToken,
+  useActiveWeb3React,
+  useOfficialsAndUserAddedTokens,
+} from 'hooks'
 import { useCallback, useMemo } from 'react'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'config'
 import farms from 'config/constants/farms'
@@ -18,7 +21,7 @@ import {
 import { serializeToken } from './helpers'
 
 export const useGasPrice = (): string => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const userGas = useAppSelector(selectGasPrice)
   return chainId === ChainId.MAINNET ? userGas : GAS_PRICE_GWEI.testnet
@@ -28,7 +31,7 @@ export const useGasPrice = (): string => {
  * Returns all the pairs of tokens that are tracked by the user for the current chain ID.
  */
 export function useTrackedTokenPairs(): [Token, Token][] {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const tokens = useOfficialsAndUserAddedTokens()
 
   // pinned pairs

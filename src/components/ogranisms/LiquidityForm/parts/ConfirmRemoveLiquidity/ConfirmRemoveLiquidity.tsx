@@ -4,6 +4,7 @@ import {
   CoinPair,
   HorizontalSeparator,
   Button,
+  Coin,
 } from 'components'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -32,10 +33,8 @@ const StyledText = styled(Typography.Body)`
   color: ${getTransparentColor(colors.black, 0.5)};
 `
 
-const StyledCoin = styled.img`
+const StyledCoin = styled.div`
   margin-left: 10px;
-  width: 24px;
-  height: 24px;
 `
 
 const StyledCoinPair = styled.div`
@@ -87,7 +86,9 @@ export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
         </StyledText>
         <Flex alignItems="center">
           <StyledText>{amounts[Field.CURRENCY_A]}</StyledText>
-          <StyledCoin src={icons[0]} />
+          <StyledCoin>
+            <Coin src={icons[0]} />
+          </StyledCoin>
         </Flex>
       </StyledTextRow>
 
@@ -97,7 +98,9 @@ export const ConfirmRemoveLiquidity: FC<IConfirmRemoveLiquidity> = ({
         </StyledText>
         <Flex alignItems="center">
           <StyledText>{amounts[Field.CURRENCY_B]}</StyledText>
-          <StyledCoin src={icons[1]} />
+          <StyledCoin>
+            <Coin src={icons[1]} />
+          </StyledCoin>
         </Flex>
       </StyledTextRow>
 

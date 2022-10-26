@@ -10,14 +10,19 @@ import { FC, ReactNode, useState } from 'react'
 import icon_arrow from 'assets/icons/back-arrow.svg'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
-import { useAllTokens, useDebounce, useToast, useToken } from 'hooks'
+import {
+  useActiveWeb3React,
+  useAllTokens,
+  useDebounce,
+  useToast,
+  useToken,
+} from 'hooks'
 import { useAddUserToken, useRemoveUserAddedToken } from 'store'
 import { getTokenUrlByAddress, truncateHash } from 'utils'
 
 import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
 import { getTransparentColor, colors } from 'styles'
 import useUserAddedTokens from 'store/features/user/hooks/useUserAddedTokens'
-import { useWeb3React } from '@web3-react/core'
 
 const StyledArrowButton = styled.button`
   background-color: transparent;
@@ -60,7 +65,7 @@ interface IManageTokensProps {
 }
 
 export const ManageTokens: FC<IManageTokensProps> = ({ goBack }) => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const [input, setInput] = useState('')
   const debouncedQuery = useDebounce(input, 200)
   const allTokensList = useAllTokens()

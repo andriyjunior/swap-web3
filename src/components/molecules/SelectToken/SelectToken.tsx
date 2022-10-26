@@ -11,6 +11,7 @@ import {
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 import {
+  useActiveWeb3React,
   useAllTokens,
   useDebounce,
   useModalRef,
@@ -18,7 +19,6 @@ import {
   wrappedCurrency,
 } from 'hooks'
 import { Currency, ETHER, Token } from 'packages/swap-sdk'
-import { useWeb3React } from '@web3-react/core'
 import { useAddUserToken } from 'store'
 
 import ETH_icon from 'assets/coins/ETH.png'
@@ -57,7 +57,7 @@ export const SelectToken: FC<ISelectTokenProps> = ({
   onSelect,
   onManageTokens,
 }) => {
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const allTokensList = useAllTokens()
 
   const [tokenList, setTokenList] = useState<Token[]>([])
@@ -86,7 +86,7 @@ export const SelectToken: FC<ISelectTokenProps> = ({
       }
     })
     setTokenList(filteredTokens || allTokensList)
-  }, [debouncedQuery])
+  }, [debouncedQuery, foundToken])
 
   const ETH_TOKEN = chainId && (wrappedCurrency(ETHER, chainId) as Token)
 

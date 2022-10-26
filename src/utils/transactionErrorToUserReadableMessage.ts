@@ -16,14 +16,14 @@ export function transactionErrorToUserReadableMessage(error: any, t) {
     reason = reason.substring('execution reverted: '.length)
 
   switch (reason) {
-    case 'PancakeRouter: EXPIRED':
+    case 'SevnRouter: EXPIRED':
       return t(
         'The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low.'
       )
-    case 'PancakeRouter: INSUFFICIENT_OUTPUT_AMOUNT':
-    case 'PancakeRouter: EXCESSIVE_INPUT_AMOUNT':
-    case 'PancakeRouter: INSUFFICIENT_A_AMOUNT':
-    case 'PancakeRouter: INSUFFICIENT_B_AMOUNT':
+    case 'SevnRouter: INSUFFICIENT_OUTPUT_AMOUNT':
+    case 'SevnRouter: EXCESSIVE_INPUT_AMOUNT':
+    case 'SevnRouter: INSUFFICIENT_A_AMOUNT':
+    case 'SevnRouter: INSUFFICIENT_B_AMOUNT':
       return t(
         'This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.'
       )
@@ -31,7 +31,7 @@ export function transactionErrorToUserReadableMessage(error: any, t) {
       return t(
         'The input token cannot be transferred. There may be an issue with the input token.'
       )
-    case 'Pancake: TRANSFER_FAILED':
+    case 'Sevn: TRANSFER_FAILED':
       return t(
         'The output token cannot be transferred. There may be an issue with the output token.'
       )

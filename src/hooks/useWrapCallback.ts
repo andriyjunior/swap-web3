@@ -1,9 +1,9 @@
-import { useWeb3React } from '@web3-react/core'
 import { Currency, currencyEquals, ETHER, WNATIVE } from 'packages/swap-sdk'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCurrencyBalance, useTransactionAdder } from 'store'
 import { tryParseAmount } from 'utils'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useWETHContract } from './useContract'
 
@@ -30,7 +30,7 @@ export const useWrapCallback = (
   inputError?: string
 } => {
   const { t } = useTranslation()
-  const { chainId, account } = useWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const wbnbContract = useWETHContract()
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency)

@@ -1,4 +1,4 @@
-import { Accordion, Button, CoinPair, Flex, Typography } from 'components'
+import { Accordion, Button, Coin, CoinPair, Flex, Typography } from 'components'
 import { FC } from 'react'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
@@ -9,10 +9,9 @@ import icon_USDT from 'assets/coins/Tether.png'
 import { useNavigate } from 'react-router-dom'
 import { paths } from 'const'
 import { useTranslation } from 'react-i18next'
-import { useTotalSupply, useUSDTPrice } from 'hooks'
+import { useActiveWeb3React, useTotalSupply, useUSDTPrice } from 'hooks'
 import { useTokenBalance } from 'store'
 import { getTokenUrlByAddress, multiplyPriceByAmount } from 'utils'
-import { useWeb3React } from '@web3-react/core'
 
 const StyledPairTitle = styled(Typography.Body)`
   padding-left: 16px;
@@ -36,23 +35,6 @@ const StyledText = styled(Typography.Body)`
 const StyledCoinWrapper = styled.span`
   padding-left: 10px;
 `
-
-const StyledCoinIcon = styled.img`
-  width: 24px;
-  height: 24px;
-`
-
-const state = {
-  inputToken: {
-    logoURI: icon_USDT,
-    symbol: 'USDT',
-  },
-
-  outputToken: {
-    logoURI: icon_BNB,
-    symbol: 'BNB',
-  },
-}
 
 interface ILiquidityItemProps {
   pair?: Pair | null
@@ -126,7 +108,7 @@ const useLPValues = (account, pair, currency0, currency1) => {
 export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
   const { t } = useTranslation()
 
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
 
   const navigate = useNavigate()
 
@@ -174,9 +156,7 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
               <StyledText>{token0Deposited?.toSignificant(6)}</StyledText>
             )}
             <StyledCoinWrapper>
-              <StyledCoinIcon
-                src={getTokenUrlByAddress(pair?.token0.address)}
-              />
+              <Coin src={getTokenUrlByAddress(pair?.token0.address)} />
             </StyledCoinWrapper>
           </Flex>
         </StyledTextRow>
@@ -191,9 +171,7 @@ export const LiquidityItem: FC<ILiquidityItemProps> = ({ pair }) => {
               <StyledText>{token1Deposited?.toSignificant(6)}</StyledText>
             )}
             <StyledCoinWrapper>
-              <StyledCoinIcon
-                src={getTokenUrlByAddress(pair?.token1.address)}
-              />
+              <Coin src={getTokenUrlByAddress(pair?.token1.address)} />
             </StyledCoinWrapper>
           </Flex>
         </StyledTextRow>

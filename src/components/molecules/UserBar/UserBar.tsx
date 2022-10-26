@@ -12,6 +12,7 @@ import {
 
 import logout_icon from 'assets/icons/logout.svg'
 import avatar_by_default_icon from 'assets/avatar_by_default.png'
+import loader_icon from 'assets/icons/loader.png'
 import { usePendingTransactions } from 'store'
 
 interface IUserBarProps {
@@ -43,7 +44,9 @@ export const UserBar: FC<IUserBarProps> = ({ username, disconnect }) => {
       <Typography.ButtonBold> {username}</Typography.ButtonBold>
       <StyledAvatarWrap>
         {hasPendingTransactions ? (
-          <StyledPendingCircle />
+          <StyledPendingCircle>
+            <img src={loader_icon} />
+          </StyledPendingCircle>
         ) : (
           <StyledAvatar src={avatar_by_default_icon} />
         )}

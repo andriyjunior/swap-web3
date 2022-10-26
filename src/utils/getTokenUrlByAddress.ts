@@ -4,6 +4,8 @@ import SEVN_icon from 'assets/coins/SEVN.png'
 import USDT_icon from 'assets/coins/USDT.png'
 import { SEVN, USDT } from 'const'
 
+export const BAD_SRCS: { [imageSrc: string]: true } = {}
+
 export const getTokenUrlByAddress = (address) => {
   if (
     address?.toLowerCase().includes('eth') ||

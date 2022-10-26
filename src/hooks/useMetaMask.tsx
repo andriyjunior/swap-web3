@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { formatEther } from 'ethers/lib/utils'
 import {
   selectUser,
@@ -9,9 +8,10 @@ import {
 } from 'store'
 import { useAuth } from './useAuth'
 import { ConnectorNames, connectorsByName } from 'utils'
+import { useActiveWeb3React } from './useActiveWeb3React'
 
 export const useBalance = () => {
-  const { account, library } = useWeb3React()
+  const { account, library } = useActiveWeb3React()
   const [balance, setBalance] = useState('')
 
   useEffect(() => {

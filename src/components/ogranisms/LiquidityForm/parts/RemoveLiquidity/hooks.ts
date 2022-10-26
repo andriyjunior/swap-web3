@@ -1,10 +1,10 @@
 import { TransactionResponse } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
 import { ROUTER_ADDRESS } from 'config'
 import { BigNumber, Contract } from 'ethers'
 import { splitSignature } from 'ethers/lib/utils'
 import {
   ApprovalState,
+  useActiveWeb3React,
   useApproveCallback,
   useCurrency,
   usePairContract,
@@ -54,7 +54,7 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
       txHash: undefined,
     })
 
-  const { chainId, library, account } = useWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
 
   const [currencyA, currencyB] = [
     useCurrency(userCurrencyA) ?? undefined,

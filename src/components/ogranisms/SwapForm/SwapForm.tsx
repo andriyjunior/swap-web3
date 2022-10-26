@@ -10,16 +10,20 @@ import {
   Settings,
   WalletConnection,
   TransactionSubmited,
+  TransactionErrorContent,
 } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ApprovalState,
+  useActiveWeb3React,
   useAllTokens,
   useApproveCallbackFromTrade,
   useCurrency,
+  useIsTransactionUnsupported,
   useModalRef,
   useSwapCallback,
   useWrapCallback,
+  wrappedCurrency,
   WrapType,
 } from 'hooks'
 import {
@@ -31,26 +35,27 @@ import {
   useSwapState,
   useUserSingleHopOnly,
 } from 'store'
-import { useWeb3React } from '@web3-react/core'
 import { confirmPriceImpactWithoutFee, useSwapForm } from './hooks'
 
 import wallet_icon from 'assets/icons/wallet.svg'
-import { Token, Trade } from 'packages/swap-sdk'
+import { CurrencyAmount, Token, Trade } from 'packages/swap-sdk'
 import { Field } from 'store/features/swap/actions'
 import { useSwapActionHandlers } from 'store/features/swap/useSwapActionHandlers'
 import { BIG_INT_ZERO } from 'config'
 import {
   computeTradePriceBreakdown,
   getTokenUrlByAddress,
+  maxAmountSpend,
   warningSeverity,
 } from 'utils'
 import { SwapConfirm } from './parts'
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
-  const { account, chainId } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const walletsRef = useModalRef()
+  const txErrorRef = useModalRef()
   const submitedRef = useModalRef()
   const confirmSwapRef = useModalRef()
   const settingsModalRef = useModalRef()
@@ -168,6 +173,12 @@ export const SwapForm: FC = () => {
   })
 
   useEffect(() => {
+    if (swapErrorMessage?.trim()?.length) {
+      txErrorRef.current?.open()
+    }
+  }, [swapErrorMessage])
+
+  useEffect(() => {
     if (txHash && submitedRef.current) {
       submitedRef.current.open()
     }
@@ -226,6 +237,14 @@ export const SwapForm: FC = () => {
       setApprovalSubmitted(true)
     }
   }, [approval, approvalSubmitted])
+
+  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(
+    currencyBalances[Field.INPUT]
+  )
+
+  const atMaxAmountInput = Boolean(
+    maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
+  )
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -313,24 +332,49 @@ export const SwapForm: FC = () => {
     [onCurrencySelection]
   )
 
+  const swapIsUnsupported = useIsTransactionUnsupported(
+    currencies?.INPUT,
+    currencies?.OUTPUT
+  )
+
   const icons = [
     getTokenUrlByAddress(inputCurrencyId),
     getTokenUrlByAddress(outputCurrencyId),
   ]
 
   const swapIsDisabled =
-    !formattedAmounts[Field.INPUT] || !formattedAmounts[Field.OUTPUT]
+    !formattedAmounts[Field.INPUT] ||
+    !formattedAmounts[Field.OUTPUT] ||
+    // !isValid ||
+    // approval !== ApprovalState.APPROVED ||
+    priceImpactSeverity > 3
+
+  const showApproveFlow =
+    !swapInputError &&
+    (approval === ApprovalState.NOT_APPROVED ||
+      approval === ApprovalState.PENDING ||
+      (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
+    !(priceImpactSeverity > 3)
 
   return (
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
         <WalletConnection onClick={() => walletsRef.current?.close()} />
       </Modal>
+
+      <Modal ref={txErrorRef} title={t('error')}>
+        <TransactionErrorContent
+          onClose={() => txErrorRef.current?.close()}
+          description={swapErrorMessage}
+        />
+      </Modal>
+
       <Modal
         ref={submitedRef}
         title={t('transactionSubmited.transactionSubmited')}
       >
         <TransactionSubmited
+          currencyToAdd={trade?.outputAmount.currency}
           txHash={txHash}
           onClose={() => submitedRef.current?.close()}
         />
@@ -398,19 +442,62 @@ export const SwapForm: FC = () => {
             onSelectToken={handleOutputSelect}
           />
 
-          {!account ? (
+          {userHasSpecifiedInputOutput && noRoute ? (
+            <>
+              {t('Insufficient liquidity for this trade')}
+              {singleHopOnly && <p>{t('Try enabling multi-hop trades.')}</p>}
+            </>
+          ) : !account ? (
             <Button
               title={t('connectWallet')}
               icon={wallet_icon}
               onClick={() => walletsRef.current?.open()}
             />
-          ) : (
+          ) : swapIsUnsupported ? (
             <Button
-              title={t('swap')}
-              icon={wallet_icon}
-              onClick={() => confirmSwapRef.current?.open()}
-              isDisabled={swapIsDisabled}
+              title={t('swapForm.unsupportedAsset')}
+              onClick={() => {}}
+              isDisabled
             />
+          ) : (
+            <Flex gap="16px">
+              {showApproveFlow && (
+                <Button
+                  // variant={
+                  //   approval === ApprovalState.APPROVED ? 'success' : 'primary'
+                  // }
+                  title={t('enable')}
+                  onClick={approveCallback}
+                  isDisabled={
+                    approval !== ApprovalState.NOT_APPROVED || approvalSubmitted
+                  }
+                />
+              )}
+              {/* {approval === ApprovalState.PENDING ? (
+              <AutoRow gap="6px" justify="center">
+                {t('Enabling')} <CircleLoader stroke="white" />
+              </AutoRow>
+            ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
+              t('Enabled')
+            ) : (
+              t('Enable %asset%', {
+                asset: currencies[Field.INPUT]?.symbol ?? '',
+              })
+            )} */}
+              {/* </Button> */}
+              <Button
+                title={
+                  priceImpactSeverity > 3
+                    ? t('Price Impact High')
+                    : priceImpactSeverity > 2
+                    ? t('Swap Anyway')
+                    : t('swap')
+                }
+                icon={wallet_icon}
+                onClick={() => confirmSwapRef.current?.open()}
+                isDisabled={swapIsDisabled}
+              />
+            </Flex>
           )}
         </motion.div>
       </AnimatePresence>

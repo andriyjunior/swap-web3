@@ -17,8 +17,8 @@ import {
   selectUserDeadlineRaw,
   useAppSelector,
 } from 'store'
-import { useWeb3React } from '@web3-react/core'
 import { useTransactionDeadline } from './useTransactionDeadline'
+import { useActiveWeb3React } from './useActiveWeb3React'
 
 interface SwapCall {
   contract: Contract
@@ -36,7 +36,7 @@ export function useSwapCallArguments(
   recipientAddress: string | null, // the address of the recipient of the trade, or null if swap should be returned to sender
   allowedSlippage: number = INITIAL_ALLOWED_SLIPPAGE // in bips
 ): SwapCall[] {
-  const { account, chainId, library } = useWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
 
   const recipient = !recipientAddress ? account : recipientAddress
   const deadline = useTransactionDeadline()

@@ -31,6 +31,8 @@ export const shadows = {
   violet: '0px 5px 3px rgba(111, 111, 111, 0.09)',
   violetS: '0px 4px 8px rgba(123, 43, 255, 0.05)',
   violetXs: '0px 0px 1px rgba(55, 0, 143, 0.2)',
+  button: '0px 4px 8px 0px rgba(111, 111, 111, 0.05)',
+  buttonHover: '0px 5px 3px 0px rgba(111, 111, 111, 0.09)',
 }
 
 export const zIndexes = {

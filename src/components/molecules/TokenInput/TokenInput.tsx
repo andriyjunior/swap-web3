@@ -91,7 +91,10 @@ export const TokenInput: FC<ITokenInputProps> = ({
     manageTokensRef.current?.open()
   }
 
-  const amountInDollar = useUSDTCurrencyAmount(currency, Number(amount))
+  const amountInDollar = useUSDTCurrencyAmount(
+    currency,
+    Number.isFinite(+amount) ? Number(amount) : undefined
+  )
 
   return (
     <>

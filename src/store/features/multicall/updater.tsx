@@ -12,10 +12,9 @@ import {
 } from './actions'
 import chunkArray from './chunkArray'
 import { RootState } from 'store/store'
-import { useMulticallContract, useDebounce } from 'hooks'
+import { useMulticallContract, useDebounce, useActiveWeb3React } from 'hooks'
 import { useAppDispatch } from 'store/utils'
 import { useBlockNumber } from 'context'
-import { useWeb3React } from '@web3-react/core'
 
 // chunk calls so we do not exceed the gas limit
 const CALL_CHUNK_SIZE = 500
@@ -167,7 +166,7 @@ export default function Updater(): null {
   // wait for listeners to settle before triggering updates
   const debouncedListeners = useDebounce(state.callListeners, 100)
   const currentBlock = useBlockNumber()
-  const { chainId } = useWeb3React()
+  const { chainId } = useActiveWeb3React()
   const multicallContract = useMulticallContract()
   const cancellations = useRef<{
     blockNumber: number

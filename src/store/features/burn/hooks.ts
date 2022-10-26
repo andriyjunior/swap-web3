@@ -1,5 +1,9 @@
-import { useWeb3React } from '@web3-react/core'
-import { usePair, useTotalSupply, wrappedCurrency } from 'hooks'
+import {
+  useActiveWeb3React,
+  usePair,
+  useTotalSupply,
+  wrappedCurrency,
+} from 'hooks'
 import {
   Currency,
   CurrencyAmount,
@@ -36,7 +40,7 @@ export const useDerivedBurnInfo = (
   error?: string
   tokenToReceive?: string
 } => {
-  const { account, chainId } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const { independentField, typedValue } = useBurnState()
 
