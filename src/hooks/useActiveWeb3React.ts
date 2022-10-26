@@ -14,13 +14,14 @@ import { useEffect, useRef, useState } from 'react'
 export const useActiveWeb3React = () => {
   const { library, chainId, account, ...web3React } = useWeb3React()
 
+  //TODO: save last chain id ot smth like that
   const appChainId = 5
   const appProvider = getProvider(appChainId)
   const currChainId = chainId || appChainId
   const refChainId = useRef(currChainId)
   const refEth = useRef(library || appProvider)
   const [provider, setProvider] = useState(library || appProvider)
-  console.log(refEth)
+
   useEffect(() => {
     if (library !== refEth.current || appProvider !== refEth.current) {
       setProvider(library || appProvider)

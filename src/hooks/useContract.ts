@@ -19,10 +19,10 @@ function useContract<T extends Contract = Contract>(
 ): T | null {
   const { library, account, chainId } = useActiveWeb3React()
 
-  if (!account || !library) return null
+  if (!account && !library) return null
 
   const signer = withSignerIfPossible
-    ? getProviderOrSigner(library, account)
+    ? getProviderOrSigner(library, account ?? undefined)
     : library
 
   const canReturnContract =
