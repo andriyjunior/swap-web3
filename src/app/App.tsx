@@ -1,4 +1,4 @@
-import { Loader } from 'components'
+import { CheckNetwork, Loader } from 'components'
 import { ToastListener } from 'context'
 import { Common } from 'layouts'
 import { FC } from 'react'
@@ -16,6 +16,7 @@ export const App: FC = () => {
         <Loader />
         <Routes />
       </Common>
+      <CheckNetwork />
     </>
   )
 }
