@@ -27,6 +27,8 @@
   "goBack": "Go back",
   "error": "Error",
   "dismiss": "Dismiss",
+  "switchNetwork": "Switch Network",
+  "importPool": "Import Pool",
 
   "menu": {
     "swap": "Swap",

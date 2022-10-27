@@ -2,7 +2,7 @@ import { ExternalProvider } from '@ethersproject/providers'
 import { ChainId } from 'packages/swap-sdk'
 import { BAD_SRCS } from './getTokenUrlByAddress'
 
-const NETWORK_CONFIG = {
+export const NETWORK_CONFIG = {
   [ChainId.MAINNET]: {
     name: 'ETH Smart Chain Mainnet',
     // scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC],

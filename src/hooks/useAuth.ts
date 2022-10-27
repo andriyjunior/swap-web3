@@ -9,7 +9,7 @@ import {
 } from 'utils'
 import { useActiveWeb3React } from './useActiveWeb3React'
 
-const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 1
+const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 5
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()

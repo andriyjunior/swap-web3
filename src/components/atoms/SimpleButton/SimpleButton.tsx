@@ -12,6 +12,8 @@ interface ISimpleButtonProps {
   children?: ReactNode
   onClick?: () => void
   href?: string
+  variant?: 'primary' | 'secondary'
+  icon?: 'wallet' | 'link'
 }
 
 const commonCss = css`
@@ -48,33 +50,47 @@ const StyledImg = styled.img`
   margin-left: 10px;
 `
 
-const StyledText = styled(Typography.ButtonBold)``
+const StyledText = styled(Typography.ButtonBold)<{ color: string }>`
+  color: ${({ color }) => color};
+`
+
+const variants = {
+  primary: colors.black,
+  secondary: colors.lightBlue,
+}
+
+const icons = {
+  wallet: wallet_icon,
+  link: link_icon,
+}
 
 export const SimpleButton: FC<ISimpleButtonProps> = ({
   onClick,
   href,
   children,
+  icon,
+  variant = 'primary',
 }) => {
   return (
     <>
       {href && (
         <StyledLink href={href} target="_blank">
           {typeof children === 'string' ? (
-            <StyledText>{children}</StyledText>
+            <StyledText color={variants[variant]}>{children}</StyledText>
           ) : (
             children
           )}
-          <StyledImg src={link_icon} />
+          {icon && <StyledImg src={icons[icon]} />}
         </StyledLink>
       )}
       {onClick && (
         <StyledButton onClick={onClick}>
           {typeof children === 'string' ? (
-            <StyledText>{children}</StyledText>
+            <StyledText color={variants[variant]}>{children}</StyledText>
           ) : (
             children
           )}
-          <StyledImg src={wallet_icon} />
+          {icon && <StyledImg src={icons[icon]} />}
         </StyledButton>
       )}
     </>

@@ -52,13 +52,13 @@ export const TransactionSubmited: FC<ITransactionSubmited> = ({
       <StyledImage src={txSubmited_image} />
       <StyledButtons>
         {chainId && (
-          <SimpleButton href={`${etherscan[chainId]}tx/${txHash}`}>
+          <SimpleButton href={`${etherscan[chainId]}tx/${txHash}`} icon="link">
             EtherScan
           </SimpleButton>
         )}
 
         {token && (
-          <SimpleButton onClick={handleRegisterToken}>
+          <SimpleButton onClick={handleRegisterToken} icon="wallet">
             {t('transactionSubmited.addToken', { token: token?.symbol })}
           </SimpleButton>
         )}

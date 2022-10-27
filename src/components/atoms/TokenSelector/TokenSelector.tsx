@@ -10,10 +10,11 @@ import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
 import { useAddUserToken } from 'store'
 import { Button } from '../Button'
 import { useTranslation } from 'react-i18next'
+import { getTokenUrlByAddress } from 'utils'
 
 interface ITokenSelectorProps {
   hasArrow?: boolean
-  token?: Token | Currency
+  token?: Token
   title?: string
   icon?: string
   onClick?: () => void
@@ -75,13 +76,21 @@ export const TokenSelector: FC<ITokenSelectorProps> = memo(
       setImgError(false)
     }, [icon])
 
+    const imgUrl = icon
+      ? icon
+      : token?.address
+      ? getTokenUrlByAddress(token.address)
+      : getTokenUrlByAddress(token?.symbol)
+
     return (
       <StyledRoot onClick={onClick}>
-        <StyledCoinIcon
-          onError={() => setImgError(true)}
-          loading="lazy"
-          src={imgError ? QUESTION_MARK_icon : icon}
-        />
+        {
+          <StyledCoinIcon
+            onError={() => setImgError(true)}
+            loading="lazy"
+            src={imgError ? QUESTION_MARK_icon : imgUrl}
+          />
+        }
         <StyledBody>
           <StyledText>{title || token?.symbol || 'ETH'}</StyledText>
           {hasArrow && <StyledArrowIcon src={arrow_icon} />}

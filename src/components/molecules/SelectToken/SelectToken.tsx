@@ -109,7 +109,7 @@ export const SelectToken: FC<ISelectTokenProps> = ({
           <TokenSelector
             key={ETH_TOKEN?.address}
             icon={ETH_icon}
-            token={ETHER}
+            token={ETHER as Token}
             onClick={() => onSelect(ETHER)}
           />
         )}
