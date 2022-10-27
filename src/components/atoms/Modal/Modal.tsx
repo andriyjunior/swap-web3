@@ -20,10 +20,11 @@ interface IModalRefProps {
 interface IModalProps {
   children: ReactNode
   title?: string
+  withoutOverlay?: boolean
 }
 
 const ModalComponent: ForwardRefRenderFunction<IModalRefProps, IModalProps> = (
-  { children, title },
+  { children, title, withoutOverlay },
   forwardedRef
 ) => {
   const [isShown, setShown] = useState(false)
@@ -46,7 +47,12 @@ const ModalComponent: ForwardRefRenderFunction<IModalRefProps, IModalProps> = (
   }))
 
   return createPortal(
-    <ModalLayout isShown={isShown} handleClose={handleClose} title={title}>
+    <ModalLayout
+      isShown={isShown}
+      handleClose={handleClose}
+      title={title}
+      withoutOverlay={withoutOverlay}
+    >
       {children}
     </ModalLayout>,
     document.getElementById('modal') as HTMLElement

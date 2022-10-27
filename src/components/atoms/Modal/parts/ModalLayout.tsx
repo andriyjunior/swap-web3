@@ -9,6 +9,7 @@ interface IModalLayoutProps {
   isShown: boolean
   handleClose: () => void
   title?: string
+  withoutOverlay?: boolean
 }
 
 const StyledRoot = styled.div`
@@ -23,13 +24,14 @@ const StyledRoot = styled.div`
   z-index: ${zIndexes.modal};
 `
 
-const StyledOverlay = styled(motion.div)`
+const StyledOverlay = styled(motion.div)<{ withoutOverlay?: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ${getTransparentColor(colors.black, 0.5)};
+  background-color: ${({ withoutOverlay }) =>
+    !withoutOverlay ? getTransparentColor(colors.black, 0.5) : 'none'};
   cursor: pointer;
   z-index: -1;
 `
@@ -57,6 +59,7 @@ export const ModalLayout: FC<IModalLayoutProps> = ({
   handleClose,
   title,
   children,
+  withoutOverlay,
 }) => {
   return (
     <AnimatePresence>
@@ -68,6 +71,7 @@ export const ModalLayout: FC<IModalLayoutProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
+            withoutOverlay={withoutOverlay}
           />
           <StyledModal
             initial={{ opacity: 0, y: -20, scale: 0 }}

@@ -12,6 +12,7 @@ import {
   selectUserSlippageTolerance,
   useAppSelector,
   useGasPrice,
+  usePairAdder,
   useTransactionAdder,
 } from 'store'
 import { Field } from 'types'
@@ -22,11 +23,14 @@ export const useOnAdd = (
   currencyB,
   parsedAmounts,
   noLiquidity,
-  currencies
+  currencies,
+  pair
 ) => {
   const addTransaction = useTransactionAdder()
 
   const { account, chainId, library } = useActiveWeb3React()
+
+  const addPair = usePairAdder()
 
   // txn values
   const deadline = useTransactionDeadline() // custom from users settings
@@ -141,6 +145,9 @@ export const useOnAdd = (
             ]?.toSignificant(3)} ${currencies[Field.CURRENCY_B]?.symbol}`,
             type: 'add-liquidity',
           })
+          if (pair) {
+            addPair(pair)
+          }
         })
       )
       .catch((err) => {

@@ -125,7 +125,7 @@ const userSlice = createSlice({
     addSerializedPair(state, { payload: { serializedPair } }) {
       if (
         serializedPair.token0.chainId === serializedPair.token1.chainId &&
-        serializedPair.token0.adress !== serializedPair.token1.adress
+        serializedPair.token0.address !== serializedPair.token1.address
       ) {
         const { chainId } = serializedPair.token0
         state.pairs[chainId] = state.pairs[chainId] || {}

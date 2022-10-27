@@ -154,7 +154,8 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
     currencyB,
     parsedAmounts,
     noLiquidity,
-    currencies
+    currencies,
+    pair
   )
 
   useEffect(() => {

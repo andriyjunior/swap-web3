@@ -14,8 +14,10 @@ import { flatMap } from 'lodash'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import {
+  addSerializedPair,
   addSerializedToken,
   removeSerializedToken,
+  SerializedPair,
   updateUserSingleHopOnly,
 } from '../reducer'
 import { serializeToken } from './helpers'
@@ -178,4 +180,22 @@ export const useUserSingleHopOnly = (): [
   )
 
   return [singleHopOnly, setSingleHopOnly]
+}
+
+function serializePair(pair: Pair): SerializedPair {
+  return {
+    token0: pair.token0,
+    token1: pair.token1,
+  }
+}
+
+export const usePairAdder = (): ((pair: Pair) => void) => {
+  const dispatch = useAppDispatch()
+
+  return useCallback(
+    (pair: Pair) => {
+      dispatch(addSerializedPair({ serializedPair: serializePair(pair) }))
+    },
+    [dispatch]
+  )
 }
