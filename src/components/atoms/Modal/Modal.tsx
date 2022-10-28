@@ -15,6 +15,7 @@ import { ModalLayout } from './parts/ModalLayout'
 interface IModalRefProps {
   open: () => void
   close: () => void
+  isOpened?: boolean
 }
 
 interface IModalProps {
@@ -44,6 +45,7 @@ const ModalComponent: ForwardRefRenderFunction<IModalRefProps, IModalProps> = (
   useImperativeHandle(forwardedRef, () => ({
     open: handleOpen,
     close: handleClose,
+    isOpened: isShown,
   }))
 
   return createPortal(

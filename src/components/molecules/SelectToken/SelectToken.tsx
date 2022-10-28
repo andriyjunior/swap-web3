@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Button,
+  ImportTokenConfirmation,
   InnerContainer,
   Input,
   Modal,
@@ -64,8 +65,10 @@ export const SelectToken: FC<ISelectTokenProps> = ({
   const [input, setInput] = useState('')
   const debouncedQuery = useDebounce(input, 200)
 
-  const foundToken = useToken(debouncedQuery)
+  const foundToken = useToken(debouncedQuery) as Token
   const addToken = useAddUserToken()
+
+  const modalRef = useModalRef()
 
   const { t } = useTranslation()
 
@@ -96,8 +99,26 @@ export const SelectToken: FC<ISelectTokenProps> = ({
     }
   }
 
+  const handleImport = () => {
+    if (foundToken) {
+      addToken(foundToken)
+    }
+    if (modalRef.current) {
+      modalRef.current.close()
+    }
+  }
+
   return (
     <>
+      {foundToken && (
+        <Modal ref={modalRef} title={t('importToken')}>
+          <ImportTokenConfirmation
+            onImport={handleImport}
+            symbol={foundToken.symbol ?? ''}
+            address={foundToken.address}
+          />
+        </Modal>
+      )}
       <Input
         value={input}
         onInput={setInput}
@@ -130,13 +151,15 @@ export const SelectToken: FC<ISelectTokenProps> = ({
               getTokenUrlByAddress(foundToken.address) || QUESTION_MARK_icon
             }
             token={foundToken}
-            onImport={() => addToken(foundToken)}
+            onImport={() => modalRef.current?.open()}
           />
         )}
       </StyledList>
-      <StyledButton>
-        <Button title={t('manageTokens')} onClick={handleManageTokens} />
-      </StyledButton>
+      {onManageTokens && (
+        <StyledButton>
+          <Button title={t('manageTokens')} onClick={handleManageTokens} />
+        </StyledButton>
+      )}
     </>
   )
 }
