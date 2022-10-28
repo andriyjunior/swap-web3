@@ -81,6 +81,8 @@ export const ManageTokens: FC<IManageTokensProps> = ({ goBack }) => {
 
   const { toastSuccess } = useToast()
 
+  const { t } = useTranslation()
+
   const modalRef = useModalRef()
 
   const handleAddToken = () => {
@@ -98,12 +100,9 @@ export const ManageTokens: FC<IManageTokensProps> = ({ goBack }) => {
     }
   }
 
-  const { t } = useTranslation()
-
   const handleImport = () => {
-    if (foundToken) {
-      addToken(foundToken)
-    }
+    handleAddToken()
+
     if (modalRef.current) {
       modalRef.current.close()
     }

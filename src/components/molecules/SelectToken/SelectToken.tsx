@@ -20,7 +20,7 @@ import {
   wrappedCurrency,
 } from 'hooks'
 import { Currency, ETHER, Token } from 'packages/swap-sdk'
-import { useAddUserToken } from 'store'
+import { useAddUserToken, WrappedTokenInfo } from 'store'
 
 import ETH_icon from 'assets/coins/ETH.png'
 import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
@@ -135,10 +135,15 @@ export const SelectToken: FC<ISelectTokenProps> = ({
           />
         )}
         {tokenList.map((item) => {
+          console.log(item)
           return (
             <TokenSelector
               key={item.address}
-              icon={getTokenUrlByAddress(item.address) || QUESTION_MARK_icon}
+              icon={
+                item instanceof WrappedTokenInfo
+                  ? item.logoURI
+                  : getTokenUrlByAddress(item.address)
+              }
               token={item}
               onClick={() => onSelect(item)}
             />
@@ -148,7 +153,9 @@ export const SelectToken: FC<ISelectTokenProps> = ({
           <TokenSelector
             key={foundToken?.address}
             icon={
-              getTokenUrlByAddress(foundToken.address) || QUESTION_MARK_icon
+              foundToken instanceof WrappedTokenInfo
+                ? foundToken.logoURI
+                : getTokenUrlByAddress(foundToken.address)
             }
             token={foundToken}
             onImport={() => modalRef.current?.open()}

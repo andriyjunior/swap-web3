@@ -8,10 +8,6 @@ import {
 import { ParsedUrlQuery } from 'querystring'
 import { useEffect, useMemo, useState } from 'react'
 import { SLOW_INTERVAL } from 'config/constants'
-import {
-  DEFAULT_INPUT_CURRENCY,
-  DEFAULT_OUTPUT_CURRENCY,
-} from 'config/constants/exchange'
 // import useSWRImmutable from 'swr/immutable'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -37,6 +33,7 @@ import { useTranslation } from 'react-i18next'
 import { useActiveWeb3React, useTradeExactIn, useTradeExactOut } from 'hooks'
 import { selectUserSlippageTolerance } from 'store/selectors'
 import { getTokenAddress } from 'components/molecules/Chart/utils'
+import { SEVN, USDT } from 'const'
 
 export const useSwapState = (): RootState['swap'] => {
   return useSelector<RootState, RootState['swap']>((state) => state.swap)
@@ -231,6 +228,9 @@ function validatedRecipient(recipient: any): string | null {
 export function queryParametersToSwapState(
   parsedQs: ParsedUrlQuery
 ): SwapState {
+  const DEFAULT_INPUT_CURRENCY = SEVN[ChainId.TESTNET].address
+  const DEFAULT_OUTPUT_CURRENCY = USDT[ChainId.TESTNET].address
+
   let inputCurrency =
     parseCurrencyFromURLParameter(parsedQs.inputCurrency) ||
     DEFAULT_INPUT_CURRENCY
