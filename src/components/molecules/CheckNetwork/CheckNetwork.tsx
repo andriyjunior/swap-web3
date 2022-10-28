@@ -56,6 +56,13 @@ export const CheckNetwork: FC = () => {
     }
   }, [])
 
+  const handleDisconnect = () => {
+    logOut()
+    if (modalRef.current) {
+      modalRef.current.close()
+    }
+  }
+
   return (
     <Modal ref={modalRef} title={'Check your network'} onClose={() => logOut()}>
       <StyledRoot>
@@ -70,7 +77,7 @@ export const CheckNetwork: FC = () => {
           <SimpleButton onClick={() => switchNetworkAsync(ChainId.TESTNET)}>
             {t('switchNetwork')}
           </SimpleButton>
-          <Button onClick={logOut}>{t('userBar.disconnect')}</Button>
+          <Button onClick={handleDisconnect}>{t('userBar.disconnect')}</Button>
         </StyledButtons>
       </StyledRoot>
     </Modal>
