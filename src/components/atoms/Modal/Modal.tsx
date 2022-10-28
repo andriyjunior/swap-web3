@@ -22,10 +22,11 @@ interface IModalProps {
   children: ReactNode
   title?: string
   withoutOverlay?: boolean
+  onClose?: () => void
 }
 
 const ModalComponent: ForwardRefRenderFunction<IModalRefProps, IModalProps> = (
-  { children, title, withoutOverlay },
+  { children, title, withoutOverlay, onClose },
   forwardedRef
 ) => {
   const [isShown, setShown] = useState(false)
@@ -40,7 +41,12 @@ const ModalComponent: ForwardRefRenderFunction<IModalRefProps, IModalProps> = (
   }, [isShown])
 
   const handleOpen = useCallback(() => setShown(true), [])
-  const handleClose = useCallback(() => setShown(false), [])
+  const handleClose = useCallback(() => {
+    setShown(false)
+    if (onClose) {
+      onClose()
+    }
+  }, [onClose])
 
   useImperativeHandle(forwardedRef, () => ({
     open: handleOpen,

@@ -1,5 +1,10 @@
 import { ChainId } from 'packages/swap-sdk'
-import { useActiveWeb3React, useModalRef, useSwitchNetwork } from 'hooks'
+import {
+  useActiveWeb3React,
+  useAuth,
+  useModalRef,
+  useSwitchNetwork,
+} from 'hooks'
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
@@ -35,6 +40,7 @@ const supportedChains = [ChainId.TESTNET]
 export const CheckNetwork: FC = () => {
   const { t } = useTranslation()
   const { switchNetworkAsync } = useSwitchNetwork()
+  const { logOut } = useAuth()
 
   const modalRef = useModalRef()
 
@@ -51,7 +57,7 @@ export const CheckNetwork: FC = () => {
   }, [])
 
   return (
-    <Modal ref={modalRef} title={'Check your network'}>
+    <Modal ref={modalRef} title={'Check your network'} onClose={() => logOut()}>
       <StyledRoot>
         <StyledImg src={error_icon} />
 
@@ -64,9 +70,7 @@ export const CheckNetwork: FC = () => {
           <SimpleButton onClick={() => switchNetworkAsync(ChainId.TESTNET)}>
             {t('switchNetwork')}
           </SimpleButton>
-          <Button onClick={() => switchNetworkAsync(ChainId.TESTNET)}>
-            {t('userBar.disconnect')}
-          </Button>
+          <Button onClick={logOut}>{t('userBar.disconnect')}</Button>
         </StyledButtons>
       </StyledRoot>
     </Modal>
