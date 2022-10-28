@@ -1,5 +1,15 @@
-import { ChainId, Token } from 'packages/swap-sdk'
+import { ChainId, Token, SerializedToken } from 'packages/swap-sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
+
+export interface SerializedWrappedToken extends SerializedToken {
+  chainId: number
+  address: string
+  decimals: number
+  symbol: string
+  name?: string
+  projectLink?: string
+  logoURI?: string
+}
 
 /**
  * Token instances created from token info.
@@ -23,6 +33,18 @@ export class WrappedTokenInfo extends Token {
 
   public get logoURI(): string | undefined {
     return this.tokenInfo.logoURI
+  }
+
+  public get serialize(): SerializedWrappedToken {
+    return {
+      address: this.address,
+      chainId: this.chainId,
+      decimals: this.decimals,
+      symbol: this.symbol ?? '',
+      name: this.name,
+      projectLink: this.projectLink,
+      logoURI: this.logoURI,
+    }
   }
 }
 

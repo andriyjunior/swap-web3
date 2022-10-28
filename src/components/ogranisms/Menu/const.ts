@@ -15,17 +15,20 @@ export const baseMenu = [
     key: 'farms',
     icon: farms_icon,
     to: '/farms',
+    isDisabled: true,
   },
   {
     id: 3,
     key: 'staking',
     icon: stake_icon,
     to: '/staking',
+    isDisabled: true,
   },
   {
     id: 4,
     key: 'games',
     icon: games_icon,
     to: '/games',
+    isDisabled: true,
   },
 ]

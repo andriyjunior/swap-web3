@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
@@ -15,6 +15,10 @@ const StyledCoin = styled.img<{ size: number }>`
 
 export const Coin: FC<ICoinProps> = ({ src, width = 'small' }) => {
   const [isError, setError] = useState(false)
+
+  useEffect(() => {
+    setError(false)
+  }, [src])
 
   const sizes = {
     ['small']: 24,

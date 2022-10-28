@@ -37,7 +37,7 @@ export const WETH = {
 
 export const USDT_TESTNET = new Token(
   ChainId.TESTNET,
-  '0x47c4E1c3C4c9282A2A75A465230C99fAc436F591',
+  '0x95b2239047e495E5FdB0ec614bA03e7c1a45309C',
   6,
   'USDT',
   'Tether USD'

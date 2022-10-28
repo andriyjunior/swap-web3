@@ -114,7 +114,7 @@ export const DEFAULT_INPUT_CURRENCY =
   '0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5'
 // CAKE
 export const DEFAULT_OUTPUT_CURRENCY =
-  '0x47c4E1c3C4c9282A2A75A465230C99fAc436F591'
+  '0x95b2239047e495E5FdB0ec614bA03e7c1a45309C'
 
 // Handler string is passed to Gelato to use PCS router
 export const GELATO_HANDLER = 'pancakeswap'

@@ -3,6 +3,15 @@ import { ChainId } from '../constants'
 import { validateAndParseAddress } from '../utils'
 import { Currency } from './currency'
 
+export interface SerializedToken {
+  chainId: number
+  address: string
+  decimals: number
+  symbol: string
+  name?: string
+  projectLink?: string
+}
+
 /**
  * Represents an ERC20 token with a unique address and some metadata.
  */

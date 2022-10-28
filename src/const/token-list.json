@@ -11,35 +11,51 @@
   "keywords": ["uniswap", "default"],
   "tokens": [
     {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "images/icons/USDT.png",
+      "address": "0x95b2239047e495E5FdB0ec614bA03e7c1a45309C",
+      "chainId": 5
+    },
+    {
       "name": "SEVN",
-      "symbol": "SEVN-T",
+      "symbol": "SEVN",
       "decimals": 18,
-      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
+      "logoURI": "images/icons/SEVN.png",
       "address": "0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5",
       "chainId": 5
     },
     {
-      "name": "Tether USD",
-      "symbol": "USDT",
-      "decimals": 6,
-      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0x47c4E1c3C4c9282A2A75A465230C99fAc436F591",
+      "name": "SEVN-1",
+      "symbol": "SFT1",
+      "decimals": 18,
+      "logoURI": "images/icons/test_token_1.png",
+      "address": "0xf4B56E5c91eCA28393e76949aa584176da3E3a77",
       "chainId": 5
     },
     {
-      "name": "ERC 20-T1",
-      "symbol": "ERC-20",
+      "name": "SEVN-2",
+      "symbol": "SFT2",
       "decimals": 18,
-      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0xE5b4385d52B6a700fC77f84F0c61A0079933B3e6",
+      "logoURI": "images/icons/test_token_2.png",
+      "address": "0x3da6E51A427Adf7335970f816dDa26b3b47C0aF8",
       "chainId": 5
     },
     {
-      "name": "ERC 20-T2",
-      "symbol": "ERC-20",
+      "name": "SEVN-3",
+      "symbol": "SFT3",
       "decimals": 18,
-      "logoURI": "https://gliaswaptest.ckbapp.dev/token/eth.png",
-      "address": "0xB919cfF0AffaFa68D12C8219E8a4D08924Ad6eed",
+      "logoURI": "images/icons/test_token_3.png",
+      "address": "0xb7459B9530EeB74E913d94d1a58B39bA98642F9f",
+      "chainId": 5
+    },
+    {
+      "name": "SEVN-4",
+      "symbol": "SFT4",
+      "decimals": 18,
+      "logoURI": "images/icons/test_token_4.png",
+      "address": "0xDc81cc1C6759eB4b51612f4cc2a14d64367A917F",
       "chainId": 5
     }
   ]

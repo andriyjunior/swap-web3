@@ -106,6 +106,8 @@ export const SwapForm: FC = () => {
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
   } = useSwapState()
 
+  console.log(outputCurrencyId)
+
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
 
