@@ -69,8 +69,6 @@ const StyledImportButton = styled.div`
 
 export const TokenSelector: FC<ITokenSelectorProps> = memo(
   ({ icon, onClick, hasArrow, token, title, onImport, onRemove }) => {
-    const [imgError, setImgError] = useState(false)
-
     const { t } = useTranslation()
 
     const imgUrl = icon
