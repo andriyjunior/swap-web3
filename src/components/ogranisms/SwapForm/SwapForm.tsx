@@ -49,6 +49,17 @@ import {
   warningSeverity,
 } from 'utils'
 import { SwapConfirm } from './parts'
+import styled from 'styled-components'
+import { borderRadius, colors, getTransparentColor } from 'styles'
+
+const StyledIssueDescription = styled.div`
+  padding: 10px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: ${borderRadius.primary};
+  border: 1px solid ${getTransparentColor(colors.black, 0.05)};
+`
 
 export const SwapForm: FC = () => {
   const { t } = useTranslation()
@@ -342,9 +353,11 @@ export const SwapForm: FC = () => {
     getTokenUrlByAddress(outputCurrencyId),
   ]
 
+  const swapInputIsEmpty =
+    !formattedAmounts[Field.INPUT] || !formattedAmounts[Field.OUTPUT]
+
   const swapIsDisabled =
-    !formattedAmounts[Field.INPUT] ||
-    !formattedAmounts[Field.OUTPUT] ||
+    swapInputIsEmpty ||
     // !isValid ||
     // approval !== ApprovalState.APPROVED ||
     priceImpactSeverity > 3
@@ -443,10 +456,10 @@ export const SwapForm: FC = () => {
           />
 
           {userHasSpecifiedInputOutput && noRoute ? (
-            <>
+            <StyledIssueDescription>
               {t('Insufficient liquidity for this trade')}
               {singleHopOnly && <p>{t('Try enabling multi-hop trades.')}</p>}
-            </>
+            </StyledIssueDescription>
           ) : !account ? (
             <Button
               title={t('connectWallet')}
@@ -487,7 +500,9 @@ export const SwapForm: FC = () => {
               {/* </Button> */}
               <Button
                 title={
-                  priceImpactSeverity > 3
+                  swapInputIsEmpty
+                    ? t('swap')
+                    : priceImpactSeverity > 3
                     ? t('Price Impact High')
                     : priceImpactSeverity > 2
                     ? t('Swap Anyway')

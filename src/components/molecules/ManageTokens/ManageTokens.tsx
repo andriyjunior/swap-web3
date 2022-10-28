@@ -1,7 +1,9 @@
 import {
   Flex,
+  ImportTokenConfirmation,
   InnerContainer,
   Input,
+  Modal,
   TokenSelector,
   Typography,
 } from 'components'
@@ -14,6 +16,7 @@ import {
   useActiveWeb3React,
   useAllTokens,
   useDebounce,
+  useModalRef,
   useToast,
   useToken,
 } from 'hooks'
@@ -78,6 +81,8 @@ export const ManageTokens: FC<IManageTokensProps> = ({ goBack }) => {
 
   const { toastSuccess } = useToast()
 
+  const modalRef = useModalRef()
+
   const handleAddToken = () => {
     if (foundToken) {
       addToken(foundToken)
@@ -95,8 +100,26 @@ export const ManageTokens: FC<IManageTokensProps> = ({ goBack }) => {
 
   const { t } = useTranslation()
 
+  const handleImport = () => {
+    if (foundToken) {
+      addToken(foundToken)
+    }
+    if (modalRef.current) {
+      modalRef.current.close()
+    }
+  }
+
   return (
     <>
+      {foundToken && (
+        <Modal ref={modalRef} title={t('importToken')}>
+          <ImportTokenConfirmation
+            onImport={handleImport}
+            symbol={foundToken.symbol ?? ''}
+            address={foundToken.address}
+          />
+        </Modal>
+      )}
       <StyledGoBack alignItems="center">
         <StyledArrowButton onClick={goBack}>
           <StyledArrowIcon src={icon_arrow} />
@@ -117,7 +140,7 @@ export const ManageTokens: FC<IManageTokensProps> = ({ goBack }) => {
               getTokenUrlByAddress(foundToken.address) || QUESTION_MARK_icon
             }
             token={foundToken}
-            onImport={handleAddToken}
+            onImport={() => modalRef.current?.open()}
           />
         )}
         {userTokens.map((item) => {
