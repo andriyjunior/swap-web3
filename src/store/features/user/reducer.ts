@@ -28,7 +28,7 @@ interface IInitialState {
   //   userHideClosedPositions: boolean
 
   // user defined slippage tolerance in bips, used in all txns
-  userSlippageTolerance: string
+  userSlippageTolerance: number
   gasPrice: string
   //   userSlippageToleranceHasBeenMigratedToAuto: boolean // temporary flag for migration status
 
@@ -59,7 +59,7 @@ interface IInitialState {
 
 const initialState: IInitialState = {
   selectedWallet: undefined,
-  userSlippageTolerance: '4',
+  userSlippageTolerance: 400,
   gasPrice: GAS_PRICE_GWEI.testnet,
   userDeadline: 900,
   timestamp: currentTimestamp(),
@@ -93,7 +93,7 @@ const userSlice = createSlice({
       state.timestamp = currentTimestamp()
     },
     updateUserDeadline(state, { payload }) {
-      state.userDeadline = payload * 60
+      state.userDeadline = payload
       state.timestamp = currentTimestamp()
     },
     updateUserGasPrice(state, { payload }) {

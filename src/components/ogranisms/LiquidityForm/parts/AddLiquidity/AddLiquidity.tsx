@@ -19,6 +19,7 @@ import {
   TransactionSubmited,
   TokenInput,
   WalletConnection,
+  TextMessage,
 } from 'components'
 
 import icon_plus from 'assets/icons/plus.svg'
@@ -34,7 +35,14 @@ import {
   useTransactionAdder,
   useGasPrice,
 } from 'store'
-import { ChainId, ETHER, TokenAmount } from 'packages/swap-sdk'
+import {
+  ChainId,
+  ETHER,
+  Fetcher,
+  Pair,
+  Token,
+  TokenAmount,
+} from 'packages/swap-sdk'
 import {
   calculateSlippageAmount,
   getRouterContract,
@@ -158,9 +166,17 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
     pair
   )
 
+  const handleResetLiquidityInputs = () => {
+    if (txHash) {
+      onFieldAInput('0')
+      onFieldBInput('0')
+    }
+  }
+
   useEffect(() => {
     if (txHash) {
       txSubmitedRef.current?.open()
+      handleResetLiquidityInputs()
     }
   }, [txHash])
 
@@ -181,7 +197,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
     approvalB === ApprovalState.NOT_APPROVED ||
     approvalB === ApprovalState.PENDING
 
-  const isValid = !error
+  const isValid = !error && !addError
 
   const buttonDisabled =
     !isValid ||
@@ -194,7 +210,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
       : (poolTokenPercentage?.lessThan(ONE_BIPS)
           ? '<0.01'
           : poolTokenPercentage?.toFixed(2)) ?? '0'
-
+  console.log(error, addError)
   const icons = [
     getTokenUrlByAddress(currencyIdA),
     getTokenUrlByAddress(currencyIdB),
@@ -222,10 +238,14 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
       <Modal
         title={t('transactionSubmited.transactionSubmited')}
         ref={txSubmitedRef}
+        onClose={handleResetLiquidityInputs}
       >
         <TransactionSubmited
           currencyToAdd={pair?.liquidityToken}
-          onClose={() => txSubmitedRef.current?.close()}
+          onClose={() => {
+            handleResetLiquidityInputs()
+            txSubmitedRef.current?.close()
+          }}
           txHash={txHash}
         />
       </Modal>
@@ -259,6 +279,15 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
 
       {liquidityFormShown && account && (
         <>
+          {noLiquidity && (
+            <TextMessage
+              title={t('You are the first liquidity provider')}
+              desc={
+                'The ratio of tokens you add will set the price of this pool. Once you are happy with the rate click supply to review.'
+              }
+            />
+          )}
+
           <TokenInput
             currency={currencies[Field.CURRENCY_A]}
             tokenName={currencies[Field.CURRENCY_A]?.symbol ?? ''}
@@ -333,7 +362,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           <StyledSupplyWrapper>
             <Button
               isDisabled={buttonDisabled}
-              title={t('supply')}
+              title={addError || t('supply')}
               onClick={() => {
                 confirmSupplyRef.current?.open()
               }}

@@ -166,7 +166,7 @@ export function useDerivedSwapInfo(
     inputError = inputError ?? t('Invalid recipient')
   }
 
-  const allowedSlippage = useAppSelector(selectUserSlippageTolerance)
+  const allowedSlippage = useAppSelector(selectUserSlippageTolerance) ?? '0'
 
   const slippageAdjustedAmounts =
     v2Trade &&

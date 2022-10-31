@@ -70,7 +70,7 @@ export const CheckNetwork: FC = () => {
 
         <StyledDesc>
           {t(
-            'Currently this page only supported in Etherium Please change your network to continue'
+            'Currently this page only supported in Ethereum Please change your network to continue'
           )}
         </StyledDesc>
         <StyledButtons>

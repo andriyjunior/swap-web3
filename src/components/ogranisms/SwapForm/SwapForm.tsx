@@ -106,8 +106,6 @@ export const SwapForm: FC = () => {
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
   } = useSwapState()
 
-  console.log(outputCurrencyId)
-
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
 
@@ -237,8 +235,8 @@ export const SwapForm: FC = () => {
   // check whether the user has approved the router on the input token
   const [approval, approveCallback]: any = useApproveCallbackFromTrade(
     trade,
-    chainId,
-    Number(allowedSlippage)
+    Number(allowedSlippage),
+    chainId
   )
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
@@ -269,6 +267,13 @@ export const SwapForm: FC = () => {
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
   const [singleHopOnly] = useUserSingleHopOnly()
+
+  const handleResetSwap = () => {
+    if (txHash) {
+      handleTypeInput('0')
+      handleTypeOutput('0')
+    }
+  }
 
   const handleSwap = useCallback(() => {
     if (
@@ -358,18 +363,13 @@ export const SwapForm: FC = () => {
   const swapInputIsEmpty =
     !formattedAmounts[Field.INPUT] || !formattedAmounts[Field.OUTPUT]
 
-  const swapIsDisabled =
-    swapInputIsEmpty ||
-    // !isValid ||
-    // approval !== ApprovalState.APPROVED ||
-    priceImpactSeverity > 3
-
   const showApproveFlow =
-    !swapInputError &&
-    (approval === ApprovalState.NOT_APPROVED ||
-      approval === ApprovalState.PENDING ||
-      (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
-    !(priceImpactSeverity > 3)
+    // !swapInputError &&
+    approval === ApprovalState.NOT_APPROVED ||
+    approval === ApprovalState.PENDING
+
+  const swapIsDisabled =
+    showApproveFlow || swapInputIsEmpty || priceImpactSeverity > 3
 
   return (
     <>
@@ -387,11 +387,15 @@ export const SwapForm: FC = () => {
       <Modal
         ref={submitedRef}
         title={t('transactionSubmited.transactionSubmited')}
+        onClose={handleResetSwap}
       >
         <TransactionSubmited
           currencyToAdd={trade?.outputAmount.currency}
           txHash={txHash}
-          onClose={() => submitedRef.current?.close()}
+          onClose={() => {
+            submitedRef.current?.close()
+            handleResetSwap()
+          }}
         />
       </Modal>
       <Modal title={t('swapForm.confirmSwap')} ref={confirmSwapRef}>
@@ -405,7 +409,6 @@ export const SwapForm: FC = () => {
           allowedSlippage={Number(allowedSlippage)}
           onConfirm={handleSwap}
           swapErrorMessage={swapErrorMessage}
-          // customOnDismiss={handleConfirmDismiss}
           icons={icons}
         />
       </Modal>

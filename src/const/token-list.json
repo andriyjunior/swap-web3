@@ -1,5 +1,5 @@
 {
-  "name": "Uniswap Labs Default",
+  "name": "Sevn Labs Default",
   "timestamp": "2022-06-29T15:57:01.868Z",
   "version": {
     "major": 4,
@@ -8,7 +8,7 @@
   },
   "tags": {},
   "logoURI": "ipfs://QmNa8mQkrNKp1WEEeGjFezDmDeodkWRevGFN8JCV7b4Xir",
-  "keywords": ["uniswap", "default"],
+  "keywords": ["sevn", "default"],
   "tokens": [
     {
       "name": "Tether USD",

@@ -1,11 +1,12 @@
+import { ChainId } from 'packages/swap-sdk'
 import { Button, Flex, HorizontalSeparator, Typography } from 'components/atoms'
 import { etherscan } from 'const'
 import { useActiveWeb3React } from 'hooks'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 import { truncateHash } from 'utils'
+import styled from 'styled-components'
 
 interface IImportTokenConfirmationProps {
   onImport: () => void
@@ -43,7 +44,7 @@ const StyledCheckbox = styled.div`
 `
 const StyledCheckboxButton = styled.button<{ isSelected: boolean }>`
   position: relative;
-  border: 1px solid ${getTransparentColor(colors.black, 0.05)};
+  border: 1px solid ${getTransparentColor(colors.black, 1)};
   border-radius: ${borderRadius.primary};
   width: 24px;
   height: 24px;
@@ -69,6 +70,11 @@ const StyledLabel = styled(Typography.Button)`
   padding-left: 10px;
 `
 
+const NETWORK = {
+  [ChainId.MAINNET]: 'ETHEREUM',
+  [ChainId.TESTNET]: 'GOERLI',
+}
+
 export const ImportTokenConfirmation: FC<IImportTokenConfirmationProps> = ({
   onImport,
   symbol,
@@ -81,7 +87,7 @@ export const ImportTokenConfirmation: FC<IImportTokenConfirmationProps> = ({
   return (
     <StyledRoot>
       <StyledDesc>
-        Anyone can create a BEB20 token on BNB Smart Chain with any name,
+        Anyone can create a ERC20 token on {NETWORK[chainId]} with any name,
         including creating fake versions of existing tokens and tokens that
         claim to represent projects that do not have token.
         <br />

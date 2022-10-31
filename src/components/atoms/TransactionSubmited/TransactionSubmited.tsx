@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { Currency } from 'packages/swap-sdk'
@@ -49,21 +49,30 @@ export const TransactionSubmited: FC<ITransactionSubmited> = ({
 
   return (
     <Flex flexDirection="column" alignItems="center">
-      <StyledImage src={txSubmited_image} />
-      <StyledButtons>
-        {chainId && (
-          <SimpleButton href={`${etherscan[chainId]}tx/${txHash}`} icon="link">
-            EtherScan
-          </SimpleButton>
-        )}
+      {!txHash ? (
+        'Pending...'
+      ) : (
+        <>
+          <StyledImage src={txSubmited_image} />
+          <StyledButtons>
+            {chainId && (
+              <SimpleButton
+                href={`${etherscan[chainId]}tx/${txHash}`}
+                icon="link"
+              >
+                EtherScan
+              </SimpleButton>
+            )}
 
-        {token && (
-          <SimpleButton onClick={handleRegisterToken} icon="wallet">
-            {t('transactionSubmited.addToken', { token: token?.symbol })}
-          </SimpleButton>
-        )}
-      </StyledButtons>
-      <Button title={t('close')} onClick={onClose} />
+            {token && (
+              <SimpleButton onClick={handleRegisterToken} icon="wallet">
+                {t('transactionSubmited.addToken', { token: token?.symbol })}
+              </SimpleButton>
+            )}
+          </StyledButtons>
+          <Button title={t('close')} onClick={onClose} />
+        </>
+      )}
     </Flex>
   )
 }

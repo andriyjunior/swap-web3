@@ -3,16 +3,20 @@ export * from './tokens'
 export * from './exchange'
 
 import { ChainTokenList } from 'abis'
-import { WETH } from 'const'
+import { SEVN, USDT, WETH } from 'const'
 // used to construct the list of all pairs we consider by default in the frontend
-import { ChainId, Token } from 'packages/swap-sdk'
+import { ChainId, Token, WETH9, WNATIVE } from 'packages/swap-sdk'
 import { bscTestnetTokens } from './tokens'
 // import { bscTokens, bscTestnetTokens } from './tokens'
 // import { ChainTokenList } from './types'
 
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.MAINNET]: [],
-  [ChainId.TESTNET]: [],
+  [ChainId.TESTNET]: [
+    WNATIVE[ChainId.TESTNET],
+    SEVN[ChainId.TESTNET],
+    USDT[ChainId.TESTNET],
+  ],
 }
 
 export const PINNED_PAIRS: {
