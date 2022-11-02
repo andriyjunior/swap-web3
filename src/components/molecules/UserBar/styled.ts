@@ -54,16 +54,15 @@ const animation = css``
 export const StyledPendingCircle = styled.div`
   width: 28px;
   height: 28px;
-  
-    @keyframes animation {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
 
-    animation: animation 2s linear infinite;
+  @keyframes animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
+
+  animation: animation 0.8s linear infinite;
 `

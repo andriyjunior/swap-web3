@@ -137,12 +137,12 @@ export const useRemoveLiquidity = (userCurrencyA, userCurrencyB) => {
   const onAttempToApprove = async () => {
     if (!pairContract || !pair || !library || !deadline)
       throw new Error('missing dependencies')
+
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) {
       toastError(t('Error'), t('Missing liquidity amount'))
       throw new Error('missing liquidity amount')
     }
-
     // try to gather a signature for permission
     const nonce = await pairContract.nonces(account)
 

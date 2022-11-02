@@ -2,7 +2,13 @@ import { Typography, IconButton } from 'components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, FC } from 'react'
 import styled from 'styled-components'
-import { zIndexes, getTransparentColor, colors, borderRadius } from 'styles'
+import {
+  zIndexes,
+  getTransparentColor,
+  colors,
+  borderRadius,
+  breakpoints,
+} from 'styles'
 
 interface IModalLayoutProps {
   children: ReactNode
@@ -22,6 +28,10 @@ const StyledRoot = styled.div`
   align-items: center;
   justify-content: center;
   z-index: ${zIndexes.modal};
+
+  @media (max-width: ${breakpoints.md}px) {
+    padding: 16px;
+  }
 `
 
 const StyledOverlay = styled(motion.div)<{ withoutOverlay?: boolean }>`
@@ -42,6 +52,10 @@ const StyledModal = styled(motion.div)`
   width: 502px;
   border-radius: ${borderRadius.primary};
   background-color: ${colors.white};
+
+  @media (max-width: ${breakpoints.md}px) {
+    width: 100%;
+  }
 `
 
 const StyledContent = styled.div`

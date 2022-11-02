@@ -1,8 +1,9 @@
-import { FC, ReactNode, useState } from 'react'
+import { FC, ReactNode, useEffect, useState } from 'react'
 import { Menu, Toast, ToastsContainer } from 'components'
 import styled from 'styled-components'
 import { gradients } from 'styles'
 import { Header } from 'components'
+import { useIsMobile } from 'hooks'
 
 interface ICommonProps {
   children: ReactNode
@@ -24,11 +25,19 @@ const StyleBody = styled.div`
 `
 
 export const Common: FC<ICommonProps> = ({ children }) => {
-  const [isCollapsed, setCollapsed] = useState(false)
+  const [isCollapsed, setCollapsed] = useState(true)
+
+  const isMobile = useIsMobile()
+
+  useEffect(() => {
+    setCollapsed(isMobile)
+  }, [isMobile])
 
   const handleCollapsedToogle = () => {
     setCollapsed((prev) => !prev)
   }
+
+  console.log(isMobile)
 
   return (
     <StyleRoot>

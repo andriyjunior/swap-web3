@@ -1,7 +1,14 @@
 import { FC, ReactNode, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import BNB_icon from 'assets/coins/BNB.png'
-import { Button, HorizontalSeparator, Icon, Typography, Coin } from 'components'
+import {
+  Button,
+  HorizontalSeparator,
+  Icon,
+  Typography,
+  Coin,
+  Tooltip,
+} from 'components'
 import { useTranslation } from 'react-i18next'
 import { colors, getTransparentColor } from 'styles'
 import { Trade, TradeType } from 'packages/swap-sdk'
@@ -16,6 +23,7 @@ import { ONE_BIPS } from 'config'
 import { Field } from 'store/features/swap/actions'
 
 import arrows_icon from 'assets/icons/blue-arrows.svg'
+import info_icon from 'assets/icons/info.svg'
 
 const StyledCurrencies = styled.div``
 
@@ -48,7 +56,13 @@ const StyledAmount = styled(Typography.Header4)<{ hasPaddingLeft?: boolean }>`
 `
 
 const StyledText = styled(Typography.Body)`
-  ${halfBlackCSS}
+  ${halfBlackCSS};
+  display: flex;
+  align-items: flex-start;
+`
+
+const StyledIcon = styled(Icon)`
+  padding: 0 8px;
 `
 
 const StyledRow = styled.div`
@@ -157,11 +171,22 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
 
       <StyledRow>
         {trade && (
-          <StyledText>
-            {trade.tradeType === TradeType.EXACT_INPUT
-              ? t('swapForm.minimumReceived')
-              : t('swapForm.maximumSold')}
-          </StyledText>
+          <>
+            <StyledText>
+              {trade.tradeType === TradeType.EXACT_INPUT
+                ? t('swapForm.minimumReceived')
+                : t('swapForm.maximumSold')}
+              <Tooltip
+                text={
+                  trade.tradeType === TradeType.EXACT_INPUT
+                    ? t('swapForm.minimumReceived')
+                    : t('swapForm.maximumSold')
+                }
+              >
+                <StyledIcon src={info_icon} />
+              </Tooltip>
+            </StyledText>
+          </>
         )}
         <StyledRight>
           {trade && (
@@ -179,7 +204,12 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
       </StyledRow>
 
       <StyledRow>
-        <StyledText>{t('swapForm.priceImpact')}</StyledText>
+        <StyledText>
+          {t('swapForm.priceImpact')}
+          <Tooltip text={t('swapForm.priceImpact')}>
+            <StyledIcon src={info_icon} />
+          </Tooltip>
+        </StyledText>
         <StyledRight>
           <StyledErrorText severity={warningSeverity(priceImpactWithoutFee)}>
             {priceImpactWithoutFee
@@ -191,7 +221,12 @@ export const SwapConfirm: FC<ISwapConfirmProps> = ({
         </StyledRight>
       </StyledRow>
       <StyledRow>
-        <StyledText>{t('swapForm.liquidityProviderFee')}</StyledText>
+        <StyledText>
+          {t('swapForm.liquidityProviderFee')}
+          <Tooltip text={t('swapForm.liquidityProviderFee')}>
+            <StyledIcon src={info_icon} />
+          </Tooltip>
+        </StyledText>
         <StyledRight>
           {trade && (
             <StyledText>

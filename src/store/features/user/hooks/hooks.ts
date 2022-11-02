@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from 'store/utils'
 import {
   deserializeToken,
   useActiveWeb3React,
+  useAllTokens,
   useOfficialsAndUserAddedTokens,
 } from 'hooks'
 import { useCallback, useMemo } from 'react'
@@ -34,7 +35,7 @@ export const useGasPrice = (): string => {
  */
 export function useTrackedTokenPairs(): [Token, Token][] {
   const { chainId } = useActiveWeb3React()
-  const tokens = useOfficialsAndUserAddedTokens()
+  const tokens = useAllTokens()
 
   // pinned pairs
   const pinnedPairs = useMemo(

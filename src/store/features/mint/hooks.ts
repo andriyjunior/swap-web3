@@ -27,6 +27,7 @@ import {
 import { selectMintState } from 'store/selectors'
 import { tryParseAmount } from 'utils'
 import { Field } from 'types'
+import { useTranslation } from 'react-i18next'
 
 export const useMintState = () => {
   return useAppSelector(selectMintState)
@@ -49,6 +50,7 @@ export const useDerivedMintInfo = (
   error?: string
   addError?: string
 } => {
+  const { t } = useTranslation()
   const { account, chainId } = useActiveWeb3React()
 
   const { independentField, typedValue, otherTypedValue } = useMintState()
@@ -203,39 +205,49 @@ export const useDerivedMintInfo = (
 
   let error: string | undefined
   let addError: string | undefined
-  //   if (!account) {
-  //     error = t('Connect Wallet')
-  //   }
+  if (!account) {
+    error = t('Connect Wallet')
+  }
 
-  //   if (pairState === PairState.INVALID) {
-  //     error = error ?? t('Choose a valid pair')
-  //   }
+  if (pairState === PairState.INVALID) {
+    error = error ?? t('Choose a valid pair')
+  }
 
   const {
     [Field.CURRENCY_A]: currencyAAmount,
     [Field.CURRENCY_B]: currencyBAmount,
   } = parsedAmounts
 
-  //   if (
-  //     currencyAAmount &&
-  //     currencyBAmount &&
-  //     currencyBalances?.[Field.CURRENCY_A]?.equalTo(0) &&
-  //     currencyBalances?.[Field.CURRENCY_B]?.equalTo(0)
-  //   ) {
-  //     error = error ?? t('No token balance')
-  //   }
+  if (
+    currencyAAmount &&
+    currencyBAmount &&
+    currencyBalances?.[Field.CURRENCY_A]?.equalTo(0) &&
+    currencyBalances?.[Field.CURRENCY_B]?.equalTo(0)
+  ) {
+    error = error ?? t('No token balance')
+  }
 
-  //   if (!parsedAmounts[Field.CURRENCY_A] || !parsedAmounts[Field.CURRENCY_B]) {
-  //     addError = t('Enter an amount')
-  //   }
+  if (!parsedAmounts[Field.CURRENCY_A] || !parsedAmounts[Field.CURRENCY_B]) {
+    addError = t('Enter an amount')
+  }
 
-  //   if (currencyAAmount && currencyBalances?.[Field.CURRENCY_A]?.lessThan(currencyAAmount)) {
-  //     addError = t('Insufficient %symbol% balance', { symbol: currencies[Field.CURRENCY_A]?.symbol })
-  //   }
+  if (
+    currencyAAmount &&
+    currencyBalances?.[Field.CURRENCY_A]?.lessThan(currencyAAmount)
+  ) {
+    addError = t('Insufficient {{symbol}} balance', {
+      symbol: currencies[Field.CURRENCY_A]?.symbol,
+    })
+  }
 
-  //   if (currencyBAmount && currencyBalances?.[Field.CURRENCY_B]?.lessThan(currencyBAmount)) {
-  //     addError = t('Insufficient %symbol% balance', { symbol: currencies[Field.CURRENCY_B]?.symbol })
-  //   }
+  if (
+    currencyBAmount &&
+    currencyBalances?.[Field.CURRENCY_B]?.lessThan(currencyBAmount)
+  ) {
+    addError = t('Insufficient {{symbol}} balance', {
+      symbol: currencies[Field.CURRENCY_B]?.symbol,
+    })
+  }
 
   return {
     dependentField,

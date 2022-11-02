@@ -103,9 +103,8 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
       approval === ApprovalState.PENDING
 
     const isDisabledRemove =
-      isDisabled ||
-      !parsedAmounts.LIQUIDITY ||
-      Boolean(!currencyA || !currencyB)
+      // isDisabled ||
+      !parsedAmounts.LIQUIDITY || Boolean(!currencyA || !currencyB)
 
     const handleOnRemove = () => {
       onRemove()
@@ -240,7 +239,7 @@ export const RemoveLiquidity: FC<IRemoveLiquidity> = memo(
             onClick={onAttempToApprove}
           />
           <Button
-            isDisabled={false}
+            isDisabled={isDisabledRemove}
             title={t('remove')}
             onClick={() => confirmModalRef.current?.open()}
           />

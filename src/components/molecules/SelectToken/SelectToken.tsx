@@ -135,7 +135,6 @@ export const SelectToken: FC<ISelectTokenProps> = ({
           />
         )}
         {tokenList.map((item) => {
-          console.log(item)
           return (
             <TokenSelector
               key={item.address}

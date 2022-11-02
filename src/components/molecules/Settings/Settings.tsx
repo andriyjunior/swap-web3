@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectUser,
@@ -18,8 +18,13 @@ import {
   RadioButton,
   Typography,
 } from 'components'
+import { escapeRegExp } from 'lodash'
 
 // interface ISettingsProps {}
+
+enum DeadlineError {
+  InvalidInput = 'InvalidInput',
+}
 
 const data = {
   name: 'gasPrice',
@@ -43,19 +48,22 @@ const data2 = {
   name: 'userSlippageTolerance',
   options: [
     {
-      value: 0.1,
+      value: 10,
       key: '0.1%',
     },
     {
-      value: 0.5,
+      value: 50,
       key: '0.5%',
     },
     {
-      value: 1,
+      value: 100,
       key: '1%',
     },
   ],
 }
+
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
+const THREE_DAYS_IN_SECONDS = 60 * 60 * 24 * 3
 
 const StyledLabel = styled.span`
   margin-left: 10px;
@@ -69,6 +77,8 @@ const ErrorMessage = styled(Typography.Body)`
 
 export const Settings: FC = () => {
   const { t } = useTranslation()
+  const [slippageInput, setSlippageInput] = useState('')
+  const [deadlineInput, setDeadlineInput] = useState('')
 
   const dispatch = useAppDispatch()
 
@@ -98,8 +108,8 @@ export const Settings: FC = () => {
     const tolerance = Number(userSlippageTolerance)
 
     if (
-      tolerance < 0.1 ||
-      tolerance >= 50 ||
+      tolerance < 100 ||
+      tolerance >= 4500 ||
       isEmpty(userSlippageTolerance.toString())
     ) {
       setErrors((prev) => {
@@ -114,6 +124,47 @@ export const Settings: FC = () => {
   }
 
   useEffect(handleOnError, [userSlippageTolerance, userDeadline, gasPrice])
+
+  let deadlineError: DeadlineError | undefined
+
+  const parseCustomSlippage = (value: string) => {
+    if (value === '' || inputRegex.test(escapeRegExp(value))) {
+      setSlippageInput(value)
+      try {
+        const valueAsIntFromRoundedFloat = Number.parseInt(
+          (Number.parseFloat(value) * 100).toString()
+        )
+        if (
+          !Number.isNaN(valueAsIntFromRoundedFloat) &&
+          valueAsIntFromRoundedFloat < 5000
+        ) {
+          handleOnChangeTolerance(valueAsIntFromRoundedFloat)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const parseCustomDeadline = (value: string) => {
+    console.log(value)
+    setDeadlineInput(value)
+
+    try {
+      const valueAsInt: number = Number.parseInt(value) * 60
+      if (
+        !Number.isNaN(valueAsInt) &&
+        valueAsInt > 60 &&
+        valueAsInt < THREE_DAYS_IN_SECONDS
+      ) {
+        handleOnChangeDeadline(valueAsInt)
+      } else {
+        deadlineError = DeadlineError.InvalidInput
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <>
@@ -145,17 +196,25 @@ export const Settings: FC = () => {
               title={t(item.key)}
               name={data2.name}
               value={item.value}
-              onChange={(value) =>
+              onChange={(value) => {
+                setSlippageInput('')
                 handleOnChangeTolerance(value.userSlippageTolerance)
-              }
+              }}
             />
           )
         })}
         <NumberInput
-          value={userSlippageTolerance}
-          onInput={(value) => handleOnChangeTolerance(value)}
-          placeholder={'0.0'}
+          value={slippageInput}
+          placeholder={(userSlippageTolerance / 100).toFixed(2)}
           error={Boolean(errors?.transactionTolerance)}
+          onChange={(event) => {
+            if (event.currentTarget.validity.valid) {
+              parseCustomSlippage(event.target.value.replace(/,/g, '.'))
+            }
+          }}
+          onBlur={() => {
+            parseCustomSlippage((userSlippageTolerance / 100).toFixed(2))
+          }}
         />
         <StyledLabel>%</StyledLabel>
       </Flex>
@@ -169,9 +228,18 @@ export const Settings: FC = () => {
         {t('userSettings.transactionDeadline')}
       </Typography.Title>
       <NumberInput
-        value={(userDeadline / 60).toString()}
-        onInput={(value) => handleOnChangeDeadline(value)}
-        placeholder={'0'}
+        value={deadlineInput}
+        placeholder={(userDeadline / 60).toString()}
+        inputMode="numeric"
+        pattern="^[0-9]+$"
+        onBlur={() => {
+          parseCustomDeadline((userDeadline / 60).toString())
+        }}
+        onChange={(event) => {
+          if (event.currentTarget.validity.valid) {
+            parseCustomDeadline(event.target.value)
+          }
+        }}
       />
       <StyledLabel>{t('minutes')}</StyledLabel>
     </>

@@ -1,15 +1,8 @@
-import { FC } from 'react'
+import { ChangeEventHandler, FC, InputHTMLAttributes } from 'react'
 import styled from 'styled-components'
 import { getTransparentColor, colors, borderRadius, shadows } from 'styles'
 import { escapeRegExp } from 'utils'
 import { inputRegex } from '../utils'
-
-interface INumberInputProps {
-  value: string
-  onInput: (e: string) => void
-  placeholder: string
-  error?: boolean
-}
 
 const StyledInput = styled.input`
   background-color: none;
@@ -40,32 +33,44 @@ const StyledInput = styled.input`
   }
 `
 
+interface INumberInputProps {
+  value: string
+  onChange: ChangeEventHandler<HTMLInputElement>
+  placeholder: string
+  error?: boolean
+  pattern?: string
+  inputMode?: string
+  onBlur?: () => void
+}
+
 export const NumberInput: FC<INumberInputProps> = ({
   value,
-  onInput,
   placeholder,
   error,
+  onChange,
+  pattern = '^[0-9]*[.,]?[0-9]{0,2}$',
+  inputMode = 'decimal',
+  onBlur,
 }) => {
-  const enforcer = (nextUserInput: string) => {
-    if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
-      onInput(nextUserInput)
-    }
-  }
+  // const enforcer = (nextUserInput: string) => {
+  //   if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
+  //     onInput(nextUserInput)
+  //   }
+  // }
 
-  const handleOnInput = (e: string) => {
-    enforcer(e.replace(/,/g, '.'))
-  }
+  // const handleOnInput = (e: string) => {
+  //   enforcer(e.replace(/,/g, '.'))
+  // }
 
   return (
     <StyledInput
       className={error ? 'error' : ''}
       placeholder={placeholder}
       inputMode="decimal"
-      pattern="^[0-9]*[.,]?[0-9]*$"
+      pattern={pattern}
       value={value}
-      minLength={1}
-      maxLength={3}
-      onInput={(e) => handleOnInput(e.currentTarget.value)}
+      onChange={onChange}
+      onBlur={onBlur}
     />
   )
 }
