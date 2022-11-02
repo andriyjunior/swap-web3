@@ -1,7 +1,7 @@
 import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { colors, getTransparentColor, zIndexes } from 'styles'
+import { breakpoints, colors, getTransparentColor, zIndexes } from 'styles'
 import {
   Button,
   MenuToogle,
@@ -35,12 +35,20 @@ const StyledRoot = styled.div`
   justify-content: space-between;
   backdrop-filter: blur(10px);
   z-index: ${zIndexes.fixed};
+
+  @media (max-width: ${breakpoints.md}) {
+    justify-content: flex-end;
+  }
 `
 
 const StyledSocials = styled.div`
   display: flex;
   align-items: center;
   gap: 42px;
+
+  @media (max-width: ${breakpoints.sm}) {
+    display: none;
+  }
 `
 
 const StyledIcon = styled.a`
