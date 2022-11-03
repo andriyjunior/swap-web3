@@ -92,3 +92,76 @@ export function usePair(
   >(() => [[tokenA, tokenB]], [tokenA, tokenB])
   return usePairs(pairCurrencies)[0]
 }
+
+export function usePairsWithoutLiquidity(
+  currencies: [Currency | undefined, Currency | undefined][]
+): [PairState, Pair | null][] {
+  const { chainId } = useActiveWeb3React()
+
+  const tokens = useMemo(
+    () =>
+      currencies.map(([currencyA, currencyB]) => [
+        wrappedCurrency(currencyA, chainId),
+        wrappedCurrency(currencyB, chainId),
+      ]),
+    [chainId, currencies]
+  )
+
+  const pairAddresses = useMemo(
+    () =>
+      tokens.map(([tokenA, tokenB]) => {
+        try {
+          return tokenA && tokenB && !tokenA.equals(tokenB)
+            ? Pair.getAddress(tokenA, tokenB)
+            : undefined
+        } catch (error: any) {
+          // Debug Invariant failed related to this line
+          console.error(
+            error,
+            `- pairAddresses: ${tokenA?.address}-${tokenB?.address}`,
+            `chainId: ${tokenA?.chainId}`
+          )
+
+          return undefined
+        }
+      }),
+    [tokens]
+  )
+
+  const results = useMultipleContractSingleData(
+    pairAddresses,
+    PAIR_INTERFACE,
+    'getReserves'
+  )
+
+  return results.map((result, i) => {
+    const { loading } = result
+
+    if (loading) return [PairState.LOADING, null]
+
+    const tokenA = tokens[i][0]!
+    const tokenB = tokens[i][1]!
+
+    if (!tokenA || !tokenB || tokenA.equals(tokenB))
+      return [PairState.INVALID, null]
+
+    const [token0, token1] = tokenA.sortsBefore(tokenB)
+      ? [tokenA, tokenB]
+      : [tokenB, tokenA]
+
+    return [
+      PairState.NOT_EXISTS,
+      new Pair(new TokenAmount(token0, ''), new TokenAmount(token1, '')),
+    ]
+  })
+}
+
+export function usePairWithoutLiquidity(
+  tokenA?: Currency,
+  tokenB?: Currency
+): [PairState, Pair | null] {
+  const pairCurrencies = useMemo<
+    [Currency | undefined, Currency | undefined][]
+  >(() => [[tokenA, tokenB]], [tokenA, tokenB])
+  return usePairsWithoutLiquidity(pairCurrencies)[0]
+}
