@@ -37,7 +37,7 @@ const StyledRoot = styled.div`
   z-index: ${zIndexes.fixed};
 
   @media (max-width: ${breakpoints.md}) {
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 `
 
@@ -47,7 +47,7 @@ const StyledSocials = styled.div`
   gap: 42px;
 
   @media (max-width: ${breakpoints.sm}) {
-    display: none;
+    gap: 12px;
   }
 `
 

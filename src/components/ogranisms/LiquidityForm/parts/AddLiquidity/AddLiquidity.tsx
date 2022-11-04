@@ -7,6 +7,7 @@ import {
   useApproveCallback,
   useCurrency,
   useModalRef,
+  usePairWithoutLiquidity,
 } from 'hooks'
 import { Field } from 'types'
 import {
@@ -124,6 +125,11 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
     addError,
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
 
+  const [_, pairWithoutLiquidity] = usePairWithoutLiquidity(
+    currencies[Field.CURRENCY_A],
+    currencies[Field.CURRENCY_B]
+  )
+
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
 
   const { handleCurrencyASelect, handleCurrencyBSelect } =
@@ -163,7 +169,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
     parsedAmounts,
     noLiquidity,
     currencies,
-    pair
+    pair ? pair : pairWithoutLiquidity
   )
 
   const handleResetLiquidityInputs = () => {
@@ -210,7 +216,7 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
       : (poolTokenPercentage?.lessThan(ONE_BIPS)
           ? '<0.01'
           : poolTokenPercentage?.toFixed(2)) ?? '0'
-  console.log(error, addError)
+
   const icons = [
     getTokenUrlByAddress(currencyIdA),
     getTokenUrlByAddress(currencyIdB),
@@ -241,7 +247,9 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
         onClose={handleResetLiquidityInputs}
       >
         <TransactionSubmited
-          currencyToAdd={pair?.liquidityToken}
+          currencyToAdd={
+            pair ? pair?.liquidityToken : pairWithoutLiquidity?.liquidityToken
+          }
           onClose={() => {
             handleResetLiquidityInputs()
             txSubmitedRef.current?.close()

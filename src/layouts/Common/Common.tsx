@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from 'react'
-import { Menu, Toast, ToastsContainer } from 'components'
+import { Menu, MobileMenu, Toast, ToastsContainer } from 'components'
 import styled from 'styled-components'
-import { gradients } from 'styles'
+import { breakpoints, gradients } from 'styles'
 import { Header } from 'components'
 import { useIsMobile } from 'hooks'
 
@@ -22,6 +22,10 @@ const StyleBody = styled.div`
   width: 100%;
   flex-grow: 0;
   flex-shrink: 1;
+
+  @media (max-width: ${breakpoints.md}) {
+    padding-bottom: 80px;
+  }
 `
 
 export const Common: FC<ICommonProps> = ({ children }) => {
@@ -41,7 +45,7 @@ export const Common: FC<ICommonProps> = ({ children }) => {
 
   return (
     <StyleRoot>
-      <Menu isCollapsed={isCollapsed} />
+      {!isMobile ? <Menu isCollapsed={isCollapsed} /> : <MobileMenu />}
       <StyleBody>
         <Header
           handleCollapsedToogle={handleCollapsedToogle}

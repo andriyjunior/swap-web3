@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components'
-import { borderRadius, colors, gradients, shadows } from 'styles'
+import { borderRadius, breakpoints, colors, gradients, shadows } from 'styles'
 
 export const styledButton = css`
   position: relative;
@@ -16,6 +16,11 @@ export const styledButton = css`
   display: flex;
   align-items: center;
   transition: background-color 0.1s ease-in;
+
+  @media (max-width: ${breakpoints.md}) {
+    margin-bottom: 0;
+    justify-content: center;
+  }
 
   &.active {
     background-color: ${colors.white};

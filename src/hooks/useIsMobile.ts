@@ -13,6 +13,8 @@ export const useIsMobile = () => {
       }
     }
 
+    checking()
+
     window.addEventListener('resize', checking)
 
     return () => {

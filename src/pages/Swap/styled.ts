@@ -5,8 +5,8 @@ import { breakpoints, colors, shadows } from 'styles'
 export const StyledPage = styled(Flex)`
   padding-top: 80px;
 
-  @media (max-width: ${breakpoints.md}px) {
-    padding: 80px 16px 0;
+  @media (max-width: ${breakpoints.md}) {
+    padding: 40px 16px 0;
   }
 `
 
@@ -17,7 +17,7 @@ export const StyledRoot = styled(Flex)`
   align-items: flex-start;
   box-shadow: ${shadows.main};
 
-  @media (max-width: ${breakpoints.md}px) {
+  @media (max-width: ${breakpoints.md}) {
     width: 100%;
   }
 `

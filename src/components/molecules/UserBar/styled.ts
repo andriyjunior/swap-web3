@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import styled, { css } from 'styled-components'
-import { colors } from 'styles'
+import { colors, shadows } from 'styles'
 
 export const StyledRoot = styled.div<{ isOpened: boolean }>`
   position: relative;
@@ -47,6 +47,7 @@ export const StyledProfileButtons = styled(motion.div)`
   background-color: ${colors.white};
   border-radius: 0 0 22px 22px;
   overflow: hidden;
+  box-shadow: ${shadows.logo};
 `
 
 const animation = css``
