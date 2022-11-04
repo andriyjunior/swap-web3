@@ -29,7 +29,7 @@ const StyledRoot = styled.div`
   justify-content: center;
   z-index: ${zIndexes.modal};
 
-  @media (max-width: ${breakpoints.md}px) {
+  @media (max-width: ${breakpoints.md}) {
     padding: 16px;
   }
 `
@@ -53,7 +53,7 @@ const StyledModal = styled(motion.div)`
   border-radius: ${borderRadius.primary};
   background-color: ${colors.white};
 
-  @media (max-width: ${breakpoints.md}px) {
+  @media (max-width: ${breakpoints.md}) {
     width: 100%;
   }
 `

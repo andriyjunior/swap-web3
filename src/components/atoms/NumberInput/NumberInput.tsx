@@ -1,6 +1,12 @@
 import { ChangeEventHandler, FC, InputHTMLAttributes } from 'react'
 import styled from 'styled-components'
-import { getTransparentColor, colors, borderRadius, shadows } from 'styles'
+import {
+  getTransparentColor,
+  colors,
+  borderRadius,
+  shadows,
+  breakpoints,
+} from 'styles'
 import { escapeRegExp } from 'utils'
 import { inputRegex } from '../utils'
 
@@ -16,6 +22,12 @@ const StyledInput = styled.input`
   border-radius: ${borderRadius.primary};
   font-weight: 500;
   font-size: 14px;
+
+  @media (max-width: ${breakpoints.md}) {
+    flex-shrink: 1;
+    min-width: 0;
+    flex-grow: 0;
+  }
 
   &.error {
     border-color: ${colors.error};

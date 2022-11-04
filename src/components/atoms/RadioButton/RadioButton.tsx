@@ -15,6 +15,7 @@ interface IRadioButtonProps {
 const StyledItem = styled.div`
   position: relative;
   width: 100%;
+  flex-shrink: 2;
 
   &:not(:last-child) {
     margin-right: 10px;

@@ -191,7 +191,7 @@ export const Settings: FC = () => {
         {data2.options.map((item) => {
           return (
             <RadioButton
-              checked={Number(userSlippageTolerance) === Number(item.value)}
+              checked={userSlippageTolerance === Number(item.value)}
               key={item.key}
               title={t(item.key)}
               name={data2.name}

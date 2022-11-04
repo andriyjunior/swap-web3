@@ -11,6 +11,7 @@ const StyledInput = styled.input<{ textAlign: TTextAlign }>`
   font-weight: 700;
   font-size: 26px;
   text-align: ${({ textAlign }) => textAlign};
+  width: 100%;
 
   &:focus {
     outline: none;
