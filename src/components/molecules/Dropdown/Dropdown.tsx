@@ -2,14 +2,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { FC, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { borderRadius, colors } from 'styles'
+import { borderRadius, colors, shadows } from 'styles'
 import { DropdownItem, Typography } from 'components/atoms'
 import { useOnClickOutside } from 'hooks'
 
 import arrow_icon from 'assets/icons/arrow.svg'
 
 type Option = {
-  key: number | number
+  key: number
   value: string
 }
 
@@ -20,11 +20,13 @@ interface IDropdown {
 }
 
 const StyledRoot = styled.div`
+  position: relative;
   width: 140px;
   background-color: ${colors.white};
   border: none;
+  transition: border 0.2s ease-in;
   border-radius: ${borderRadius.primary};
-  overflow: hidden;
+  box-shadow: ${shadows.main};
 `
 
 const StyledButton = styled.button`
@@ -44,6 +46,17 @@ const StyledIcon = styled.img<{ isOpen: boolean }>`
   height: 24px;
   transform: rotate(${({ isOpen }) => (isOpen ? '180deg' : '0deg')});
   transition: transform 0.1s ease-in;
+`
+
+const StyledItems = styled(motion.div)`
+  width: 100%;
+  background-color: ${colors.white};
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 0;
+  box-shadow: ${shadows.main};
+  border: none;
+  border-radius: ${borderRadius.primary};
 `
 
 export const Dropdown: FC<IDropdown> = ({ options, title, onSelect }) => {
@@ -68,7 +81,7 @@ export const Dropdown: FC<IDropdown> = ({ options, title, onSelect }) => {
       </StyledButton>
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <StyledItems
             initial={{ height: 0, opacity: 0, y: -20 }}
             animate={{ height: 'inherit', opacity: 1, y: 0 }}
             exit={{ height: 0, opacity: 0, y: -20 }}
@@ -84,7 +97,7 @@ export const Dropdown: FC<IDropdown> = ({ options, title, onSelect }) => {
                 </DropdownItem>
               )
             })}
-          </motion.div>
+          </StyledItems>
         )}
       </AnimatePresence>
     </StyledRoot>
