@@ -19,6 +19,7 @@ export const StyledRoot = styled.button`
   height: 42px;
   width: 100%;
   z-index: 0;
+  outline: transparent;
 
   &::before {
     position: absolute;
