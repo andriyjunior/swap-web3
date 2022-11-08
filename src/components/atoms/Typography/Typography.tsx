@@ -59,6 +59,12 @@ const StyledButtonBold = styled(StyledButton)`
   font-weight: 700;
 `
 
+const StyledSmall = styled(StyledButton)`
+  font-weight: 700;
+  font-size: 10px;
+  color: ${colors.black};
+`
+
 export const Typography = {
   Header3: StyledHeader3,
   Header4: StyledHeader4,
@@ -68,4 +74,5 @@ export const Typography = {
   Caption: StyledCaption,
   Button: StyledButton,
   ButtonBold: StyledButtonBold,
+  Small: StyledSmall,
 }

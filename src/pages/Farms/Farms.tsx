@@ -2,8 +2,8 @@ import { Container, Flex, Typography } from 'components'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { breakpoints } from 'styles'
-import { FilterBar } from './parts'
+
+import { FilterBar, FarmTable } from './parts'
 
 interface IFarmsProps {
   children?: ReactNode
@@ -20,6 +20,7 @@ export const Farms: FC<IFarmsProps> = () => {
     <StyledPage>
       <StyledTitle>{t('Swap tokens')}</StyledTitle>
       <FilterBar />
+      <FarmTable />
     </StyledPage>
   )
 }
