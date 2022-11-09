@@ -50,6 +50,10 @@ export const styledButton = css`
 
   &:hover::before {
     opacity: 1;
+
+    @media (max-width: ${breakpoints.md}) {
+      opacity: 0;
+    }
   }
 `
 

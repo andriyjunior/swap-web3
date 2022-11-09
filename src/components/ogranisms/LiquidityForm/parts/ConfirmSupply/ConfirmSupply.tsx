@@ -8,7 +8,7 @@ import {
 } from 'components'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { colors, getTransparentColor } from 'styles'
+import { breakpoints, colors, getTransparentColor } from 'styles'
 
 import bnb from 'assets/coins/BNB.png'
 import { FC } from 'react'
@@ -22,6 +22,10 @@ const StyledButton = styled.div`
 
 const StyledLiquidityMinted = styled(Typography.Header3)`
   min-width: 0;
+
+  @media (max-width: ${breakpoints.sm}) {
+    font-size: 26px;
+  }
 `
 
 const StyledTextRow = styled(Flex)`
@@ -68,7 +72,7 @@ export const ConfirmSupply: FC<IConfirmSupply> = ({
 
   return (
     <>
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" alignItems="center">
         <StyledLiquidityMinted>
           {liquidityMinted?.toSignificant(6)}
         </StyledLiquidityMinted>

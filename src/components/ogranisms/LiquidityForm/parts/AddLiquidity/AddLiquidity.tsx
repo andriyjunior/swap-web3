@@ -58,6 +58,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 
 import wallet_icon from 'assets/icons/wallet.svg'
 import { useOnAdd } from './hooks'
+import { breakpoints } from 'styles'
 
 const StyledPlusIcon = styled.img`
   margin: 10px 0;
@@ -66,6 +67,23 @@ const StyledPlusIcon = styled.img`
 const StyledPricesAndPool = styled(Flex)`
   padding-bottom: 20px;
 `
+
+const StyledPriceOrPool = styled(Flex)`
+  @media (max-width: ${breakpoints.md}) {
+    padding: 0 2px;
+  }
+`
+
+const StyledText = styled(Typography.Body)`
+  display: flex;
+  flex-wrap: wrap;
+
+  @media (max-width: ${breakpoints.md}) {
+    font-size: 10px;
+    text-align: center;
+  }
+`
+
 const StyledSupplyWrapper = styled.div`
   margin-top: 16px;
 `
@@ -323,30 +341,30 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
               justifyContent="space-between"
               alignItems="center"
             >
-              <Flex alignItems="center" flexDirection="column">
+              <StyledPriceOrPool alignItems="center" flexDirection="column">
                 <Typography.Title>
                   {price?.toSignificant(6) ?? '-'}
                 </Typography.Title>
-                <Typography.Body>
+                <StyledText>
                   {currencies?.CURRENCY_B?.symbol}&nbsp;per&nbsp;
                   {currencies?.CURRENCY_A?.symbol}
-                </Typography.Body>
-              </Flex>
-              <Flex alignItems="center" flexDirection="column">
+                </StyledText>
+              </StyledPriceOrPool>
+              <StyledPriceOrPool alignItems="center" flexDirection="column">
                 <Typography.Title>
                   {price?.invert()?.toSignificant(6) ?? '-'}
                 </Typography.Title>
-                <Typography.Body>
+                <StyledText>
                   {currencies?.CURRENCY_A?.symbol}&nbsp;per&nbsp;
                   {currencies?.CURRENCY_B?.symbol}
-                </Typography.Body>
-              </Flex>
-              <Flex alignItems="center" flexDirection="column">
+                </StyledText>
+              </StyledPriceOrPool>
+              <StyledPriceOrPool alignItems="center" flexDirection="column">
                 <Typography.Title>
                   {poolTokenPercentageAmount}%
                 </Typography.Title>
-                <Typography.Body>Share of Pool</Typography.Body>
-              </Flex>
+                <StyledText>Share of Pool</StyledText>
+              </StyledPriceOrPool>
             </StyledPricesAndPool>
           </InnerContainer>
 
