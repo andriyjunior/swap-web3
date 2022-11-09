@@ -198,7 +198,7 @@ export const Settings: FC = () => {
               value={item.value}
               onChange={(value) => {
                 setSlippageInput('')
-                handleOnChangeTolerance(value.userSlippageTolerance)
+                handleOnChangeTolerance(Number(value.userSlippageTolerance))
               }}
             />
           )
