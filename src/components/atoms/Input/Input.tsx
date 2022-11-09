@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { colors, getTransparentColor } from 'styles'
+import { colors, getTransparentColor, shadows } from 'styles'
 import { InnerContainer } from '../InnerContainer'
 
 interface IInputProps {
@@ -9,7 +9,11 @@ interface IInputProps {
   placeholder: string
   height?: string
 }
-const StyledRoot = styled(InnerContainer)``
+const StyledRoot = styled(InnerContainer)`
+  &:has(input:focus) {
+    box-shadow: ${shadows.onFocus};
+  }
+`
 
 const StyledInput = styled.input<{ height: string }>`
   width: 100%;

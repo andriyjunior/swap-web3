@@ -56,17 +56,47 @@ const StyledButtonTitle = styled(Typography.BodyBold)`
   color: ${colors.lightBlue};
 `
 
-const StyledArrow = styled.img`
+const StyledArrow = styled.img<{ isFlip: boolean }>`
   width: 24px;
   height: 24px;
+  transform: rotate(${({ isFlip }) => (isFlip ? 180 : 0)}deg);
+  transition: transform 0.1s ease-in;
 `
 
 const StyledDetailedInfo = styled(motion.div)`
-  padding: 30px;
+  height: 100%;
+  width: 100%;
+  padding: 0 30px;
   background-image: url(${farm_row_bg});
   background-repeat: no-repeat;
   background-size: cover;
-  width: 100%;
+  background-position: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+`
+
+const StyledDetailedTextGroup = styled(Flex)`
+  flex-shrink: 0;
+`
+
+const StyledEnableFarm = styled.div`
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0.4;
+
+  &:before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: ${getTransparentColor(colors.white, 0.5)};
+    transform: skew(-10deg);
+  }
 `
 
 const variants = {
@@ -76,6 +106,8 @@ const variants = {
 
 export const Row: FC = () => {
   const [isOpened, setOpened] = useState(false)
+
+  const hasFarm = true
   return (
     <>
       <>
@@ -120,9 +152,9 @@ export const Row: FC = () => {
             </Flex>
           </StyledCell>
           <StyledCell width="100px">
-            <StyledButton onClick={() => setOpened((prev) => !prev)}>
+            <StyledButton onClick={() => {}}>
               <StyledButtonTitle>Details</StyledButtonTitle>
-              <StyledArrow src={arrowDown_icon} />
+              <StyledArrow src={arrowDown_icon} isFlip={isOpened} />
             </StyledButton>
           </StyledCell>
         </StyledRow>
@@ -137,16 +169,39 @@ export const Row: FC = () => {
                 animate="animate"
                 exit="initial"
               >
-                <Flex>
-                  <div>
-                    <Button onClick={() => {}}>Get LP</Button>
-                  </div>
-                  <div>
-                    <Button onClick={() => {}}>Enable Farm</Button>
-                  </div>
-                  <div>
-                    <Button onClick={() => {}}>Harvest</Button>
-                  </div>
+                <Flex gap="10px" alignItems="center">
+                  <Button onClick={() => {}}>Get LP</Button>
+                  <StyledDetailedTextGroup flexDirection="column">
+                    <StyledTitle>Avaliable LP</StyledTitle>
+                    <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
+                  </StyledDetailedTextGroup>
+                </Flex>
+                <StyledEnableFarm>
+                  {!hasFarm ? (
+                    <Flex>
+                      <Button onClick={() => {}}>Enable Farm</Button>
+                    </Flex>
+                  ) : (
+                    <Flex
+                      gap="8px"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Button onClick={() => {}}>Stake</Button>
+                      <Button onClick={() => {}}>Unstake</Button>
+                      <StyledDetailedTextGroup flexDirection="column">
+                        <StyledTitle>Avaliable LP</StyledTitle>
+                        <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
+                      </StyledDetailedTextGroup>
+                    </Flex>
+                  )}
+                </StyledEnableFarm>
+                <Flex gap="10px" alignItems="center">
+                  <Button onClick={() => {}}>Harvest</Button>
+                  <StyledDetailedTextGroup flexDirection="column">
+                    <StyledTitle>Earned</StyledTitle>
+                    <Typography.BodyBold>0.0345 SEVN</Typography.BodyBold>
+                  </StyledDetailedTextGroup>
                 </Flex>
               </StyledDetailedInfo>
             )}

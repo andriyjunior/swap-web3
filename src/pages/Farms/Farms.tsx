@@ -18,7 +18,7 @@ export const Farms: FC<IFarmsProps> = () => {
 
   return (
     <StyledPage>
-      <StyledTitle>{t('Swap tokens')}</StyledTitle>
+      <StyledTitle>{t('Farms')}</StyledTitle>
       <FilterBar />
       <FarmTable />
     </StyledPage>
