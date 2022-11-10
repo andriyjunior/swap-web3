@@ -1,11 +1,15 @@
-import { Button, CoinPair, Flex, Icon, Typography } from 'components'
-import { FC, useState } from 'react'
+import { Button, CoinPair, Flex, Icon, Modal, Typography } from 'components'
+import { FC, memo, useState } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 
 import arrowDown_icon from 'assets/icons/arrow_blue.svg'
 import farm_row_bg from 'assets/farms/row-bg.png'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useModalRef } from 'hooks'
+import { useTranslation } from 'react-i18next'
+import { StakeLP } from '../StakeLP'
+import { UnstakeLP } from '../UnstakeLP'
 
 // interface IRowProps {}
 
@@ -57,9 +61,10 @@ const StyledButtonTitle = styled(Typography.BodyBold)`
 `
 
 const StyledArrow = styled.img<{ isFlip: boolean }>`
+  margin-left: 6px;
   width: 24px;
   height: 24px;
-  transform: rotate(${({ isFlip }) => (isFlip ? 180 : 0)}deg);
+  transform: rotate(${({ isFlip }) => (isFlip ? -180 : 0)}deg);
   transition: transform 0.1s ease-in;
 `
 
@@ -104,12 +109,47 @@ const variants = {
   animate: { height: '100px', visibillity: 'visible', opacity: 1 },
 }
 
-export const Row: FC = () => {
+export const Row: FC = memo(() => {
+  const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
 
+  const stakeModalRef = useModalRef()
+  const unstakeModalRef = useModalRef()
+
+  const handleOpenStake = () => {
+    if (stakeModalRef.current) {
+      stakeModalRef.current.open()
+    }
+  }
+
+  const handleCloseStake = () => {
+    if (stakeModalRef.current) {
+      stakeModalRef.current.close()
+    }
+  }
+
+  const handleOpenUnstake = () => {
+    if (unstakeModalRef.current) {
+      unstakeModalRef.current.open()
+    }
+  }
+
+  const handleCloseUnstake = () => {
+    if (unstakeModalRef.current) {
+      unstakeModalRef.current.close()
+    }
+  }
+
   const hasFarm = true
+
   return (
     <>
+      <Modal title={t('Stake LP tokens')} ref={stakeModalRef}>
+        <StakeLP onCancel={handleCloseStake} onConfirm={() => {}} />
+      </Modal>
+      <Modal title={t('Unstake LP tokens')} ref={unstakeModalRef}>
+        <UnstakeLP onCancel={handleCloseUnstake} onConfirm={() => {}} />
+      </Modal>
       <>
         <StyledRow
           hasBorder={isOpened}
@@ -152,10 +192,12 @@ export const Row: FC = () => {
             </Flex>
           </StyledCell>
           <StyledCell width="100px">
-            <StyledButton onClick={() => {}}>
-              <StyledButtonTitle>Details</StyledButtonTitle>
-              <StyledArrow src={arrowDown_icon} isFlip={isOpened} />
-            </StyledButton>
+            <Flex justifyContent="flex-end">
+              <StyledButton onClick={() => {}}>
+                <StyledButtonTitle>Details</StyledButtonTitle>
+                <StyledArrow src={arrowDown_icon} isFlip={isOpened} />
+              </StyledButton>
+            </Flex>
           </StyledCell>
         </StyledRow>
       </>
@@ -187,10 +229,10 @@ export const Row: FC = () => {
                       alignItems="center"
                       justifyContent="space-between"
                     >
-                      <Button onClick={() => {}}>Stake</Button>
-                      <Button onClick={() => {}}>Unstake</Button>
+                      <Button onClick={handleOpenStake}>Stake</Button>
+                      <Button onClick={handleOpenUnstake}>Unstake</Button>
                       <StyledDetailedTextGroup flexDirection="column">
-                        <StyledTitle>Avaliable LP</StyledTitle>
+                        <StyledTitle>Staked LP</StyledTitle>
                         <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
                       </StyledDetailedTextGroup>
                     </Flex>
@@ -210,4 +252,4 @@ export const Row: FC = () => {
       </tr>
     </>
   )
-}
+})

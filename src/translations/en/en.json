@@ -30,6 +30,7 @@
   "switchNetwork": "Switch Network",
   "importPool": "Import Pool",
   "import": "Import",
+  "cancel": "Cancel",
 
   "menu": {
     "swap": "Swap",
