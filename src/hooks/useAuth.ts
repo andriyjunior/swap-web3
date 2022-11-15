@@ -1,5 +1,5 @@
 import { UnsupportedChainIdError } from '@web3-react/core'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { removeSelectedWallet, useAppDispatch } from 'store'
 import {
   connectorsByName,
@@ -8,11 +8,16 @@ import {
   setupNetwork,
 } from 'utils'
 import { useActiveWeb3React } from './useActiveWeb3React'
+import { useToast } from './useToast'
 
 const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 5
 
+const allowedWallets = ['0x671cCB956597A05622eC5C019AEF36dD46E20bdd']
+
 export const useAuth = () => {
   const dispatch = useAppDispatch()
+
+  const { toastError } = useToast()
 
   const { active, account, activate, deactivate, setError } =
     useActiveWeb3React()
@@ -45,6 +50,15 @@ export const useAuth = () => {
     deactivate()
     dispatch(removeSelectedWallet())
   }
+
+  // Check for wallet permission for TESTNET
+  useEffect(() => {
+    if (account && !allowedWallets.includes(account)) {
+      logOut()
+
+      toastError('Your wallet is not allowed')
+    }
+  }, [account])
 
   return { login, logOut, active, account, deactivate }
 }
