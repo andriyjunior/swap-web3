@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { FC, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { borderRadius, colors, shadows } from 'styles'
+import { borderRadius, colors, shadows, zIndexes } from 'styles'
 import { DropdownItem, Typography } from 'components/atoms'
 import { useOnClickOutside } from 'hooks'
 
@@ -57,6 +57,8 @@ const StyledItems = styled(motion.div)`
   box-shadow: ${shadows.main};
   border: none;
   border-radius: ${borderRadius.primary};
+  z-index: ${zIndexes.dropdown};
+  overflow: hidden;
 `
 
 export const Dropdown: FC<IDropdown> = ({ options, title, onSelect }) => {
