@@ -1,18 +1,23 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { colors, getTransparentColor } from 'styles'
+import { colors, getTransparentColor, shadows } from 'styles'
 import { InnerContainer } from '../InnerContainer'
 
 interface IInputProps {
   value: string
   onInput: (e: string) => void
   placeholder: string
+  height?: string
 }
-const StyledRoot = styled(InnerContainer)``
+const StyledRoot = styled(InnerContainer)`
+  &:has(input:focus) {
+    box-shadow: ${shadows.onFocus};
+  }
+`
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{ height: string }>`
   width: 100%;
-  height: 56px;
+  height: ${({ height }) => height};
   background-color: transparent;
   border: none;
 
@@ -27,13 +32,19 @@ const StyledInput = styled.input`
   }
 `
 
-export const Input: FC<IInputProps> = ({ value, onInput, placeholder }) => {
+export const Input: FC<IInputProps> = ({
+  value,
+  onInput,
+  placeholder,
+  height = '56px',
+}) => {
   return (
     <StyledRoot>
       <StyledInput
         placeholder={placeholder}
         value={value}
         onInput={(e) => onInput(e.currentTarget.value)}
+        height={height}
       />
     </StyledRoot>
   )

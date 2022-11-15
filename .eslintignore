@@ -1,7 +1,9 @@
 // .eslintignore
+
 .idea
 .storybook
 .config
+.fttemplates
 node_modules/*
 config/*
 public/*

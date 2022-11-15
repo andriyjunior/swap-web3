@@ -37,6 +37,7 @@ const StyledRoot = styled.div`
   z-index: ${zIndexes.fixed};
 
   @media (max-width: ${breakpoints.md}) {
+    padding: 0 16px;
     justify-content: space-between;
   }
 `
@@ -61,7 +62,7 @@ const StyledIcon = styled.a`
 `
 
 const StyledRight = styled.div`
-  width: 200px;
+  /* width: 200px; */
   display: flex;
   justify-content: flex-end;
 `

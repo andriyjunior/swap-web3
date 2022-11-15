@@ -2,5 +2,6 @@
 build
 coverage
 packages/*
+.fttemplates
 # Ignore all HTML files:
 *.html
