@@ -4,4 +4,9 @@ export default {
     3: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     5: '0x77dCa2C955b15e9dE4dbBCf1246B4B85b651e50e',
   },
+  masterChef: {
+    1: '0x2CBa4E01838651EbA879B4eF9f0B2E5Cb81386Be',
+    3: '0x2CBa4E01838651EbA879B4eF9f0B2E5Cb81386Be',
+    5: '',
+  },
 }
