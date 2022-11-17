@@ -1,9 +1,11 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors } from 'styles'
-import { Row } from '../Row'
+import { IRowProps, Row } from '../Row'
 
-// interface IFarmTableProps {}
+interface IFarmTableProps {
+  data: IRowProps[]
+}
 
 const StyledRoot = styled.div`
   padding: 10px 14px;
@@ -31,17 +33,14 @@ const StyledBody = styled.tbody`
   }
 `
 
-export const FarmTable: FC = () => {
+export const FarmTable: FC<IFarmTableProps> = ({ data }) => {
   return (
     <StyledRoot>
       <StyledTable>
         <StyledBody>
-          <Row />
-          <Row />
-          <Row />
-          <Row />
-          <Row />
-          <Row />
+          {data.map((item, idx) => {
+            return <Row key={idx} {...item} />
+          })}
         </StyledBody>
       </StyledTable>
     </StyledRoot>

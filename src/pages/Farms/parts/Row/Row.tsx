@@ -10,8 +10,23 @@ import { useModalRef } from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { StakeLP } from '../StakeLP'
 import { UnstakeLP } from '../UnstakeLP'
+import {
+  AprProps,
+  EarnedProps,
+  FarmProps,
+  FarmWithStakedValue,
+  LiquidityProps,
+  MultiplierProps,
+} from '../types.t'
 
-// interface IRowProps {}
+export interface IRowProps {
+  apr: AprProps
+  farm: FarmProps
+  earned: EarnedProps
+  multiplier: MultiplierProps
+  liquidity: LiquidityProps
+  details: FarmWithStakedValue
+}
 
 const StyledRow = styled.tr<{ hasBorder: boolean }>`
   cursor: pointer;
@@ -109,7 +124,9 @@ const variants = {
   animate: { height: '100px', visibillity: 'visible', opacity: 1 },
 }
 
-export const Row: FC = memo(() => {
+export const Row: FC<IRowProps> = memo((props) => {
+  const { apr, farm, earned, multiplier, liquidity, details } = props
+
   const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
 
