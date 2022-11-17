@@ -20,6 +20,7 @@ export interface SerializedWrappedToken extends SerializedToken {
  */
 export class WrappedTokenInfo extends Token {
   public readonly tokenInfo: TokenInfo
+
   public readonly tags: TagInfo[]
 
   constructor(tokenInfo: TokenInfo, tags: TagInfo[]) {
