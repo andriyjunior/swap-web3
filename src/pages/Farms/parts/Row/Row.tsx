@@ -176,7 +176,7 @@ export const Row: FC<IRowProps> = memo((props) => {
             <CoinPair size="large" inputToken={'ETH'} outputToken={''} />
           </StyledCell>
           <StyledCell width="100px">
-            <StyledName>SEVN/ETH</StyledName>
+            <StyledName>{farm.label}</StyledName>
           </StyledCell>
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
@@ -187,25 +187,35 @@ export const Row: FC<IRowProps> = memo((props) => {
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APR</StyledTitle>
-              <Typography.BodyBold>40.60%</Typography.BodyBold>
+              <Typography.BodyBold>
+                {apr.value ? `${apr.value}%` : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="100px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Liquidity</StyledTitle>
-              <Typography.BodyBold>$9 224 833</Typography.BodyBold>
+              <Typography.BodyBold>
+                {liquidity.liquidity ? Number(liquidity.liquidity.gt) : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="60px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Earned</StyledTitle>
-              <Typography.BodyBold>---</Typography.BodyBold>
+              <Typography.BodyBold>
+                {earned.earnings ? `${earned.earnings}` : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="60px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Multipler</StyledTitle>
-              <Typography.BodyBold>50X</Typography.BodyBold>
+              <Typography.BodyBold>
+                {multiplier.multiplier
+                  ? multiplier.multiplier.toLowerCase()
+                  : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="100px">
@@ -259,7 +269,9 @@ export const Row: FC<IRowProps> = memo((props) => {
                   <Button onClick={() => {}}>Harvest</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Earned</StyledTitle>
-                    <Typography.BodyBold>0.0345 SEVN</Typography.BodyBold>
+                    <Typography.BodyBold>
+                      {earned.earnings ? `${earned.earnings}` : '---'}
+                    </Typography.BodyBold>
                   </StyledDetailedTextGroup>
                 </Flex>
               </StyledDetailedInfo>
