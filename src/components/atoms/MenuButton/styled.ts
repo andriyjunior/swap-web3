@@ -71,7 +71,30 @@ export const StyledTitle = styled.span`
   font-size: 16px;
   color: ${colors.black};
 `
+
+export const StyledIconWrapper = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 export const StyledIcon = styled.img`
   width: 24px;
   height: 24px;
+`
+
+export const StyledSoon = styled.span`
+  padding: 2px;
+  position: absolute;
+  font-size: 6px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  text-transform: uppercase;
+  color: ${colors.white};
+  font-weight: 700;
+  background-color: ${colors.black};
+  border-radius: 26px;
 `
