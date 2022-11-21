@@ -15,6 +15,7 @@ export const baseMenu = [
     key: 'farms',
     icon: farms_icon,
     to: '/farms',
+    soon: true,
   },
   {
     id: 3,
