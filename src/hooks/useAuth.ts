@@ -12,12 +12,16 @@ import { useToast } from './useToast'
 
 const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 5
 
-const allowedWallets = ['0x671cCB956597A05622eC5C019AEF36dD46E20bdd']
+const whitelist = [
+  '0x671cCB956597A05622eC5C019AEF36dD46E20bdd',
+  '0x3AeBb685f319F35970ab4Cc45708d0880aD7ceDa',
+  '0xa71026e9dA3084969E4d79e59aCEdEa20641e9A2',
+]
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
 
-  const { toastError } = useToast()
+  const { toastWarning } = useToast()
 
   const { active, account, activate, deactivate, setError } =
     useActiveWeb3React()
@@ -53,10 +57,10 @@ export const useAuth = () => {
 
   // Check for wallet permission for TESTNET
   useEffect(() => {
-    if (account && !allowedWallets.includes(account)) {
+    if (account && !whitelist.includes(account)) {
       logOut()
 
-      toastError('Your wallet is not allowed')
+      toastWarning('Authorization error', 'Your wallet is not whitelisted')
     }
   }, [account])
 
