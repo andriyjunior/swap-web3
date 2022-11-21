@@ -5,6 +5,8 @@ import {
   StyledButton,
   StyledButtonLink,
   StyledIcon,
+  StyledIconWrapper,
+  StyledSoon,
   StyledTitle,
 } from './styled'
 
@@ -14,6 +16,7 @@ interface IMenuButtonProps {
   icon: string
   isCollapsed: boolean
   onClick?: () => void
+  soon?: boolean
 }
 
 export const MenuButton: FC<IMenuButtonProps> = ({
@@ -22,16 +25,26 @@ export const MenuButton: FC<IMenuButtonProps> = ({
   to,
   isCollapsed,
   onClick,
+  soon,
 }) => {
-  return to ? (
-    <StyledButtonLink to={to}>
+  const Icon = () => (
+    <StyledIconWrapper>
       <StyledIcon src={icon} />
+      {soon && <StyledSoon>Soon</StyledSoon>}
+    </StyledIconWrapper>
+  )
+
+  const Component = ({ children }) =>
+    to ? (
+      <StyledButtonLink to={to}>{children}</StyledButtonLink>
+    ) : (
+      <StyledButton onClick={onClick}>{children}</StyledButton>
+    )
+
+  return (
+    <Component>
+      <Icon />
       {!isCollapsed && <StyledTitle>{title}</StyledTitle>}
-    </StyledButtonLink>
-  ) : (
-    <StyledButton onClick={onClick}>
-      <StyledIcon src={icon} />
-      {!isCollapsed && <StyledTitle>{title}</StyledTitle>}
-    </StyledButton>
+    </Component>
   )
 }

@@ -45,6 +45,7 @@ export const Menu: FC<IMenu> = memo(({ isCollapsed }) => {
         {baseMenu.map((item) => {
           return (
             <MenuButton
+              {...item}
               key={item.key}
               isCollapsed={isCollapsed}
               title={t(`menu.${item.key}`)}
@@ -53,7 +54,12 @@ export const Menu: FC<IMenu> = memo(({ isCollapsed }) => {
             />
           )
         })}
-        <MenuButton isCollapsed={isCollapsed} title="More" icon={more_icon} />
+        <MenuButton
+          isCollapsed={isCollapsed}
+          title="More"
+          icon={more_icon}
+          soon
+        />
       </StyledButtonContainer>
     </StyledRoot>
   )

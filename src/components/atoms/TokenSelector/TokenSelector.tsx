@@ -25,7 +25,6 @@ interface ITokenSelectorProps {
 
 const StyledRoot = styled.button`
   padding: 5px;
-  min-width: 0;
   display: flex;
   align-items: center;
   background: none;
@@ -40,6 +39,7 @@ const StyledRoot = styled.button`
 
 const StyledBody = styled.div`
   width: 100%;
+  min-width: 0;
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -55,8 +55,10 @@ const StyledText = styled(Typography.BodyBold)`
 `
 
 const StyledArrowIcon = styled(Icon)`
+  display: flex;
   opacity: 0.5;
   transition: opacity 0.1s ease-in;
+  flex-shrink: 1;
 
   &:hover {
     opacity: 1;

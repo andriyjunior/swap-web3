@@ -39,6 +39,7 @@ export const MobileMenu: FC = () => {
         {baseMenu.map((item) => {
           return (
             <MenuButton
+              {...item}
               key={item.key}
               isCollapsed
               title={t(`menu.${item.key}`)}
@@ -47,7 +48,7 @@ export const MobileMenu: FC = () => {
             />
           )
         })}
-        <MenuButton isCollapsed title="More" icon={more_icon} />
+        <MenuButton isCollapsed title="More" icon={more_icon} soon />
       </StyledContainer>
     </StyledRoot>
   )

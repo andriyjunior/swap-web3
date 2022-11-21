@@ -5,12 +5,17 @@ import {
   Routes as ReactRoutes,
   useParams,
 } from 'react-router-dom'
-import { Home, SwapPage } from 'pages'
+import { Farms, Home, SwapPage } from 'pages'
 import { LiquidityForm, SwapForm } from 'components'
+import { isDev } from 'utils'
 
 // interface IRoutesProps {}
 
 export const Routes: FC = () => {
+  const getRightRoute = (route) => {
+    return isDev ? route : <Navigate to={'/swap'} />
+  }
+
   return (
     <ReactRoutes>
       <Route path="/" element={<Navigate to={'/swap'} />} />
@@ -56,7 +61,7 @@ export const Routes: FC = () => {
           element={<Swap isAddTab />}
         />
       </Route> */}
-      <Route path="/farms" element={<Navigate to={'/swap'} />} />
+      <Route path="/farms" element={getRightRoute(<Farms />)} />
       <Route path="/staking" element={<Navigate to={'/swap'} />} />
       <Route path="/games" element={<Navigate to={'/swap'} />} />
       <Route path="*" element="404" />

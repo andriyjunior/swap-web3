@@ -1,18 +1,27 @@
 import { FC, ReactNode, useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
-
-import icon_success from 'assets/icons/success.svg'
-import icon_cross from 'assets/icons/cross.svg'
 import { Typography } from '../Typography'
 import { IToastProps } from './types'
 import { motion } from 'framer-motion'
+
+import icon_cross from 'assets/icons/cross.svg'
+import icon_success from 'assets/icons/success.svg'
+import icon_warning from 'assets/icons/warning.svg'
+import icon_info from 'assets/icons/info.svg'
 
 const toastsColor = {
   success: colors.success,
   danger: colors.error,
   warning: colors.warning,
   info: colors.white,
+}
+
+const toastsIcons = {
+  success: icon_success,
+  danger: icon_warning,
+  warning: icon_warning,
+  info: icon_info,
 }
 
 const StyledWrapper = styled(motion.div)``
@@ -51,6 +60,10 @@ const StyledBody = styled.div`
 
 const StyledTitle = styled(Typography.Title)`
   padding: 0;
+`
+
+const StyledDescription = styled(Typography.Body)`
+  opacity: 0.5;
 `
 
 const StyledCross = styled.button`
@@ -115,11 +128,15 @@ export const Toast: FC<IToastProps> = ({ toast, onRemove, style, ttl }) => {
         onMouseLeave={handleMouseLeave}
       >
         <StyledLeft color={toastsColor[type]}>
-          <StyledIcon src={icon_success} />
+          <StyledIcon src={toastsIcons[type]} />
         </StyledLeft>
         <StyledBody>
           <StyledTitle>{title}</StyledTitle>
-          {description}
+          {typeof description === 'string' ? (
+            <StyledDescription>{description}</StyledDescription>
+          ) : (
+            description
+          )}
         </StyledBody>
         <StyledCross onClick={handleRemove}>
           <img src={icon_cross} />

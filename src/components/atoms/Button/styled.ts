@@ -8,6 +8,8 @@ import {
 } from 'styles'
 
 export const StyledRoot = styled.button`
+  margin: 1px;
+  padding: 0 24px;
   position: relative;
   display: flex;
   align-items: center;
@@ -19,7 +21,7 @@ export const StyledRoot = styled.button`
   height: 42px;
   width: 100%;
   z-index: 0;
-  outline: transparent;
+  outline: 2px solid white;
 
   &::before {
     position: absolute;
@@ -51,7 +53,7 @@ export const StyledRoot = styled.button`
     left: 0;
     width: 100%;
     height: 100%;
-    background: ${gradients.secondary};
+    background: ${gradients.faded};
     border-radius: ${borderRadius.primary};
     z-index: -1;
     opacity: 0;
@@ -66,8 +68,14 @@ export const StyledRoot = styled.button`
 
   &:active {
     span {
-      font-weight: 700;
-      color: ${colors.white};
+      /* font-weight: 700; */
+      /* color: ${colors.white}; */
+    }
+
+    &::before {
+      opacity: 1;
+      border-image-source: ${gradients.faded};
+      background: ${gradients.faded};
     }
 
     &::after {
