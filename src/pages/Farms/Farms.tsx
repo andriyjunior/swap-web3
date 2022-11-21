@@ -8,7 +8,7 @@ import { Farm, useFarms, usePriceCakeBusd } from 'store'
 import styled from 'styled-components'
 import { getBalanceNumber, getFarmApr, isArchivedPid, latinise } from 'utils'
 
-import { FilterBar, FarmTable } from './parts'
+import { FilterBar, FarmTable, options, sortEnum } from './parts'
 import { IRowProps } from './parts/Row'
 import { FarmWithStakedValue } from './parts/types.t'
 
@@ -32,9 +32,18 @@ export const Farms: FC<IFarmsProps> = () => {
 
   const cakePrice = usePriceCakeBusd()
 
-  const [sortOption, setSortOption] = useState('hot')
+  const [sortOption, setSortOption] = useState(options[0].key)
   const [query, setQuery] = useState('')
   const [stakedOnly, setStakedOnly] = useState(!isActive)
+
+  const handleChangeQuery = (value: string) => {
+    setQuery(value)
+  }
+
+  const handleChangeSort = (value) => {
+    setSortOption(value)
+  }
+
   useEffect(() => {
     setStakedOnly(!isActive)
   }, [isActive])
@@ -110,23 +119,23 @@ export const Farms: FC<IFarmsProps> = () => {
 
     const sortFarms = (farms: FarmWithStakedValue[]): FarmWithStakedValue[] => {
       switch (sortOption) {
-        case 'apr':
+        case sortEnum.ARP:
           return orderBy(farms, (farm: FarmWithStakedValue) => farm.apr, 'desc')
-        case 'multiplier':
+        case sortEnum.Multiplier:
           return orderBy(
             farms,
             (farm: FarmWithStakedValue) =>
               farm.multiplier ? Number(farm.multiplier.slice(0, -1)) : 0,
             'desc'
           )
-        case 'earned':
+        case sortEnum.Earned:
           return orderBy(
             farms,
             (farm: FarmWithStakedValue) =>
               farm.userData ? Number(farm.userData.earnings) : 0,
             'desc'
           )
-        case 'liquidity':
+        case sortEnum.Liquidity:
           return orderBy(
             farms,
             (farm: FarmWithStakedValue) => Number(farm.liquidity),
@@ -218,7 +227,10 @@ export const Farms: FC<IFarmsProps> = () => {
   return (
     <StyledPage>
       <StyledTitle>{t('Farms')}</StyledTitle>
-      <FilterBar />
+      <FilterBar
+        onChangeQuerry={handleChangeQuery}
+        onChangeSort={handleChangeSort}
+      />
       <FarmTable data={rowData} />
     </StyledPage>
   )

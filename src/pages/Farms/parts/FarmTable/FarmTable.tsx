@@ -38,6 +38,7 @@ export const FarmTable: FC<IFarmTableProps> = ({ data }) => {
     <StyledRoot>
       <StyledTable>
         <StyledBody>
+          {!data.length && 'Not found'}
           {data.map((item, idx) => {
             return <Row key={idx} {...item} />
           })}

@@ -2436,6 +2436,34 @@ export const bscTestnetTokens = {
 }
 
 export const tokens = {
+  sevn: {
+    symbol: 'SEVN',
+    address: {
+      [ChainId.MAINNET]: '',
+      [ChainId.TESTNET]: '0xB97ba66758584b7C3F10267F6CC0cA6a4abDc3e5',
+    },
+    decimals: 18,
+    projectLink: 'https://pancakeswap.finance/',
+  },
+  usdt: {
+    symbol: 'USDT',
+    address: {
+      [ChainId.MAINNET]: '0x55d398326f99059fF775485246999027B3197955',
+      [ChainId.TESTNET]: '0x95b2239047e495E5FdB0ec614bA03e7c1a45309C',
+    },
+    decimals: 18,
+    projectLink: 'https://tether.to/',
+  },
+  sft2: {
+    symbol: 'SFT2',
+    address: {
+      [ChainId.MAINNET]: '0x55d398326f99059fF775485246999027B3197955',
+      [ChainId.TESTNET]: '0x3da6E51A427Adf7335970f816dDa26b3b47C0aF8',
+    },
+    decimals: 18,
+    projectLink: 'https://tether.to/',
+  },
+
   bnb: {
     symbol: 'BNB',
     projectLink: 'https://www.binance.com/',
@@ -2458,15 +2486,7 @@ export const tokens = {
     decimals: 18,
     projectLink: 'https://pancakeswap.finance/',
   },
-  usdt: {
-    symbol: 'USDT',
-    address: {
-      [ChainId.MAINNET]: '0x55d398326f99059fF775485246999027B3197955',
-      [ChainId.TESTNET]: '0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5',
-    },
-    decimals: 18,
-    projectLink: 'https://tether.to/',
-  },
+
   btcb: {
     symbol: 'BTCB',
     address: {
