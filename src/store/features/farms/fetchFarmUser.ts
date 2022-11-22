@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import erc20ABI from 'abis/erc20.json'
-import masterchefABI from 'abis/masterchef.json'
+import masterchefABI from 'abis/MasterChef.json'
 import multicall from 'utils/multicall'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
@@ -61,7 +61,7 @@ export const fetchFarmUserStakedBalances = async (
     }
   })
 
-  const rawStakedBalances = await multicall(masterchefABI, calls)
+  const rawStakedBalances = await multicall(masterchefABI.abi, calls)
   const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })
@@ -82,7 +82,7 @@ export const fetchFarmUserEarnings = async (
     }
   })
 
-  const rawEarnings = await multicall(masterchefABI, calls)
+  const rawEarnings = await multicall(masterchefABI.abi, calls)
   const parsedEarnings = rawEarnings.map((earnings) => {
     return new BigNumber(earnings).toJSON()
   })

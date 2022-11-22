@@ -4,7 +4,7 @@ import { orderBy } from 'lodash'
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import { Farm, useFarms, usePriceCakeBusd } from 'store'
+import { Farm, useFarms, usePollFarmsData, usePriceCakeBusd } from 'store'
 import styled from 'styled-components'
 import { getBalanceNumber, getFarmApr, isArchivedPid, latinise } from 'utils'
 
@@ -30,6 +30,8 @@ export const Farms: FC<IFarmsProps> = () => {
   const isInactive = pathname.includes('history')
   const isActive = !isInactive && !isArchived
 
+  usePollFarmsData(isArchived)
+
   const cakePrice = usePriceCakeBusd()
 
   const [sortOption, setSortOption] = useState(options[0].key)
@@ -49,12 +51,10 @@ export const Farms: FC<IFarmsProps> = () => {
   }, [isActive])
 
   const activeFarms = farmsLP.filter(
-    (farm) =>
-      farm.pid !== 0 && farm.multiplier !== '0X' && !isArchivedPid(farm.pid)
+    (farm) => farm.multiplier !== '0X' && !isArchivedPid(farm.pid)
   )
   const inactiveFarms = farmsLP.filter(
-    (farm) =>
-      farm.pid !== 0 && farm.multiplier === '0X' && !isArchivedPid(farm.pid)
+    (farm) => farm.multiplier === '0X' && !isArchivedPid(farm.pid)
   )
   const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 

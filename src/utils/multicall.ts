@@ -3,6 +3,9 @@ import { Interface } from '@ethersproject/abi'
 import { getProvider } from 'utils/getProvider'
 // import { getMulticallContract } from 'utils/contractHelpers'
 import { useMulticallContract } from 'hooks'
+import multiCallAbi from 'abis/Multicall.json'
+import { getContract, getMulticallAddress } from 'utils'
+import { Contract } from '@ethersproject/contracts'
 
 interface Call {
   address: string // Address of the contract
@@ -21,15 +24,25 @@ const Multicall = async (
   calls: Call[],
   options: MulticallOptions = {}
 ) => {
+  const _web3 = getProvider(5)
+
+  console.log('provider', _web3)
   try {
-    const multi: any = useMulticallContract()
+    // const multi: any = useMulticallContract()
+    // const multi: any = getContract(getMulticallAddress(5), multiCallAbi)
+    const multi: any = new Contract(
+      '0x77dCa2C955b15e9dE4dbBCf1246B4B85b651e50e',
+      multiCallAbi
+    )
+
     const itf = new Interface(abi)
 
     const calldata = calls.map((call) => [
-      call.address.toLowerCase(),
+      call?.address?.toLowerCase(),
       itf.encodeFunctionData(call.name, call.params),
     ])
-    const { returnData } = await multi.methods
+
+    const { returnData } = await multi
       .aggregate(calldata)
       .call(undefined, options.blockNumber)
     const res = returnData.map((call, i) =>
@@ -38,6 +51,7 @@ const Multicall = async (
 
     return res
   } catch (error: any) {
+    console.error(error)
     throw new Error(error)
   }
 }

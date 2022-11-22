@@ -4,8 +4,11 @@ import addresses from 'const/contracts'
 
 // import { VaultKey } from 'state/types'
 
-export const getAddress = (address: Address, chainId?: number): string => {
-  return address[chainId ?? 3] ? address[chainId!] : address[ChainId.MAINNET]
+export const getAddress = (
+  address: Address,
+  chainId = ChainId.TESTNET
+): string => {
+  return address[chainId]
 }
 
 export const getMasterChefAddress = (chainId?: number) => {

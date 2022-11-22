@@ -17,6 +17,7 @@ import {
 import { State, Farm, Pool, FarmsState } from 'store/types'
 import { useAppDispatch } from 'store/utils'
 import { fetchFarmUserDataAsync } from './reducer'
+import { useActiveWeb3React } from 'hooks'
 // import { transformPool } from './pools/helpers'
 // import { fetchPoolsStakingLimitsAsync } from './pools'
 // import { fetchFarmUserDataAsync, nonArchivedFarms } from './farms'
@@ -24,7 +25,7 @@ import { fetchFarmUserDataAsync } from './reducer'
 export const usePollFarmsData = (includeArchive = false) => {
   const dispatch = useAppDispatch()
   // const { slowRefresh } = useRefresh()
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
 
   useEffect(() => {
     // const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
