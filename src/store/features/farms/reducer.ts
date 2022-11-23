@@ -11,6 +11,7 @@ import {
   fetchFarmUserStakedBalances,
 } from './fetchFarmUser'
 import { FarmsState, Farm } from 'store/types'
+import { ChainId } from 'packages/swap-sdk'
 
 const noAccountFarmConfig = farmsConfig.map((farm) => ({
   ...farm,
@@ -62,42 +63,46 @@ interface FarmUserDataResponse {
 
 export const fetchFarmUserDataAsync = createAsyncThunk<
   FarmUserDataResponse[],
-  { account: string; pids: number[]; library?: any }
->('farms/fetchFarmUserDataAsync', async ({ account, pids, library }) => {
-  const farmsToFetch = farmsConfig.filter((farmConfig) =>
-    pids.includes(farmConfig.pid)
-  )
-  const userFarmAllowances = await fetchFarmUserAllowances(
-    account,
-    farmsToFetch,
-    library
-  )
-  const userFarmTokenBalances = await fetchFarmUserTokenBalances(
-    account,
-    farmsToFetch,
-    library
-  )
-  const userStakedBalances = await fetchFarmUserStakedBalances(
-    account,
-    farmsToFetch,
-    library
-  )
-  const userFarmEarnings = await fetchFarmUserEarnings(
-    account,
-    farmsToFetch,
-    library
-  )
+  { account: string; pids: number[]; library?: any; chainId?: ChainId }
+>(
+  'farms/fetchFarmUserDataAsync',
+  async ({ account, pids, library, chainId }) => {
+    const farmsToFetch = farmsConfig.filter((farmConfig) =>
+      pids.includes(farmConfig.pid)
+    )
+    const userFarmAllowances = await fetchFarmUserAllowances(
+      account,
+      farmsToFetch,
+      library
+    )
+    const userFarmTokenBalances = await fetchFarmUserTokenBalances(
+      account,
+      farmsToFetch,
+      library
+    )
+    const userStakedBalances = await fetchFarmUserStakedBalances(
+      account,
+      farmsToFetch,
+      library
+    )
+    const userFarmEarnings = await fetchFarmUserEarnings(
+      account,
+      farmsToFetch,
+      library,
+      chainId
+    )
 
-  return userFarmAllowances.map((farmAllowance, index) => {
-    return {
-      pid: farmsToFetch[index].pid,
-      allowance: userFarmAllowances[index],
-      tokenBalance: userFarmTokenBalances[index],
-      stakedBalance: userStakedBalances[index],
-      earnings: userFarmEarnings[index],
-    }
-  })
-})
+    return userFarmAllowances.map((farmAllowance, index) => {
+      return {
+        pid: farmsToFetch[index].pid,
+        allowance: userFarmAllowances[index],
+        tokenBalance: userFarmTokenBalances[index],
+        stakedBalance: userStakedBalances[index],
+        earnings: userFarmEarnings[index],
+      }
+    })
+  }
+)
 
 export const farmsSlice = createSlice({
   name: 'Farms',

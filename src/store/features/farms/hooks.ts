@@ -25,7 +25,7 @@ import { useActiveWeb3React } from 'hooks'
 export const usePollFarmsData = (includeArchive = false) => {
   const dispatch = useAppDispatch()
   // const { slowRefresh } = useRefresh()
-  const { account, library } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React()
 
   useEffect(() => {
     // const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
@@ -35,7 +35,7 @@ export const usePollFarmsData = (includeArchive = false) => {
     dispatch(fetchFarmsPublicDataAsync(pids))
 
     if (account) {
-      dispatch(fetchFarmUserDataAsync({ account, pids, library }))
+      dispatch(fetchFarmUserDataAsync({ account, pids, library, chainId }))
     }
     // }, [includeArchive, dispatch, slowRefresh, account])
   }, [includeArchive, dispatch, account])

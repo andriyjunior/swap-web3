@@ -31,6 +31,7 @@ export * from './farmHelpers'
 export * from './bigNumber'
 export * from './apr'
 export * from './latinise'
+export * from './getDefaultChainId'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 

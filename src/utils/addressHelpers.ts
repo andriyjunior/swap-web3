@@ -1,12 +1,13 @@
 import { ChainId } from 'packages/swap-sdk'
 import { Address } from 'abis'
 import addresses from 'const/contracts'
+import { defaultChainId } from './getDefaultChainId'
 
 // import { VaultKey } from 'state/types'
 
 export const getAddress = (
   address: Address,
-  chainId = ChainId.TESTNET
+  chainId = defaultChainId
 ): string => {
   return address[chainId]
 }

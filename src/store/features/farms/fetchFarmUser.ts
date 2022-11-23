@@ -4,6 +4,7 @@ import masterchefABI from 'abis/MasterChef.json'
 import multicall from 'utils/multicall'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
+import { ChainId } from 'packages/swap-sdk'
 
 export const fetchFarmUserAllowances = async (
   account: string,
@@ -76,17 +77,19 @@ export const fetchFarmUserStakedBalances = async (
 export const fetchFarmUserEarnings = async (
   account: string,
   farmsToFetch: FarmConfig[],
-  library?: any
+  library?: any,
+  chainId?: ChainId | undefined
 ) => {
-  const masterChefAddress = getMasterChefAddress()
+  const masterChefAddress = getMasterChefAddress(chainId)
 
   const calls = farmsToFetch.map((farm) => {
     return {
       address: masterChefAddress,
-      name: 'pendingHSW',
+      name: 'pendingSEVN',
       params: [farm.pid, account],
     }
   })
+  console.log(calls)
 
   const rawEarnings = await multicall(masterchefABI.abi, calls, {
     web3: library,

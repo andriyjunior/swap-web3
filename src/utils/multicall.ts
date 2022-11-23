@@ -4,8 +4,9 @@ import { getProvider } from 'utils/getProvider'
 // import { getMulticallContract } from 'utils/contractHelpers'
 import { useMulticallContract } from 'hooks'
 import multiCallAbi from 'abis/Multicall.json'
-import { getContract, getMulticallAddress } from 'utils'
+import { defaultChainId, getContract, getMulticallAddress } from 'utils'
 import { Contract } from '@ethersproject/contracts'
+import { ChainId } from 'packages/swap-sdk'
 
 interface Call {
   address: string // Address of the contract
@@ -19,28 +20,31 @@ interface MulticallOptions {
   requireSuccess?: boolean
 }
 
-const defaultChainId = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 1
-
 const Multicall = async (
   abi: any[],
   calls: Call[],
-  options: MulticallOptions = {}
+  options: MulticallOptions = {},
+  chainId?: ChainId
 ) => {
-  const _web3 = getProvider(defaultChainId)
+  const currentChainId = chainId || defaultChainId
+  const _web3 = getProvider(currentChainId)
 
   try {
     const multi: any = getContract(
-      getMulticallAddress(5),
+      getMulticallAddress(currentChainId),
       multiCallAbi,
       options.web3 || _web3
     )
 
     const itf = new Interface(abi)
 
-    const calldata = calls.map((call) => [
-      call?.address?.toLowerCase(),
-      itf?.encodeFunctionData(call.name, call.params),
-    ])
+    const calldata = calls.map((call) => {
+      console.log(itf)
+      return [
+        call?.address?.toLowerCase(),
+        itf?.encodeFunctionData(call.name, call.params),
+      ]
+    })
     const { returnData } = await multi.aggregate(calldata)
 
     const res = returnData.map((call, i) =>
