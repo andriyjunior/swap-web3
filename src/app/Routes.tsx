@@ -12,8 +12,10 @@ import { isDev } from 'utils'
 // interface IRoutesProps {}
 
 export const Routes: FC = () => {
-  const getRightRoute = (route) => {
-    return isDev ? route : <Navigate to={'/swap'} />
+  const farmsIsVisible = process.env.REACT_APP_FARMS_VISIBLE
+
+  const getRightRoute = (route, condition) => {
+    return condition ? route : <Navigate to={'/swap'} />
   }
 
   return (
@@ -61,7 +63,7 @@ export const Routes: FC = () => {
           element={<Swap isAddTab />}
         />
       </Route> */}
-      <Route path="/farms" element={getRightRoute(<Farms />)} />
+      <Route path="/farms" element={getRightRoute(<Farms />, farmsIsVisible)} />
       <Route path="/staking" element={<Navigate to={'/swap'} />} />
       <Route path="/games" element={<Navigate to={'/swap'} />} />
       <Route path="*" element="404" />

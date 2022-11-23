@@ -10,8 +10,23 @@ import { useModalRef } from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { StakeLP } from '../StakeLP'
 import { UnstakeLP } from '../UnstakeLP'
+import {
+  AprProps,
+  EarnedProps,
+  FarmProps,
+  FarmWithStakedValue,
+  LiquidityProps,
+  MultiplierProps,
+} from '../types.t'
 
-// interface IRowProps {}
+export interface IRowProps {
+  apr: AprProps
+  farm: FarmProps
+  earned: EarnedProps
+  multiplier: MultiplierProps
+  liquidity: LiquidityProps
+  details: FarmWithStakedValue
+}
 
 const StyledRow = styled.tr<{ hasBorder: boolean }>`
   cursor: pointer;
@@ -109,7 +124,9 @@ const variants = {
   animate: { height: '100px', visibillity: 'visible', opacity: 1 },
 }
 
-export const Row: FC = memo(() => {
+export const Row: FC<IRowProps> = memo((props) => {
+  const { apr, farm, earned, multiplier, liquidity, details } = props
+
   const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
 
@@ -159,7 +176,7 @@ export const Row: FC = memo(() => {
             <CoinPair size="large" inputToken={'ETH'} outputToken={''} />
           </StyledCell>
           <StyledCell width="100px">
-            <StyledName>SEVN/ETH</StyledName>
+            <StyledName>{farm.label}</StyledName>
           </StyledCell>
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
@@ -170,25 +187,35 @@ export const Row: FC = memo(() => {
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APR</StyledTitle>
-              <Typography.BodyBold>40.60%</Typography.BodyBold>
+              <Typography.BodyBold>
+                {apr.value ? `${apr.value}%` : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="100px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Liquidity</StyledTitle>
-              <Typography.BodyBold>$9 224 833</Typography.BodyBold>
+              <Typography.BodyBold>
+                {liquidity.liquidity ? Number(liquidity.liquidity.gt) : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="60px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Earned</StyledTitle>
-              <Typography.BodyBold>---</Typography.BodyBold>
+              <Typography.BodyBold>
+                {earned.earnings ? `${earned.earnings}` : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="60px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Multipler</StyledTitle>
-              <Typography.BodyBold>50X</Typography.BodyBold>
+              <Typography.BodyBold>
+                {multiplier.multiplier
+                  ? multiplier.multiplier.toLowerCase()
+                  : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="100px">
@@ -242,7 +269,9 @@ export const Row: FC = memo(() => {
                   <Button onClick={() => {}}>Harvest</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Earned</StyledTitle>
-                    <Typography.BodyBold>0.0345 SEVN</Typography.BodyBold>
+                    <Typography.BodyBold>
+                      {earned.earnings ? `${earned.earnings}` : '---'}
+                    </Typography.BodyBold>
                   </StyledDetailedTextGroup>
                 </Flex>
               </StyledDetailedInfo>
