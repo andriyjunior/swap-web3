@@ -19,32 +19,30 @@ interface MulticallOptions {
   requireSuccess?: boolean
 }
 
+const defaultChainId = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 1
+
 const Multicall = async (
   abi: any[],
   calls: Call[],
   options: MulticallOptions = {}
 ) => {
-  const _web3 = getProvider(5)
+  const _web3 = getProvider(defaultChainId)
 
-  console.log('provider', _web3)
   try {
-    // const multi: any = useMulticallContract()
-    // const multi: any = getContract(getMulticallAddress(5), multiCallAbi)
-    const multi: any = new Contract(
-      '0x77dCa2C955b15e9dE4dbBCf1246B4B85b651e50e',
-      multiCallAbi
+    const multi: any = getContract(
+      getMulticallAddress(5),
+      multiCallAbi,
+      options.web3 || _web3
     )
 
     const itf = new Interface(abi)
 
     const calldata = calls.map((call) => [
       call?.address?.toLowerCase(),
-      itf.encodeFunctionData(call.name, call.params),
+      itf?.encodeFunctionData(call.name, call.params),
     ])
+    const { returnData } = await multi.aggregate(calldata)
 
-    const { returnData } = await multi
-      .aggregate(calldata)
-      .call(undefined, options.blockNumber)
     const res = returnData.map((call, i) =>
       itf.decodeFunctionResult(calls[i].name, call)
     )

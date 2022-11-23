@@ -62,24 +62,31 @@ interface FarmUserDataResponse {
 
 export const fetchFarmUserDataAsync = createAsyncThunk<
   FarmUserDataResponse[],
-  { account: string; pids: number[] }
->('farms/fetchFarmUserDataAsync', async ({ account, pids }) => {
+  { account: string; pids: number[]; library?: any }
+>('farms/fetchFarmUserDataAsync', async ({ account, pids, library }) => {
   const farmsToFetch = farmsConfig.filter((farmConfig) =>
     pids.includes(farmConfig.pid)
   )
   const userFarmAllowances = await fetchFarmUserAllowances(
     account,
-    farmsToFetch
+    farmsToFetch,
+    library
   )
   const userFarmTokenBalances = await fetchFarmUserTokenBalances(
     account,
-    farmsToFetch
+    farmsToFetch,
+    library
   )
   const userStakedBalances = await fetchFarmUserStakedBalances(
     account,
-    farmsToFetch
+    farmsToFetch,
+    library
   )
-  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
+  const userFarmEarnings = await fetchFarmUserEarnings(
+    account,
+    farmsToFetch,
+    library
+  )
 
   return userFarmAllowances.map((farmAllowance, index) => {
     return {

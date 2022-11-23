@@ -21,37 +21,38 @@ const getFarmFromTokenSymbol = (
 const getFarmBaseTokenPrice = (
   farm: Farm,
   quoteTokenFarm: Farm,
-  bnbPriceBusd: BigNumber
+  ethPriceUsdt: BigNumber
 ): BigNumber => {
   const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
 
-  if (farm.tokenPriceVsQuote && farm.quoteToken.symbol === 'BUSD') {
+  if (farm.tokenPriceVsQuote && farm.quoteToken.symbol === 'USDT') {
     return hasTokenPriceVsQuote
       ? new BigNumber(farm.tokenPriceVsQuote)
       : BIG_ZERO
   }
 
-  if (farm.tokenPriceVsQuote && farm.quoteToken.symbol === 'wBNB') {
+  //TODO: check WETH or ETH
+  if (farm.tokenPriceVsQuote && farm.quoteToken.symbol === 'WETH') {
     return hasTokenPriceVsQuote
-      ? bnbPriceBusd.times(farm.tokenPriceVsQuote)
+      ? ethPriceUsdt.times(farm.tokenPriceVsQuote)
       : BIG_ZERO
   }
 
-  // We can only calculate profits without a quoteTokenFarm for BUSD/BNB farms
+  // We can only calculate profits without a quoteTokenFarm for USDT/ETH farms
   if (!quoteTokenFarm) {
     return BIG_ZERO
   }
 
   // Possible alternative farm quoteTokens:
   // UST (i.e. MIR-UST), pBTC (i.e. PNT-pBTC), BTCB (i.e. bBADGER-BTCB), ETH (i.e. SUSHI-ETH)
-  // If the farm's quote token isn't BUSD or wBNB, we then use the quote token, of the original farm's quote token
+  // If the farm's quote token isn't USDT or WETH, we then use the quote token, of the original farm's quote token
   // i.e. for farm PNT - pBTC we use the pBTC farm's quote token - BNB, (pBTC - BNB)
   // from the BNB - pBTC price, we can calculate the PNT - BUSD price
   if (
     quoteTokenFarm.tokenPriceVsQuote &&
-    quoteTokenFarm.quoteToken.symbol === 'wBNB'
+    quoteTokenFarm.quoteToken.symbol === 'WETH'
   ) {
-    const quoteTokenInBusd = bnbPriceBusd.times(
+    const quoteTokenInBusd = ethPriceUsdt.times(
       quoteTokenFarm.tokenPriceVsQuote
     )
     return hasTokenPriceVsQuote && quoteTokenInBusd && farm.tokenPriceVsQuote
@@ -59,7 +60,7 @@ const getFarmBaseTokenPrice = (
       : BIG_ZERO
   }
 
-  if (farm.tokenPriceVsQuote && quoteTokenFarm.quoteToken.symbol === 'BUSD') {
+  if (farm.tokenPriceVsQuote && quoteTokenFarm.quoteToken.symbol === 'USDT') {
     const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
     return hasTokenPriceVsQuote && quoteTokenInBusd
       ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
@@ -73,27 +74,27 @@ const getFarmBaseTokenPrice = (
 const getFarmQuoteTokenPrice = (
   farm: Farm,
   quoteTokenFarm: Farm,
-  bnbPriceBusd: BigNumber
+  ethPriceUsdt: BigNumber
 ): BigNumber => {
-  if (farm.quoteToken.symbol === 'BUSD') {
+  if (farm.quoteToken.symbol === 'USDT') {
     return BIG_ONE
   }
 
-  if (farm.quoteToken.symbol === 'wBNB') {
-    return bnbPriceBusd
+  if (farm.quoteToken.symbol === 'WETH') {
+    return ethPriceUsdt
   }
 
   if (!quoteTokenFarm) {
     return BIG_ZERO
   }
 
-  if (quoteTokenFarm.quoteToken.symbol === 'wBNB') {
+  if (quoteTokenFarm.quoteToken.symbol === 'WETH') {
     return quoteTokenFarm.tokenPriceVsQuote
-      ? bnbPriceBusd.times(quoteTokenFarm.tokenPriceVsQuote)
+      ? ethPriceUsdt.times(quoteTokenFarm.tokenPriceVsQuote)
       : BIG_ZERO
   }
 
-  if (quoteTokenFarm.quoteToken.symbol === 'BUSD') {
+  if (quoteTokenFarm.quoteToken.symbol === 'USDT') {
     return quoteTokenFarm.tokenPriceVsQuote
       ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote)
       : BIG_ZERO
@@ -103,9 +104,10 @@ const getFarmQuoteTokenPrice = (
 }
 
 const fetchFarmsPrices = async (farms) => {
-  const bnbBusdFarm = farms.find((farm: Farm) => farm.pid === 252)
-  const bnbPriceBusd = bnbBusdFarm.tokenPriceVsQuote
-    ? BIG_ONE.div(bnbBusdFarm.tokenPriceVsQuote)
+  //TODO: change to USDT-ETH pid
+  const ethUsdtFarm = farms.find((farm: Farm) => farm.pid === 0)
+  const ethPriceUsdt = ethUsdtFarm.tokenPriceVsQuote
+    ? BIG_ONE.div(ethUsdtFarm.tokenPriceVsQuote)
     : BIG_ZERO
 
   const farmsWithPrices = farms.map((farm) => {
@@ -113,17 +115,17 @@ const fetchFarmsPrices = async (farms) => {
     const baseTokenPrice = getFarmBaseTokenPrice(
       farm,
       quoteTokenFarm,
-      bnbPriceBusd
+      ethPriceUsdt
     )
     const quoteTokenPrice = getFarmQuoteTokenPrice(
       farm,
       quoteTokenFarm,
-      bnbPriceBusd
+      ethPriceUsdt
     )
-    const token = { ...farm.token, busdPrice: baseTokenPrice.toJSON() }
+    const token = { ...farm.token, usdtPrice: baseTokenPrice.toJSON() }
     const quoteToken = {
       ...farm.quoteToken,
-      busdPrice: quoteTokenPrice.toJSON(),
+      usdtPrice: quoteTokenPrice.toJSON(),
     }
     return { ...farm, token, quoteToken }
   })
