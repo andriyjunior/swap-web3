@@ -27,6 +27,11 @@ export * from './transactionErrorToUserReadableMessage'
 export * from './truncateHash'
 export * from './localStorageOrders'
 export * from './getTokenUrlByAddress'
+export * from './farmHelpers'
+export * from './bigNumber'
+export * from './apr'
+export * from './latinise'
+export * from './getDefaultChainId'
 
 export const AddressZero = '0x0000000000000000000000000000000000000000'
 

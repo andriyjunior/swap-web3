@@ -1,3 +1,8 @@
+import { Address } from 'abis'
+import BigNumber from 'bignumber.js'
+
+import { Farm } from 'store'
+
 export type ColumnsDefTypes = {
   id: number
   label: string
@@ -49,3 +54,38 @@ export const DesktopColumnSchema: ColumnsDefTypes[] = [
     label: '',
   },
 ]
+
+export interface AprProps {
+  value: string
+  multiplier: string
+  lpLabel: string
+  tokenAddress?: Address
+  quoteTokenAddress?: Address
+  cakePrice: BigNumber
+  originalValue: number
+  hideButton?: boolean
+}
+
+export interface FarmWithStakedValue extends Farm {
+  apr?: number
+  liquidity?: BigNumber
+}
+
+export interface FarmProps {
+  label: string
+  pid: number
+  image: string
+}
+
+export interface EarnedProps {
+  earnings: number
+  pid: number
+}
+
+export interface MultiplierProps {
+  multiplier: string
+}
+
+export interface LiquidityProps {
+  liquidity: BigNumber
+}

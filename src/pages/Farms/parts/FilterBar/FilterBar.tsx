@@ -1,27 +1,42 @@
 import { Button, Dropdown, DropdownItem, Flex, Input } from 'components'
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { borderRadius, colors } from 'styles'
 
-// interface IFilterBarProps {}
+export enum sortEnum {
+  All,
+  Liquidity,
+  Multiplier,
+  ARP,
+  Earned,
+}
 
-const options = [
+interface IFilterBarProps {
+  onChangeQuerry: (e: string) => void
+  onChangeSort: (value: sortEnum) => void
+}
+
+export const options = [
   {
-    key: 0,
+    key: sortEnum.All,
     value: 'All',
   },
   {
-    key: 1,
+    key: sortEnum.Liquidity,
     value: 'Liquidity',
   },
   {
-    key: 2,
+    key: sortEnum.Multiplier,
     value: 'Multipler',
   },
   {
-    key: 3,
+    key: sortEnum.ARP,
     value: 'APR',
+  },
+  {
+    key: sortEnum.Earned,
+    value: 'Earned',
   },
 ]
 
@@ -45,7 +60,10 @@ const StyledRight = styled(Flex)`
   min-width: 134px;
 `
 
-export const FilterBar: FC = () => {
+export const FilterBar: FC<IFilterBarProps> = ({
+  onChangeQuerry,
+  onChangeSort,
+}) => {
   const [filters, setFilters] = useState<{
     search: string
     filter: { key: number; value: string }
@@ -62,6 +80,14 @@ export const FilterBar: FC = () => {
       return { ...prev, filter: e }
     })
   }
+
+  useEffect(() => {
+    onChangeQuerry(filters.search)
+  }, [filters.search])
+
+  useEffect(() => {
+    onChangeSort(filters.filter.key)
+  }, [filters.filter])
 
   const { t } = useTranslation()
 
