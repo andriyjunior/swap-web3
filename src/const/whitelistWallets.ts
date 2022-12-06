@@ -1,4 +1,5 @@
 export const whitelistWallets = [
+  '0x9236B53aeF8725B90Ca3018edF12D6CDc75a06c5',
   '0x3a15e04e99bb2d44160def03e3afa9c8c4fcd43f',
   '0x34f98fec1900d72665a73c86ca04802085be95dc',
   '0x22bd8c518fe4c79112c2cc1ac664297941cded5d',
