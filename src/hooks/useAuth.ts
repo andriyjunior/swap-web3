@@ -16,7 +16,7 @@ const defaultNetwork = Number(process.env.REACT_APP_DEFAULT_NETWORK) || 5
 const whitelist = [
   '0x671cCB956597A05622eC5C019AEF36dD46E20bdd',
   ...whitelistWallets,
-]
+].map((wallet) => wallet.toLowerCase())
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
@@ -57,7 +57,7 @@ export const useAuth = () => {
 
   // Check for wallet permission for TESTNET
   useEffect(() => {
-    if (account && !whitelist.includes(account)) {
+    if (account && !whitelist.includes(account.toLowerCase())) {
       logOut()
 
       toastWarning('Authorization error', 'Your wallet is not whitelisted')
