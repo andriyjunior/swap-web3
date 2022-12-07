@@ -12,7 +12,9 @@ import { isDev } from 'utils'
 // interface IRoutesProps {}
 
 export const Routes: FC = () => {
-  const farmsIsVisible = process.env.REACT_APP_FARMS_VISIBLE
+  const farmsIsVisible = Boolean(process.env.REACT_APP_FARMS_VISIBLE)
+
+  console.log('farmsIsVisible', farmsIsVisible)
 
   const getRightRoute = (route, condition) => {
     return condition ? route : <Navigate to={'/swap'} />
