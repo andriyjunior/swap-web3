@@ -4,7 +4,7 @@ import { orderBy } from 'lodash'
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import { Farm, useFarms, usePollFarmsData, usePriceCakeBusd } from 'store'
+import { Farm, useFarms, usePollFarmsData, usePriceSevnUsdt } from 'store'
 import styled from 'styled-components'
 import { getBalanceNumber, getFarmApr, isArchivedPid, latinise } from 'utils'
 
@@ -28,11 +28,12 @@ export const Farms: FC<IFarmsProps> = () => {
 
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
+
   const isActive = !isInactive && !isArchived
 
   usePollFarmsData(isArchived)
 
-  const cakePrice = usePriceCakeBusd()
+  const sevnPrice = usePriceSevnUsdt()
 
   const [sortOption, setSortOption] = useState(options[0].key)
   const [query, setQuery] = useState('')
@@ -80,17 +81,18 @@ export const Farms: FC<IFarmsProps> = () => {
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
       let farmsToDisplayWithAPR: FarmWithStakedValue[] = farmsToDisplay.map(
         (farm) => {
-          if (!farm.lpTotalInQuoteToken || !farm.quoteToken.busdPrice) {
+          if (!farm.lpTotalInQuoteToken || !farm.quoteToken.usdtPrice) {
             return farm
           }
           const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(
-            farm.quoteToken.busdPrice
+            farm.quoteToken.usdtPrice
           )
+
           const apr =
-            isActive && cakePrice && farm.poolWeight
+            isActive && sevnPrice && farm.poolWeight
               ? getFarmApr(
                   new BigNumber(farm.poolWeight),
-                  cakePrice,
+                  sevnPrice,
                   totalLiquidity
                 )
               : 0
@@ -111,7 +113,7 @@ export const Farms: FC<IFarmsProps> = () => {
       }
       return farmsToDisplayWithAPR
     },
-    [cakePrice, query, isActive]
+    [sevnPrice, query, isActive]
   )
 
   const farmsStakedMemoized = useMemo(() => {
@@ -199,7 +201,7 @@ export const Farms: FC<IFarmsProps> = () => {
             lpLabel,
             tokenAddress,
             quoteTokenAddress,
-            cakePrice,
+            sevnPrice,
             originalValue: farm.apr,
           },
           farm: {

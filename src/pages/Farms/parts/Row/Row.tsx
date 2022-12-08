@@ -1,5 +1,5 @@
 import { Button, CoinPair, Flex, Icon, Modal, Typography } from 'components'
-import { FC, memo, useState } from 'react'
+import { FC, memo, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 
@@ -18,6 +18,7 @@ import {
   LiquidityProps,
   MultiplierProps,
 } from '../types.t'
+import { aprToApy } from '../utils'
 
 export interface IRowProps {
   apr: AprProps
@@ -127,6 +128,8 @@ const variants = {
 export const Row: FC<IRowProps> = memo((props) => {
   const { apr, farm, earned, multiplier, liquidity, details } = props
 
+  console.log('apr', apr)
+
   const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
 
@@ -159,6 +162,14 @@ export const Row: FC<IRowProps> = memo((props) => {
 
   const hasFarm = true
 
+  const displayLiquidity = useMemo(
+    () =>
+      Number(liquidity.liquidity).toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+      }),
+    [liquidity.liquidity]
+  )
+
   return (
     <>
       <Modal title={t('Stake LP tokens')} ref={stakeModalRef}>
@@ -181,7 +192,9 @@ export const Row: FC<IRowProps> = memo((props) => {
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APY</StyledTitle>
-              <Typography.BodyBold>50.09%</Typography.BodyBold>
+              <Typography.BodyBold>
+                {apr.value ? `${aprToApy(apr.value)}%` : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="80px">
@@ -196,7 +209,7 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Liquidity</StyledTitle>
               <Typography.BodyBold>
-                {liquidity.liquidity ? Number(liquidity.liquidity.gt) : '---'}
+                {liquidity.liquidity ? displayLiquidity : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>

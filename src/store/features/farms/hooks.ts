@@ -193,11 +193,11 @@ export const useFarmFromPid = (pid): Farm | undefined => {
 // }
 
 // // Price
-export const usePriceCakeBusd = (): BigNumber | undefined => {
-  const cakeBnbFarm = useFarmFromPid(1)
+export const usePriceSevnUsdt = (): BigNumber | undefined => {
+  const sevnUsdtFarm = useFarmFromPid(0)
 
-  if (cakeBnbFarm?.token.busdPrice) {
-    return new BigNumber(cakeBnbFarm.token.busdPrice)
+  if (sevnUsdtFarm?.token.usdtPrice) {
+    return new BigNumber(sevnUsdtFarm.token.usdtPrice)
   }
 }
 
