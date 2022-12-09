@@ -20,7 +20,6 @@ interface IStyledRoot {
 
 const StyledRoot = styled.div<IStyledRoot>`
   display: flex;
-  width: 100%;
   justify-content: ${(props) => props.justifyContent};
   align-items: ${(props) => props.alignItems};
   flex-direction: ${(props) => props.flexDirection};
