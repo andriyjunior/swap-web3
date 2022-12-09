@@ -9,6 +9,7 @@ import {
   Modal,
   SelectToken,
   ManageTokens,
+  Flex,
 } from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
 import { TokenDTO } from 'types'
@@ -32,6 +33,7 @@ const StyledBlock = styled.div`
 
 const StyledTitle = styled(Typography.Caption)`
   padding-bottom: 10px;
+  opacity: 0.5;
 `
 
 const StyledBlockTop = styled.div`
@@ -55,6 +57,7 @@ interface ITokenInputProps {
   icon?: string
   onInput: (value: string) => void
   onSelectToken: (value: Currency) => void
+  balance?: string
 }
 
 export const TokenInput: FC<ITokenInputProps> = ({
@@ -66,6 +69,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   onSelectToken,
   onInput,
   currency,
+  balance,
 }) => {
   const { t } = useTranslation()
 
@@ -108,7 +112,14 @@ export const TokenInput: FC<ITokenInputProps> = ({
         <ManageTokens goBack={handleOnBack} />
       </Modal>
       <StyledRoot>
-        {title && <StyledTitle>{title}</StyledTitle>}
+        <Flex justifyContent="space-between">
+          {title && <StyledTitle>{title}</StyledTitle>}
+          {balance && (
+            <StyledTitle>
+              {t('balance')}: {balance}
+            </StyledTitle>
+          )}
+        </Flex>
         <StyledBlock>
           <StyledBlockTop>
             <TokenSelector
