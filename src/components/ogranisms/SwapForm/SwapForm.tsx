@@ -29,6 +29,8 @@ import {
 import {
   selectUserSlippageTolerance,
   useAppSelector,
+  useCurrencyBalance,
+  useCurrencyBalances,
   useDefaultsFromURLSearch,
   useDerivedSwapInfo,
   useSingleTokenSwapInfo,
@@ -371,6 +373,11 @@ export const SwapForm: FC = () => {
   const swapIsDisabled =
     showApproveFlow || swapInputIsEmpty || priceImpactSeverity > 3
 
+  const [balanceInput, balanceOutput] = useCurrencyBalances(
+    account ?? undefined,
+    [currencies[Field.INPUT], currencies[Field.OUTPUT]]
+  )
+
   return (
     <>
       <Modal ref={walletsRef} title={t('walletConnection.connectToAWallet')}>
@@ -444,6 +451,7 @@ export const SwapForm: FC = () => {
             amount={formattedAmounts[Field.INPUT]}
             onInput={handleTypeInput}
             onSelectToken={handleInputSelect}
+            balance={balanceInput?.toSignificant(6)}
           />
 
           <Flex justifyContent="center">
@@ -458,6 +466,7 @@ export const SwapForm: FC = () => {
             amount={formattedAmounts[Field.OUTPUT]}
             onInput={handleTypeOutput}
             onSelectToken={handleOutputSelect}
+            balance={balanceOutput?.toSignificant(6)}
           />
 
           {userHasSpecifiedInputOutput && noRoute ? (
