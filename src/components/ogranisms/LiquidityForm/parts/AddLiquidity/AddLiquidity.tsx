@@ -35,6 +35,7 @@ import {
   calculateGasMargin,
   useTransactionAdder,
   useGasPrice,
+  useCurrencyBalances,
 } from 'store'
 import {
   ChainId,
@@ -240,6 +241,11 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
     getTokenUrlByAddress(currencyIdB),
   ]
 
+  const [balanceInput, balanceOutput] = useCurrencyBalances(
+    account ?? undefined,
+    [currencies[Field.CURRENCY_A], currencies[Field.CURRENCY_B]]
+  )
+
   return (
     <>
       <Typography.Header4>{t('liquidityForm.addLiquidity')}</Typography.Header4>
@@ -315,23 +321,27 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
           )}
 
           <TokenInput
+            title="&nbsp;"
             currency={currencies[Field.CURRENCY_A]}
             tokenName={currencies[Field.CURRENCY_A]?.symbol ?? ''}
             icon={icons[0]}
             amount={formattedAmounts[Field.CURRENCY_A]}
             onInput={onFieldAInput}
             onSelectToken={handleCurrencyASelect}
+            balance={balanceInput?.toSignificant(6)}
           />
           <Flex justifyContent="center" alignItems="center">
             <StyledPlusIcon src={icon_plus} />
           </Flex>
           <TokenInput
+            title="&nbsp;"
             currency={currencies[Field.CURRENCY_B]}
             tokenName={currencies[Field.CURRENCY_B]?.symbol ?? ''}
             icon={icons[1]}
             amount={formattedAmounts[Field.CURRENCY_B]}
             onInput={onFieldBInput}
             onSelectToken={handleCurrencyBSelect}
+            balance={balanceOutput?.toSignificant(6)}
           />
           <Typography.Title>
             {t('liquidityForm.pricesAndPoolShare')}
