@@ -14,6 +14,7 @@ interface ISimpleButtonProps {
   href?: string
   variant?: 'primary' | 'secondary'
   icon?: 'wallet' | 'link'
+  width?: number
 }
 
 const commonCss = css`
@@ -38,11 +39,13 @@ const commonCss = css`
   }
 `
 
-const StyledLink = styled.a`
+const StyledLink = styled.a<{ width?: number }>`
   ${commonCss};
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
 `
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ width?: number }>`
   ${commonCss};
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
   border: none;
 `
 
@@ -70,11 +73,12 @@ export const SimpleButton: FC<ISimpleButtonProps> = ({
   children,
   icon,
   variant = 'primary',
+  width,
 }) => {
   return (
     <>
       {href && (
-        <StyledLink href={href} target="_blank">
+        <StyledLink href={href} target="_blank" width={width}>
           {typeof children === 'string' ? (
             <StyledText color={variants[variant]}>{children}</StyledText>
           ) : (
@@ -84,7 +88,7 @@ export const SimpleButton: FC<ISimpleButtonProps> = ({
         </StyledLink>
       )}
       {onClick && (
-        <StyledButton onClick={onClick}>
+        <StyledButton onClick={onClick} width={width}>
           {typeof children === 'string' ? (
             <StyledText color={variants[variant]}>{children}</StyledText>
           ) : (

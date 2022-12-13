@@ -451,7 +451,8 @@ export const SwapForm: FC = () => {
             amount={formattedAmounts[Field.INPUT]}
             onInput={handleTypeInput}
             onSelectToken={handleInputSelect}
-            balance={balanceInput?.toSignificant(6)}
+            balance={balanceInput}
+            onMax={handleTypeInput}
           />
 
           <Flex justifyContent="center">
@@ -466,7 +467,8 @@ export const SwapForm: FC = () => {
             amount={formattedAmounts[Field.OUTPUT]}
             onInput={handleTypeOutput}
             onSelectToken={handleOutputSelect}
-            balance={balanceOutput?.toSignificant(6)}
+            balance={balanceOutput}
+            onMax={handleTypeOutput}
           />
 
           {userHasSpecifiedInputOutput && noRoute ? (
