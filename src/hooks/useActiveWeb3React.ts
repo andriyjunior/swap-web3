@@ -15,7 +15,7 @@ export const useActiveWeb3React = () => {
   const { library, chainId, account, ...web3React } = useWeb3React()
 
   //TODO: save last chain id ot smth like that
-  const appChainId = 5
+  const appChainId = chainId || 5
   const appProvider = getProvider(appChainId)
   const currChainId = chainId || appChainId
   const refChainId = useRef(currChainId)

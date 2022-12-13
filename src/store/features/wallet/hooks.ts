@@ -22,7 +22,7 @@ const ERC20_INTERFACE = new Interface(ERC20_ABI)
 /**
  * Returns a map of the given addresses to their eventually consistent BNB balances.
  */
-export function useBNBBalances(uncheckedAddresses?: (string | undefined)[]): {
+export function useETHBalances(uncheckedAddresses?: (string | undefined)[]): {
   [address: string]: CurrencyAmount | undefined
 } {
   const multicallContract = useMulticallContract()
@@ -151,7 +151,7 @@ export function useCurrencyBalances(
     () => (containsBNB ? [account] : []),
     [containsBNB, account]
   )
-  const bnbBalance = useBNBBalances(uncheckedAddresses)
+  const bnbBalance = useETHBalances(uncheckedAddresses)
 
   return useMemo(
     () =>
