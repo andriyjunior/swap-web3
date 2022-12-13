@@ -10,10 +10,11 @@ import {
   SelectToken,
   ManageTokens,
   Flex,
+  SimpleButton,
 } from 'components'
 import { borderRadius, colors, getTransparentColor, shadows } from 'styles'
 import { TokenDTO } from 'types'
-import { Currency, Token } from 'packages/swap-sdk'
+import { Currency, CurrencyAmount, Token } from 'packages/swap-sdk'
 import { useUSDTCurrencyAmount } from 'hooks'
 import { formatNumber, getTokenUrlByAddress } from 'utils'
 
@@ -57,7 +58,8 @@ interface ITokenInputProps {
   icon?: string
   onInput: (value: string) => void
   onSelectToken: (value: Currency) => void
-  balance?: string
+  balance?: CurrencyAmount
+  onMax?: (value) => void
 }
 
 export const TokenInput: FC<ITokenInputProps> = ({
@@ -70,6 +72,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
   onInput,
   currency,
   balance,
+  onMax,
 }) => {
   const { t } = useTranslation()
 
@@ -116,7 +119,7 @@ export const TokenInput: FC<ITokenInputProps> = ({
           {title && <StyledTitle>{title}</StyledTitle>}
           {balance && (
             <StyledTitle>
-              {t('balance')}: {balance}
+              {t('balance')}: {balance.toSignificant(6)}
             </StyledTitle>
           )}
         </Flex>
@@ -128,6 +131,15 @@ export const TokenInput: FC<ITokenInputProps> = ({
               onClick={() => modalRef.current?.open()}
               hasArrow
             />
+            {balance && onMax && (
+              <SimpleButton
+                variant="secondary"
+                onClick={() => onMax(balance?.toSignificant())}
+                width={88}
+              >
+                MAX
+              </SimpleButton>
+            )}
             <BigDecimalInput value={amount} onInput={handleOnInput} />
           </StyledBlockTop>
           <StyledText>
