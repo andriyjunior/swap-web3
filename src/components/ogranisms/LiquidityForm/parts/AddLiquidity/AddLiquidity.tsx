@@ -27,35 +27,16 @@ import icon_plus from 'assets/icons/plus.svg'
 import { ConfirmSupply } from '../ConfirmSupply'
 
 import {
-  useAppSelector,
   useMintState,
   useDerivedMintInfo,
   useMintActionHandlers,
-  selectUserSlippageTolerance,
-  calculateGasMargin,
-  useTransactionAdder,
-  useGasPrice,
   useCurrencyBalances,
 } from 'store'
-import {
-  ChainId,
-  ETHER,
-  Fetcher,
-  Pair,
-  Token,
-  TokenAmount,
-} from 'packages/swap-sdk'
-import {
-  calculateSlippageAmount,
-  getRouterContract,
-  getTokenUrlByAddress,
-  maxAmountSpend,
-} from 'utils'
+import { TokenAmount } from 'packages/swap-sdk'
+import { getTokenUrlByAddress, maxAmountSpend } from 'utils'
 import { useCurrencySelectRoute } from 'pages/Swap/hooks'
 import { SEVN, USDT } from 'const'
 import { ONE_BIPS, ROUTER_ADDRESS } from 'config'
-import { BigNumber } from 'ethers'
-import { TransactionResponse } from '@ethersproject/providers'
 
 import wallet_icon from 'assets/icons/wallet.svg'
 import { useOnAdd } from './hooks'
@@ -328,7 +309,8 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
             amount={formattedAmounts[Field.CURRENCY_A]}
             onInput={onFieldAInput}
             onSelectToken={handleCurrencyASelect}
-            balance={balanceInput?.toSignificant(6)}
+            balance={balanceInput}
+            onMax={onFieldAInput}
           />
           <Flex justifyContent="center" alignItems="center">
             <StyledPlusIcon src={icon_plus} />
@@ -341,7 +323,8 @@ export const AddLiquidity: FC<IAddLiquidity> = ({
             amount={formattedAmounts[Field.CURRENCY_B]}
             onInput={onFieldBInput}
             onSelectToken={handleCurrencyBSelect}
-            balance={balanceOutput?.toSignificant(6)}
+            balance={balanceOutput}
+            onMax={onFieldBInput}
           />
           <Typography.Title>
             {t('liquidityForm.pricesAndPoolShare')}
