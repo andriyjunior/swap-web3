@@ -7,11 +7,12 @@ import { Typography } from '../Typography'
 
 import arrow_icon from 'assets/icons/arrow.svg'
 import QUESTION_MARK_icon from 'assets/coins/QUESTION_MARK.png'
-import { useAddUserToken, WrappedTokenInfo } from 'store'
+import { useAddUserToken, useCurrencyBalance, WrappedTokenInfo } from 'store'
 import { Button } from '../Button'
 import { useTranslation } from 'react-i18next'
 import { getTokenUrlByAddress } from 'utils'
 import { Coin } from '../Coin'
+import { useActiveWeb3React } from 'hooks'
 
 interface ITokenSelectorProps {
   hasArrow?: boolean
@@ -50,8 +51,14 @@ const StyledCoinIcon = styled(Icon)`
   height: 24px;
 `
 
+const StyledLeft = styled.div``
+
 const StyledText = styled(Typography.BodyBold)`
   padding: 0 5px;
+`
+
+const StyledBalance = styled(Typography.BodyBold)`
+  opacity: 0.5;
 `
 
 const StyledArrowIcon = styled(Icon)`
@@ -71,7 +78,10 @@ const StyledImportButton = styled.div`
 
 export const TokenSelector: FC<ITokenSelectorProps> = memo(
   ({ icon, onClick, hasArrow, token, title, onImport, onRemove }) => {
+    const { account } = useActiveWeb3React()
     const { t } = useTranslation()
+
+    const balance = useCurrencyBalance(account || undefined, token)
 
     const imgUrl = icon
       ? icon
@@ -86,6 +96,9 @@ export const TokenSelector: FC<ITokenSelectorProps> = memo(
         {<Coin src={imgUrl ?? ''} width={'small'} />}
         <StyledBody>
           <StyledText>{title || token?.symbol || 'ETH'}</StyledText>
+          {!onImport && !onRemove && balance && (
+            <StyledBalance>{balance.toSignificant(6)}</StyledBalance>
+          )}
           {hasArrow && <StyledArrowIcon src={arrow_icon} />}
           {onImport && (
             <StyledImportButton>
