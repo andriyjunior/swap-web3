@@ -89,22 +89,33 @@ export const useFarmFromPid = (pid): Farm | undefined => {
 //   return farm
 // }
 
-// export const useFarmUser = (pid) => {
-//   const farm = useFarmFromPid(pid)
+export const useFarmUser = (pid) => {
+  const farm = useFarmFromPid(pid)
 
-//   return {
-//     allowance: farm.userData
-//       ? new BigNumber(farm.userData.allowance)
-//       : BIG_ZERO,
-//     tokenBalance: farm.userData
-//       ? new BigNumber(farm.userData.tokenBalance)
-//       : BIG_ZERO,
-//     stakedBalance: farm.userData
-//       ? new BigNumber(farm.userData.stakedBalance)
-//       : BIG_ZERO,
-//     earnings: farm.userData ? new BigNumber(farm.userData.earnings) : BIG_ZERO,
-//   }
-// }
+  if (farm) {
+    return {
+      allowance: farm.userData
+        ? new BigNumber(farm.userData.allowance)
+        : BIG_ZERO,
+      tokenBalance: farm.userData
+        ? new BigNumber(farm.userData.tokenBalance)
+        : BIG_ZERO,
+      stakedBalance: farm.userData
+        ? new BigNumber(farm.userData.stakedBalance)
+        : BIG_ZERO,
+      earnings: farm.userData
+        ? new BigNumber(farm.userData.earnings)
+        : BIG_ZERO,
+    }
+  } else {
+    return {
+      allowance: BIG_ZERO,
+      tokenBalance: BIG_ZERO,
+      stakedBalance: BIG_ZERO,
+      earnings: BIG_ZERO,
+    }
+  }
+}
 
 // // Return a farm for a given token symbol. The farm is filtered based on attempting to return a farm with a quote token from an array of preferred quote tokens
 // export const useFarmFromTokenSymbol = (

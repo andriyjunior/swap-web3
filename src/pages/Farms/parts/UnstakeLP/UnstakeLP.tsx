@@ -1,18 +1,19 @@
 import {
+  BigDecimalInput,
   Button,
   Flex,
   InnerContainer,
   SimpleButton,
   Typography,
 } from 'components'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 
 interface IUnstakeLPProps {
   onCancel: () => void
-  onConfirm: () => void
+  onConfirm: (value: string) => void
 }
 
 const StyledBody = styled(InnerContainer)`
@@ -31,14 +32,20 @@ const StyledButtons = styled(Flex)`
 `
 
 export const UnstakeLP: FC<IUnstakeLPProps> = ({ onCancel, onConfirm }) => {
+  const [amount, setAmount] = useState('')
+
   const { t } = useTranslation()
+
+  const handleConfirm = () => {
+    onConfirm(amount)
+  }
 
   return (
     <div>
       <StyledBody>
         <Flex flexDirection="column" gap="14px">
           <StyledTitle>Unstake SAND/MANA</StyledTitle>
-          <Typography.Header4>0.05763243</Typography.Header4>
+          <BigDecimalInput onInput={(val) => setAmount(val)} value={amount} />
         </Flex>
         <Flex flexDirection="column" gap="14px">
           <StyledTitle>Balance: 0.05763243</StyledTitle>
@@ -47,7 +54,7 @@ export const UnstakeLP: FC<IUnstakeLPProps> = ({ onCancel, onConfirm }) => {
       </StyledBody>
       <StyledButtons gap="16px">
         <Button onClick={onCancel}>{t('cancel')}</Button>
-        <Button onClick={onConfirm}>{t('confirm')}</Button>
+        <Button onClick={handleConfirm}>{t('confirm')}</Button>
       </StyledButtons>
     </div>
   )

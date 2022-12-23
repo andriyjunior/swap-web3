@@ -1,12 +1,12 @@
 import { Button, CoinPair, Flex, Icon, Modal, Typography } from 'components'
-import { FC, memo, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 
 import arrowDown_icon from 'assets/icons/arrow_blue.svg'
 import farm_row_bg from 'assets/farms/row-bg.png'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useModalRef } from 'hooks'
+import { useModalRef, useStake, useUnstake } from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { StakeLP } from '../StakeLP'
 import { UnstakeLP } from '../UnstakeLP'
@@ -19,6 +19,14 @@ import {
   MultiplierProps,
 } from '../types.t'
 import { aprToApy } from '../utils'
+import { useFarmUser } from 'store'
+import {
+  getBalanceAmount,
+  getBalanceNumber,
+  getFullDisplayBalance,
+} from 'utils'
+import BigNumber from 'bignumber.js'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 export interface IRowProps {
   apr: AprProps
@@ -127,11 +135,13 @@ const variants = {
 
 export const Row: FC<IRowProps> = memo((props) => {
   const { apr, farm, earned, multiplier, liquidity, details } = props
-
-  console.log('apr', apr)
+  const { pid } = farm
+  const { allowance, tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
 
   const { t } = useTranslation()
   const [isOpened, setOpened] = useState(false)
+  const { onStake } = useStake(pid)
+  const { onUnstake } = useUnstake(pid)
 
   const stakeModalRef = useModalRef()
   const unstakeModalRef = useModalRef()
@@ -160,7 +170,7 @@ export const Row: FC<IRowProps> = memo((props) => {
     }
   }
 
-  const hasFarm = true
+  const hasFarm = details.userData?.stakedBalance
 
   const displayLiquidity = useMemo(
     () =>
@@ -170,13 +180,21 @@ export const Row: FC<IRowProps> = memo((props) => {
     [liquidity.liquidity]
   )
 
+  const displayBalance = useCallback(() => {
+    const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
+    if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0001)) {
+      return getFullDisplayBalance(stakedBalance).toLocaleString()
+    }
+    return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+  }, [stakedBalance])
+
   return (
     <>
       <Modal title={t('Stake LP tokens')} ref={stakeModalRef}>
-        <StakeLP onCancel={handleCloseStake} onConfirm={() => {}} />
+        <StakeLP onCancel={handleCloseStake} onConfirm={onStake} />
       </Modal>
       <Modal title={t('Unstake LP tokens')} ref={unstakeModalRef}>
-        <UnstakeLP onCancel={handleCloseUnstake} onConfirm={() => {}} />
+        <UnstakeLP onCancel={handleCloseUnstake} onConfirm={onUnstake} />
       </Modal>
       <>
         <StyledRow
@@ -193,7 +211,7 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APY</StyledTitle>
               <Typography.BodyBold>
-                {apr.value ? `${aprToApy(apr.value)}%` : '---'}
+                {apr.value ? `${aprToApy(apr.value.split(',')[0])}%` : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -201,7 +219,11 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APR</StyledTitle>
               <Typography.BodyBold>
-                {apr.value ? `${apr.value}%` : '---'}
+                {apr.value
+                  ? `${new BigNumber(apr.originalValue)
+                      .div(DEFAULT_TOKEN_DECIMAL)
+                      .toFixed(2)}%`
+                  : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -217,7 +239,9 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Earned</StyledTitle>
               <Typography.BodyBold>
-                {earned.earnings ? `${earned.earnings}` : '---'}
+                {earned.earnings
+                  ? `${earned.earnings.toLocaleString()}`
+                  : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -255,7 +279,9 @@ export const Row: FC<IRowProps> = memo((props) => {
                   <Button onClick={() => {}}>Get LP</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Avaliable LP</StyledTitle>
-                    <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
+                    <Typography.BodyBold>
+                      {/* {allowance && getBalanceAmount(allowance).toFixed()} */}
+                    </Typography.BodyBold>
                   </StyledDetailedTextGroup>
                 </Flex>
                 <StyledEnableFarm>
@@ -273,7 +299,9 @@ export const Row: FC<IRowProps> = memo((props) => {
                       <Button onClick={handleOpenUnstake}>Unstake</Button>
                       <StyledDetailedTextGroup flexDirection="column">
                         <StyledTitle>Staked LP</StyledTitle>
-                        <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
+                        <Typography.BodyBold>
+                          {stakedBalance.gt(0) ? displayBalance() : '---'}
+                        </Typography.BodyBold>
                       </StyledDetailedTextGroup>
                     </Flex>
                   )}
@@ -283,7 +311,9 @@ export const Row: FC<IRowProps> = memo((props) => {
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Earned</StyledTitle>
                     <Typography.BodyBold>
-                      {earned.earnings ? `${earned.earnings}` : '---'}
+                      {earnings.gt(0)
+                        ? `${getBalanceNumber(earnings).toFixed()}`
+                        : '---'}
                     </Typography.BodyBold>
                   </StyledDetailedTextGroup>
                 </Flex>

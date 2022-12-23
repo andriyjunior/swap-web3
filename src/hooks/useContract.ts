@@ -3,10 +3,15 @@ import ERC20_ABI from 'abis/erc20.json'
 import SevnPair from 'abis/SevnPair.json'
 import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
 import { Erc20, Erc20Bytes32, ISevnPair, Multicall } from 'abis'
-import { getContract, getMulticallAddress, getProviderOrSigner } from 'utils'
+import {
+  getContract,
+  getMasterChefAddress,
+  getMulticallAddress,
+  getProviderOrSigner,
+} from 'utils'
 import multiCallAbi from 'abis/Multicall.json'
 import { ChainId, WNATIVE } from 'packages/swap-sdk'
-import { infuraProvider } from 'utils'
+import masterChef from 'abis/MasterChef.json'
 import { Weth } from 'abis/types/Weth'
 
 import WETH_ABI from 'abis/weth.json'
@@ -81,4 +86,9 @@ export const useWETHContract = (
     WETH_ABI,
     withSignerIfPossible
   )
+}
+
+export const useMasterChef = () => {
+  const { chainId } = useActiveWeb3React()
+  return useContract(getMasterChefAddress(chainId), masterChef.abi)
 }

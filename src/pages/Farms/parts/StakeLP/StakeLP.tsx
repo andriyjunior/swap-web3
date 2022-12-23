@@ -1,18 +1,20 @@
+import { AddressZero } from '@ethersproject/constants'
 import {
+  BigDecimalInput,
   Button,
   Flex,
   InnerContainer,
   SimpleButton,
   Typography,
 } from 'components'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 
 interface IStakeLPProps {
   onCancel: () => void
-  onConfirm: () => void
+  onConfirm: (amount: string, referrer: string) => void
 }
 
 const StyledBody = styled(InnerContainer)`
@@ -32,14 +34,25 @@ const StyledButtons = styled(Flex)`
 `
 
 export const StakeLP: FC<IStakeLPProps> = ({ onCancel, onConfirm }) => {
+  const [amount, setAmount] = useState('')
   const { t } = useTranslation()
+
+  const referrer = AddressZero
+
+  const handleConfirm = () => {
+    onConfirm(amount, referrer)
+  }
 
   return (
     <div>
       <StyledBody>
         <Flex flexDirection="column" gap="14px">
           <StyledTitle>Stake SAND/MANA</StyledTitle>
-          <Typography.Header4>0.05763243</Typography.Header4>
+          <BigDecimalInput
+            textAlign="left"
+            value={amount}
+            onInput={(value) => setAmount(value)}
+          />
         </Flex>
         <Flex flexDirection="column" gap="14px">
           <StyledTitle>Balance: 0.05763243</StyledTitle>
@@ -51,7 +64,7 @@ export const StakeLP: FC<IStakeLPProps> = ({ onCancel, onConfirm }) => {
       </SimpleButton>
       <StyledButtons gap="16px">
         <Button onClick={onCancel}>{t('cancel')}</Button>
-        <Button onClick={onConfirm}>{t('confirm')}</Button>
+        <Button onClick={handleConfirm}>{t('confirm')}</Button>
       </StyledButtons>
     </div>
   )
