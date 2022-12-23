@@ -17,7 +17,11 @@ import {
 import { State, Farm, Pool, FarmsState } from 'store/types'
 import { useAppDispatch } from 'store/utils'
 import { fetchFarmUserDataAsync } from './reducer'
-import { useActiveWeb3React } from 'hooks'
+import {
+  useActiveWeb3React,
+  useFastRefreshEffect,
+  useSlowRefreshEffect,
+} from 'hooks'
 // import { transformPool } from './pools/helpers'
 // import { fetchPoolsStakingLimitsAsync } from './pools'
 // import { fetchFarmUserDataAsync, nonArchivedFarms } from './farms'
@@ -27,7 +31,7 @@ export const usePollFarmsData = (includeArchive = false) => {
   // const { slowRefresh } = useRefresh()
   const { account, library, chainId } = useActiveWeb3React()
 
-  useEffect(() => {
+  useSlowRefreshEffect(() => {
     // const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
     const farmsToFetch = farmsConfig
     const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
@@ -38,7 +42,7 @@ export const usePollFarmsData = (includeArchive = false) => {
       dispatch(fetchFarmUserDataAsync({ account, pids, library, chainId }))
     }
     // }, [includeArchive, dispatch, slowRefresh, account])
-  }, [includeArchive, dispatch, account])
+  }, [dispatch, account])
 }
 
 /**
@@ -46,14 +50,13 @@ export const usePollFarmsData = (includeArchive = false) => {
  * 0 = CAKE-BNB LP
  * 1 = BUSD-BNB LP
  */
-// export const usePollCoreFarmData = () => {
-//   const dispatch = useAppDispatch()
-//   const { fastRefresh } = useRefresh()
+export const usePollCoreFarmData = () => {
+  const dispatch = useAppDispatch()
 
-//   useEffect(() => {
-//     dispatch(fetchFarmsPublicDataAsync([0, 1]))
-//   }, [dispatch, fastRefresh])
-// }
+  useFastRefreshEffect(() => {
+    dispatch(fetchFarmsPublicDataAsync([0, 1]))
+  }, [dispatch])
+}
 
 // export const usePollBlockNumber = () => {
 //   const dispatch = useAppDispatch()
