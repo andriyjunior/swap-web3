@@ -7,12 +7,14 @@ import { useGasPrice, useSingleCallResult, useTransactionAdder } from 'store'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { useToast } from './useToast'
 
 export const useStake = (pid: number) => {
   const { account } = useActiveWeb3React()
   const masterChefContract: any = useMasterChef()
 
   const addTransaction = useTransactionAdder()
+  const { toastError } = useToast()
 
   const stake = async (amount, referrer) => {
     return masterChefContract.functions
@@ -23,6 +25,11 @@ export const useStake = (pid: number) => {
       .then((res) => {
         addTransaction(res, {})
         return res.hash
+      })
+      .catch((err) => {
+        if (err.message.includes('cannot estimate gas')) {
+          toastError('Insufficient balance of tokens')
+        }
       })
   }
 

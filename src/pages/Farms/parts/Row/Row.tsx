@@ -6,7 +6,13 @@ import { borderRadius, colors, getTransparentColor } from 'styles'
 import arrowDown_icon from 'assets/icons/arrow_blue.svg'
 import farm_row_bg from 'assets/farms/row-bg.png'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useModalRef, useStake, useUnstake } from 'hooks'
+import {
+  useActiveWeb3React,
+  useHarvest,
+  useModalRef,
+  useStake,
+  useUnstake,
+} from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { StakeLP } from '../StakeLP'
 import { UnstakeLP } from '../UnstakeLP'
@@ -27,6 +33,8 @@ import {
 } from 'utils'
 import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { useNavigate } from 'react-router-dom'
+import { paths } from 'const'
 
 export interface IRowProps {
   apr: AprProps
@@ -138,10 +146,13 @@ export const Row: FC<IRowProps> = memo((props) => {
   const { pid } = farm
   const { allowance, tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
 
+  const navigate = useNavigate()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const [isOpened, setOpened] = useState(false)
   const { onStake } = useStake(pid)
   const { onUnstake } = useUnstake(pid)
+  const { onReward } = useHarvest(pid)
 
   const stakeModalRef = useModalRef()
   const unstakeModalRef = useModalRef()
@@ -170,6 +181,19 @@ export const Row: FC<IRowProps> = memo((props) => {
     }
   }
 
+  const handleGetLP = () => {
+    if (details?.token?.address && details?.quoteToken?.address) {
+      navigate(
+        paths.addLiquidity(
+          details?.token?.address[chainId],
+          details.quoteToken.address[chainId]
+        ),
+        { replace: true }
+      )
+    }
+    console.log(details.token.address, details.quoteToken.address)
+  }
+
   const hasFarm = details.userData?.stakedBalance
 
   const displayLiquidity = useMemo(
@@ -188,13 +212,35 @@ export const Row: FC<IRowProps> = memo((props) => {
     return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }, [stakedBalance])
 
+  const aprValue = new BigNumber(apr.originalValue).div(DEFAULT_TOKEN_DECIMAL)
+
+  const balance = displayBalance()
+
   return (
     <>
       <Modal title={t('Stake LP tokens')} ref={stakeModalRef}>
-        <StakeLP onCancel={handleCloseStake} onConfirm={onStake} />
+        <StakeLP
+          onCancel={handleCloseStake}
+          onConfirm={async (...args) => {
+            if (await onStake(...args)) {
+              handleCloseStake()
+            }
+          }}
+          label={farm.label}
+          tokenAddress={details.lpAddresses && details.lpAddresses[chainId]}
+        />
       </Modal>
       <Modal title={t('Unstake LP tokens')} ref={unstakeModalRef}>
-        <UnstakeLP onCancel={handleCloseUnstake} onConfirm={onUnstake} />
+        <UnstakeLP
+          onCancel={handleCloseUnstake}
+          onConfirm={async (value) => {
+            if (await onUnstake(value)) {
+              handleCloseUnstake()
+            }
+          }}
+          label={farm.label}
+          balance={balance}
+        />
       </Modal>
       <>
         <StyledRow
@@ -211,7 +257,7 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APY</StyledTitle>
               <Typography.BodyBold>
-                {apr.value ? `${aprToApy(apr.value.split(',')[0])}%` : '---'}
+                {apr.value ? `${aprToApy(aprValue.toString())}%` : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -219,11 +265,7 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APR</StyledTitle>
               <Typography.BodyBold>
-                {apr.value
-                  ? `${new BigNumber(apr.originalValue)
-                      .div(DEFAULT_TOKEN_DECIMAL)
-                      .toFixed(2)}%`
-                  : '---'}
+                {apr.value ? `${aprValue.toFixed(2)}%` : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -276,7 +318,7 @@ export const Row: FC<IRowProps> = memo((props) => {
                 exit="initial"
               >
                 <Flex gap="10px" alignItems="center">
-                  <Button onClick={() => {}}>Get LP</Button>
+                  <Button onClick={handleGetLP}>Get LP</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Avaliable LP</StyledTitle>
                     <Typography.BodyBold>
@@ -300,14 +342,14 @@ export const Row: FC<IRowProps> = memo((props) => {
                       <StyledDetailedTextGroup flexDirection="column">
                         <StyledTitle>Staked LP</StyledTitle>
                         <Typography.BodyBold>
-                          {stakedBalance.gt(0) ? displayBalance() : '---'}
+                          {stakedBalance.gt(0) ? balance : '---'}
                         </Typography.BodyBold>
                       </StyledDetailedTextGroup>
                     </Flex>
                   )}
                 </StyledEnableFarm>
                 <Flex gap="10px" alignItems="center">
-                  <Button onClick={() => {}}>Harvest</Button>
+                  <Button onClick={onReward}>Harvest</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Earned</StyledTitle>
                     <Typography.BodyBold>

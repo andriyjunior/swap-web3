@@ -1,4 +1,5 @@
 import { AddressZero } from '@ethersproject/constants'
+import { Token } from 'packages/swap-sdk'
 import {
   BigDecimalInput,
   Button,
@@ -9,12 +10,16 @@ import {
 } from 'components'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useCurrencyBalance } from 'store'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
+import { useActiveWeb3React, useToken } from 'hooks'
 
 interface IStakeLPProps {
   onCancel: () => void
   onConfirm: (amount: string, referrer: string) => void
+  label: string
+  tokenAddress: string
 }
 
 const StyledBody = styled(InnerContainer)`
@@ -33,21 +38,36 @@ const StyledButtons = styled(Flex)`
   padding-top: 16px;
 `
 
-export const StakeLP: FC<IStakeLPProps> = ({ onCancel, onConfirm }) => {
+export const StakeLP: FC<IStakeLPProps> = ({
+  onCancel,
+  onConfirm,
+  label,
+  tokenAddress,
+}) => {
   const [amount, setAmount] = useState('')
-  const { t } = useTranslation()
 
+  const { account, chainId } = useActiveWeb3React()
+  const { t } = useTranslation()
+  const tokenObj = useToken(tokenAddress)
+
+  const balance = useCurrencyBalance(account ?? '', tokenObj ?? undefined)
   const referrer = AddressZero
 
   const handleConfirm = () => {
     onConfirm(amount, referrer)
   }
 
+  const handleMax = () => {
+    if (balance) {
+      setAmount(balance?.toSignificant(6))
+    }
+  }
+
   return (
     <div>
       <StyledBody>
         <Flex flexDirection="column" gap="14px">
-          <StyledTitle>Stake SAND/MANA</StyledTitle>
+          <StyledTitle>Stake {label}</StyledTitle>
           <BigDecimalInput
             textAlign="left"
             value={amount}
@@ -55,8 +75,8 @@ export const StakeLP: FC<IStakeLPProps> = ({ onCancel, onConfirm }) => {
           />
         </Flex>
         <Flex flexDirection="column" gap="14px">
-          <StyledTitle>Balance: 0.05763243</StyledTitle>
-          <Button onClick={() => {}}>Max</Button>
+          <StyledTitle>Balance: {balance?.toSignificant(6)}</StyledTitle>
+          <Button onClick={handleMax}>Max</Button>
         </Flex>
       </StyledBody>
       <SimpleButton href="234sdf" icon="link" variant="secondary">

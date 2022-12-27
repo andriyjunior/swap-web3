@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { ChainId } from 'packages/swap-sdk'
-import { BIG_TEN } from 'utils'
+// import { BIG_TEN } from 'utils'
 
 export * from './constants'
 
@@ -16,4 +16,5 @@ export const BASE_BSC_SCAN_URLS = {
   [ChainId.TESTNET]: 'https://testnet.bscscan.com',
 }
 
-export const DEFAULT_TOKEN_DECIMAL = new BigNumber(10).pow(18)
+export const BIG_TEN = new BigNumber(10)
+export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)
