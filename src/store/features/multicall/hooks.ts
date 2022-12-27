@@ -1,20 +1,6 @@
 import { Interface, FunctionFragment } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useBlockNumber } from 'context'
-// import { Contract } from '@ethersproject/contracts'
-// import { useEffect, useMemo } from 'react'
-// import { useSelector } from 'react-redux'
-// import useActiveWeb3React from 'hooks/useActiveWeb3React'
-// import { useSWRConfig } from 'swr'
-// import { AppState, useAppDispatch } from '../index'
-// import {
-//   addMulticallListeners,
-//   Call,
-//   removeMulticallListeners,
-//   parseCallKey,
-//   toCallKey,
-//   ListenerOptions,
-// } from './actions'
 
 import { Contract } from 'ethers'
 import { useActiveWeb3React } from 'hooks'

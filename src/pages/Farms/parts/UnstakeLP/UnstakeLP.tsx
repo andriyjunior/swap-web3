@@ -1,18 +1,22 @@
+import BigNumber from 'bignumber.js'
 import {
+  BigDecimalInput,
   Button,
   Flex,
   InnerContainer,
   SimpleButton,
   Typography,
 } from 'components'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { colors, getTransparentColor } from 'styles'
 
 interface IUnstakeLPProps {
   onCancel: () => void
-  onConfirm: () => void
+  onConfirm: (value: string) => void
+  label: string
+  balance: string
 }
 
 const StyledBody = styled(InnerContainer)`
@@ -30,24 +34,39 @@ const StyledButtons = styled(Flex)`
   padding-top: 16px;
 `
 
-export const UnstakeLP: FC<IUnstakeLPProps> = ({ onCancel, onConfirm }) => {
+export const UnstakeLP: FC<IUnstakeLPProps> = ({
+  onCancel,
+  onConfirm,
+  label,
+  balance,
+}) => {
+  const [amount, setAmount] = useState('')
+
   const { t } = useTranslation()
+
+  const handleConfirm = () => {
+    onConfirm(amount)
+  }
+
+  const handleOnMax = () => {
+    setAmount(balance)
+  }
 
   return (
     <div>
       <StyledBody>
         <Flex flexDirection="column" gap="14px">
-          <StyledTitle>Unstake SAND/MANA</StyledTitle>
-          <Typography.Header4>0.05763243</Typography.Header4>
+          <StyledTitle>Unstake {label}</StyledTitle>
+          <BigDecimalInput onInput={(val) => setAmount(val)} value={amount} />
         </Flex>
         <Flex flexDirection="column" gap="14px">
-          <StyledTitle>Balance: 0.05763243</StyledTitle>
-          <Button onClick={() => {}}>Max</Button>
+          <StyledTitle>Balance: {balance}</StyledTitle>
+          <Button onClick={handleOnMax}>Max</Button>
         </Flex>
       </StyledBody>
       <StyledButtons gap="16px">
         <Button onClick={onCancel}>{t('cancel')}</Button>
-        <Button onClick={onConfirm}>{t('confirm')}</Button>
+        <Button onClick={handleConfirm}>{t('confirm')}</Button>
       </StyledButtons>
     </div>
   )

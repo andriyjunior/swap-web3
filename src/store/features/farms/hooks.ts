@@ -17,7 +17,11 @@ import {
 import { State, Farm, Pool, FarmsState } from 'store/types'
 import { useAppDispatch } from 'store/utils'
 import { fetchFarmUserDataAsync } from './reducer'
-import { useActiveWeb3React } from 'hooks'
+import {
+  useActiveWeb3React,
+  useFastRefreshEffect,
+  useSlowRefreshEffect,
+} from 'hooks'
 // import { transformPool } from './pools/helpers'
 // import { fetchPoolsStakingLimitsAsync } from './pools'
 // import { fetchFarmUserDataAsync, nonArchivedFarms } from './farms'
@@ -27,7 +31,7 @@ export const usePollFarmsData = (includeArchive = false) => {
   // const { slowRefresh } = useRefresh()
   const { account, library, chainId } = useActiveWeb3React()
 
-  useEffect(() => {
+  useSlowRefreshEffect(() => {
     // const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
     const farmsToFetch = farmsConfig
     const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
@@ -38,7 +42,7 @@ export const usePollFarmsData = (includeArchive = false) => {
       dispatch(fetchFarmUserDataAsync({ account, pids, library, chainId }))
     }
     // }, [includeArchive, dispatch, slowRefresh, account])
-  }, [includeArchive, dispatch, account])
+  }, [dispatch, account])
 }
 
 /**
@@ -46,14 +50,13 @@ export const usePollFarmsData = (includeArchive = false) => {
  * 0 = CAKE-BNB LP
  * 1 = BUSD-BNB LP
  */
-// export const usePollCoreFarmData = () => {
-//   const dispatch = useAppDispatch()
-//   const { fastRefresh } = useRefresh()
+export const usePollCoreFarmData = () => {
+  const dispatch = useAppDispatch()
 
-//   useEffect(() => {
-//     dispatch(fetchFarmsPublicDataAsync([0, 1]))
-//   }, [dispatch, fastRefresh])
-// }
+  useFastRefreshEffect(() => {
+    dispatch(fetchFarmsPublicDataAsync([0, 1]))
+  }, [dispatch])
+}
 
 // export const usePollBlockNumber = () => {
 //   const dispatch = useAppDispatch()
@@ -89,22 +92,33 @@ export const useFarmFromPid = (pid): Farm | undefined => {
 //   return farm
 // }
 
-// export const useFarmUser = (pid) => {
-//   const farm = useFarmFromPid(pid)
+export const useFarmUser = (pid) => {
+  const farm = useFarmFromPid(pid)
 
-//   return {
-//     allowance: farm.userData
-//       ? new BigNumber(farm.userData.allowance)
-//       : BIG_ZERO,
-//     tokenBalance: farm.userData
-//       ? new BigNumber(farm.userData.tokenBalance)
-//       : BIG_ZERO,
-//     stakedBalance: farm.userData
-//       ? new BigNumber(farm.userData.stakedBalance)
-//       : BIG_ZERO,
-//     earnings: farm.userData ? new BigNumber(farm.userData.earnings) : BIG_ZERO,
-//   }
-// }
+  if (farm) {
+    return {
+      allowance: farm.userData
+        ? new BigNumber(farm.userData.allowance)
+        : BIG_ZERO,
+      tokenBalance: farm.userData
+        ? new BigNumber(farm.userData.tokenBalance)
+        : BIG_ZERO,
+      stakedBalance: farm.userData
+        ? new BigNumber(farm.userData.stakedBalance)
+        : BIG_ZERO,
+      earnings: farm.userData
+        ? new BigNumber(farm.userData.earnings)
+        : BIG_ZERO,
+    }
+  } else {
+    return {
+      allowance: BIG_ZERO,
+      tokenBalance: BIG_ZERO,
+      stakedBalance: BIG_ZERO,
+      earnings: BIG_ZERO,
+    }
+  }
+}
 
 // // Return a farm for a given token symbol. The farm is filtered based on attempting to return a farm with a quote token from an array of preferred quote tokens
 // export const useFarmFromTokenSymbol = (
@@ -193,11 +207,11 @@ export const useFarmFromPid = (pid): Farm | undefined => {
 // }
 
 // // Price
-export const usePriceCakeBusd = (): BigNumber | undefined => {
-  const cakeBnbFarm = useFarmFromPid(1)
+export const usePriceSevnUsdt = (): BigNumber | undefined => {
+  const sevnUsdtFarm = useFarmFromPid(0)
 
-  if (cakeBnbFarm?.token.busdPrice) {
-    return new BigNumber(cakeBnbFarm.token.busdPrice)
+  if (sevnUsdtFarm?.token.usdtPrice) {
+    return new BigNumber(sevnUsdtFarm.token.usdtPrice)
   }
 }
 

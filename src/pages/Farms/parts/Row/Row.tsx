@@ -1,12 +1,18 @@
 import { Button, CoinPair, Flex, Icon, Modal, Typography } from 'components'
-import { FC, memo, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { borderRadius, colors, getTransparentColor } from 'styles'
 
 import arrowDown_icon from 'assets/icons/arrow_blue.svg'
 import farm_row_bg from 'assets/farms/row-bg.png'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useModalRef } from 'hooks'
+import {
+  useActiveWeb3React,
+  useHarvest,
+  useModalRef,
+  useStake,
+  useUnstake,
+} from 'hooks'
 import { useTranslation } from 'react-i18next'
 import { StakeLP } from '../StakeLP'
 import { UnstakeLP } from '../UnstakeLP'
@@ -18,6 +24,17 @@ import {
   LiquidityProps,
   MultiplierProps,
 } from '../types.t'
+import { aprToApy } from '../utils'
+import { useFarmUser } from 'store'
+import {
+  getBalanceAmount,
+  getBalanceNumber,
+  getFullDisplayBalance,
+} from 'utils'
+import BigNumber from 'bignumber.js'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { useNavigate } from 'react-router-dom'
+import { paths } from 'const'
 
 export interface IRowProps {
   apr: AprProps
@@ -126,9 +143,16 @@ const variants = {
 
 export const Row: FC<IRowProps> = memo((props) => {
   const { apr, farm, earned, multiplier, liquidity, details } = props
+  const { pid } = farm
+  const { allowance, tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
 
+  const navigate = useNavigate()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const [isOpened, setOpened] = useState(false)
+  const { onStake } = useStake(pid)
+  const { onUnstake } = useUnstake(pid)
+  const { onReward } = useHarvest(pid)
 
   const stakeModalRef = useModalRef()
   const unstakeModalRef = useModalRef()
@@ -157,15 +181,66 @@ export const Row: FC<IRowProps> = memo((props) => {
     }
   }
 
-  const hasFarm = true
+  const handleGetLP = () => {
+    if (details?.token?.address && details?.quoteToken?.address) {
+      navigate(
+        paths.addLiquidity(
+          details?.token?.address[chainId],
+          details.quoteToken.address[chainId]
+        ),
+        { replace: true }
+      )
+    }
+    console.log(details.token.address, details.quoteToken.address)
+  }
+
+  const hasFarm = details.userData?.stakedBalance
+
+  const displayLiquidity = useMemo(
+    () =>
+      Number(liquidity.liquidity).toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+      }),
+    [liquidity.liquidity]
+  )
+
+  const displayBalance = useCallback(() => {
+    const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
+    if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0001)) {
+      return getFullDisplayBalance(stakedBalance).toLocaleString()
+    }
+    return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+  }, [stakedBalance])
+
+  const aprValue = new BigNumber(apr.originalValue).div(DEFAULT_TOKEN_DECIMAL)
+
+  const balance = displayBalance()
 
   return (
     <>
       <Modal title={t('Stake LP tokens')} ref={stakeModalRef}>
-        <StakeLP onCancel={handleCloseStake} onConfirm={() => {}} />
+        <StakeLP
+          onCancel={handleCloseStake}
+          onConfirm={async (...args) => {
+            if (await onStake(...args)) {
+              handleCloseStake()
+            }
+          }}
+          label={farm.label}
+          tokenAddress={details.lpAddresses && details.lpAddresses[chainId]}
+        />
       </Modal>
       <Modal title={t('Unstake LP tokens')} ref={unstakeModalRef}>
-        <UnstakeLP onCancel={handleCloseUnstake} onConfirm={() => {}} />
+        <UnstakeLP
+          onCancel={handleCloseUnstake}
+          onConfirm={async (value) => {
+            if (await onUnstake(value)) {
+              handleCloseUnstake()
+            }
+          }}
+          label={farm.label}
+          balance={balance}
+        />
       </Modal>
       <>
         <StyledRow
@@ -181,14 +256,16 @@ export const Row: FC<IRowProps> = memo((props) => {
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APY</StyledTitle>
-              <Typography.BodyBold>50.09%</Typography.BodyBold>
+              <Typography.BodyBold>
+                {apr.value ? `${aprToApy(aprValue.toString())}%` : '---'}
+              </Typography.BodyBold>
             </Flex>
           </StyledCell>
           <StyledCell width="80px">
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>APR</StyledTitle>
               <Typography.BodyBold>
-                {apr.value ? `${apr.value}%` : '---'}
+                {apr.value ? `${aprValue.toFixed(2)}%` : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -196,7 +273,7 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Liquidity</StyledTitle>
               <Typography.BodyBold>
-                {liquidity.liquidity ? Number(liquidity.liquidity.gt) : '---'}
+                {liquidity.liquidity ? displayLiquidity : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -204,7 +281,9 @@ export const Row: FC<IRowProps> = memo((props) => {
             <Flex flexDirection="column" alignItems="flex-start" gap="2px">
               <StyledTitle>Earned</StyledTitle>
               <Typography.BodyBold>
-                {earned.earnings ? `${earned.earnings}` : '---'}
+                {earned.earnings
+                  ? `${earned.earnings.toLocaleString()}`
+                  : '---'}
               </Typography.BodyBold>
             </Flex>
           </StyledCell>
@@ -239,10 +318,12 @@ export const Row: FC<IRowProps> = memo((props) => {
                 exit="initial"
               >
                 <Flex gap="10px" alignItems="center">
-                  <Button onClick={() => {}}>Get LP</Button>
+                  <Button onClick={handleGetLP}>Get LP</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Avaliable LP</StyledTitle>
-                    <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
+                    <Typography.BodyBold>
+                      {/* {allowance && getBalanceAmount(allowance).toFixed()} */}
+                    </Typography.BodyBold>
                   </StyledDetailedTextGroup>
                 </Flex>
                 <StyledEnableFarm>
@@ -260,17 +341,21 @@ export const Row: FC<IRowProps> = memo((props) => {
                       <Button onClick={handleOpenUnstake}>Unstake</Button>
                       <StyledDetailedTextGroup flexDirection="column">
                         <StyledTitle>Staked LP</StyledTitle>
-                        <Typography.BodyBold>0.0345 LP</Typography.BodyBold>
+                        <Typography.BodyBold>
+                          {stakedBalance.gt(0) ? balance : '---'}
+                        </Typography.BodyBold>
                       </StyledDetailedTextGroup>
                     </Flex>
                   )}
                 </StyledEnableFarm>
                 <Flex gap="10px" alignItems="center">
-                  <Button onClick={() => {}}>Harvest</Button>
+                  <Button onClick={onReward}>Harvest</Button>
                   <StyledDetailedTextGroup flexDirection="column">
                     <StyledTitle>Earned</StyledTitle>
                     <Typography.BodyBold>
-                      {earned.earnings ? `${earned.earnings}` : '---'}
+                      {earnings.gt(0)
+                        ? `${getBalanceNumber(earnings).toFixed()}`
+                        : '---'}
                     </Typography.BodyBold>
                   </StyledDetailedTextGroup>
                 </Flex>
