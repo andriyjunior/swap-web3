@@ -57,7 +57,11 @@ export const UnstakeLP: FC<IUnstakeLPProps> = ({
       <StyledBody>
         <Flex flexDirection="column" gap="14px">
           <StyledTitle>Unstake {label}</StyledTitle>
-          <BigDecimalInput onInput={(val) => setAmount(val)} value={amount} />
+          <BigDecimalInput
+            textAlign="left"
+            onInput={(val) => setAmount(val)}
+            value={amount}
+          />
         </Flex>
         <Flex flexDirection="column" gap="14px">
           <StyledTitle>Balance: {balance}</StyledTitle>

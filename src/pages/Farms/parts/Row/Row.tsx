@@ -148,7 +148,7 @@ export const Row: FC<IRowProps> = memo((props) => {
 
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const [isOpened, setOpened] = useState(false)
   const { onStake } = useStake(pid)
   const { onUnstake } = useUnstake(pid)
@@ -181,20 +181,22 @@ export const Row: FC<IRowProps> = memo((props) => {
     }
   }
 
-  const handleGetLP = () => {
+  const getLPLink = useMemo(() => {
     if (details?.token?.address && details?.quoteToken?.address) {
-      navigate(
-        paths.addLiquidity(
-          details?.token?.address[chainId],
-          details.quoteToken.address[chainId]
-        ),
-        { replace: true }
+      return paths.addLiquidity(
+        details?.token?.address[chainId],
+        details.quoteToken.address[chainId]
       )
     }
-    console.log(details.token.address, details.quoteToken.address)
+  }, [details])
+
+  const handleGetLP = () => {
+    if (getLPLink) {
+      navigate(getLPLink, { replace: true })
+    }
   }
 
-  const hasFarm = details.userData?.stakedBalance
+  const hasFarm = account ? true : false
 
   const displayLiquidity = useMemo(
     () =>
@@ -221,6 +223,7 @@ export const Row: FC<IRowProps> = memo((props) => {
       <Modal title={t('Stake LP tokens')} ref={stakeModalRef}>
         <StakeLP
           onCancel={handleCloseStake}
+          getLPLink={getLPLink}
           onConfirm={async (...args) => {
             if (await onStake(...args)) {
               handleCloseStake()

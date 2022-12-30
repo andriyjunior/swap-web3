@@ -20,6 +20,7 @@ interface IStakeLPProps {
   onConfirm: (amount: string, referrer: string) => void
   label: string
   tokenAddress: string
+  getLPLink?: string
 }
 
 const StyledBody = styled(InnerContainer)`
@@ -43,6 +44,7 @@ export const StakeLP: FC<IStakeLPProps> = ({
   onConfirm,
   label,
   tokenAddress,
+  getLPLink,
 }) => {
   const [amount, setAmount] = useState('')
 
@@ -79,9 +81,11 @@ export const StakeLP: FC<IStakeLPProps> = ({
           <Button onClick={handleMax}>Max</Button>
         </Flex>
       </StyledBody>
-      <SimpleButton href="234sdf" icon="link" variant="secondary">
-        {t('Get SAND/MANA')}
-      </SimpleButton>
+      {getLPLink && (
+        <SimpleButton href={getLPLink} icon="link" variant="secondary">
+          {t(`Get {{label}}`, { label: label })}
+        </SimpleButton>
+      )}
       <StyledButtons gap="16px">
         <Button onClick={onCancel}>{t('cancel')}</Button>
         <Button onClick={handleConfirm}>{t('confirm')}</Button>

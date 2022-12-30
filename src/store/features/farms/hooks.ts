@@ -41,8 +41,7 @@ export const usePollFarmsData = (includeArchive = false) => {
     if (account) {
       dispatch(fetchFarmUserDataAsync({ account, pids, library, chainId }))
     }
-    // }, [includeArchive, dispatch, slowRefresh, account])
-  }, [dispatch, account])
+  }, [account])
 }
 
 /**
